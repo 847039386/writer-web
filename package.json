@@ -1,0 +1,49 @@
+{
+  "name": "writer-web",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "antd": "^3.0.0",
+    "axios": "^0.16.2",
+    "codemirror": "^5.31.0",
+    "react": "^16.0.0",
+    "react-codemirror2": "^3.0.7",
+    "react-document-title": "^2.0.3",
+    "react-dom": "^16.0.0",
+    "react-loadable": "^5.3.1",
+    "react-loading": "^1.0.2",
+    "react-markdown": "^2.5.0",
+    "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0"
+  },
+  "scripts": {
+    "start": "react-scripts-ts start",
+    "build": "webpack --config ./conf/webpack.config.prod",
+    "build1": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject"
+  },
+  "devDependencies": {
+    "@types/codemirror": "^0.0.49",
+    "@types/jest": "^21.1.2",
+    "@types/node": "^8.0.33",
+    "@types/react": "^16.0.10",
+    "@types/react-codemirror": "^1.0.0",
+    "@types/react-document-title": "^2.0.1",
+    "@types/react-dom": "^16.0.1",
+    "@types/react-loadable": "^5.3.0",
+    "@types/react-redux": "^5.0.10",
+    "@types/react-router-dom": "^4.0.8",
+    "@types/redux": "^3.6.0",
+    "compression-webpack-plugin": "^1.0.1",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
+    "lodash-webpack-plugin": "^0.11.4",
+    "mockjs": "^1.0.1-beta3",
+    "react-scripts-ts": "2.7.0",
+    "ts-import-plugin": "^1.4.2",
+    "webpack-bundle-analyzer": "^2.9.0"
+  }
+}

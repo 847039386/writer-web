@@ -1,0 +1,57 @@
+.ua-dramas-item { 
+    margin-bottom: 20px;
+    &.ant-card {
+        padding: 0;
+        .ant-card-body{
+            padding: 0;
+        }
+    }
+    .ua-dramas-item-body {
+        cursor: pointer;
+        padding: 24px;
+        border-radius: 2px;
+        box-sizing: border-box;
+        background-color: #FFF;
+        font-size: 14px;    
+        .ua-dramas-item-title {
+            margin-bottom: 12px;
+            color :rgba(0, 0, 0, 0.85);
+        }
+        .ua-dramas-item-description {
+            color :rgba(0, 0, 0, 0.45);
+            word-break: break-all;
+            height: 64px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+        }
+    }
+    .ua-dramas-item-actions {
+        overflow: hidden;
+        & > li {
+            float: left;
+            cursor: pointer;
+            text-align: center;
+            padding: 12px 0;
+            background: #f7f9fa;
+            border-top: 1px solid #e8e8e8;
+            color: rgba(0, 0, 0, 0.45);
+            &:not(:last-child){
+                border-right: 1px solid #e8e8e8;
+            }
+            &:hover {
+                background: #108EE9;
+                color: #FFF;
+            }
+        }
+    }
+}
+
+.ua-dramas-add {
+    cursor: pointer;
+    height: 187px;
+    font-size: 18px;
+    width: 100%;
+}

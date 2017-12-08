@@ -1,0 +1,12 @@
+.pagination{
+  margin: 10px 0;
+}
+
+
+.ant-card-meta {
+  overflow: hidden;
+  width: 100%;
+  word-break:keep-all;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
