@@ -60,8 +60,8 @@ class Login extends React.Component<LoginProps, LoginState> {
     return (
         <div>
           <ul>
-            <li><Input onChange={this.onChangeUsername} placeholder="邮箱" /></li>
-            <li><Input onChange={this.onChangePassword} placeholder="密码" /></li>
+            <li><Input onChange={this.onChangeUsername} disabled={this.state.loading} placeholder="邮箱" /></li>
+            <li><Input onChange={this.onChangePassword}  disabled={this.state.loading} placeholder="密码" /></li>
             <li><Button loading={this.state.loading} onClick={this.onLogin} style={{width:'100%'}} type="primary">登陆</Button></li>
           </ul>
           <Divider><span style={{fontSize :14}}>第三方登陆</span></Divider>

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IComment } from '../Models';
+import { ICommentPopulate ,IComment } from '../Models';
 import Conf from '../conf';
 const host = Conf.host || 'http://test.com/';
 
@@ -12,11 +12,11 @@ interface IAJAXComment {
 interface Pagination {
     total : number,
     current :number,
-    limit : number
+    size : number
 }
 // 多条comment接口
 interface IAJAXComments {
-    data? :IComment [],
+    data? :ICommentPopulate [],
     pagination? :Pagination,
     success : boolean,
     msg? : string,

@@ -52,6 +52,8 @@ class DramaFormat extends React.Component<Props,State> {
     let { value } = nextProps;
     if(value){
       this.setState({value :value ,markdownCode: this.getMarkdown(value)})
+    }else{
+      this.setState({value :'' ,markdownCode: ''})
     }    
   }
 

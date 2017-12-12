@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Button ,Menu ,Layout ,Anchor } from 'antd'
-const { Content, Sider } = Layout;
+import { Button , Tabs ,Avatar ,Row ,Col ,Spin } from 'antd'
 import { UserState ,UserModel } from './constraint'
 import Presentation from './Presentation'
 import Production from './Production'
@@ -10,30 +9,21 @@ import './index.less'
 class AuthorPage extends React.Component<any,UserState> {
   constructor(props :any){
     super(props)
-    this.handleMenu = this.handleMenu.bind(this)
+    
     this.state = {
       User : new UserModel(),
-      UserPageType : this.props.match.params.type,
-      UserId : this.props.match.params.id,
-      UserBodyComponent : null
+      loading :false
     }
   }
 
   componentWillMount() {
-    this.handlePage()  
-  }
-
-  handlePage = () => {
-    if(!this.state.UserId || !this.state.UserPageType){
-       location.replace("#/");
-    }else{
-      this.getUser(this.state.UserId);
-      this.handleUserBody(this.state.UserPageType)
-    }  
+    this.getUser(this.props.match.params.id)
   }
 
   getUser = (id :string) => {
+    this.setState({loading :true })
     UserAjax.getUserById(id).then(({success ,data}) => {
+      this.setState({loading :false })
       if(success && data){
         this.setState({
           User :data
@@ -42,44 +32,38 @@ class AuthorPage extends React.Component<any,UserState> {
     })
   }
 
- handleUserBody(type :string){
-    switch(type){
-      case 'presentation':
-        this.setState({UserBodyComponent : (<Presentation id={this.props.match.params.id} />)})
-      break;
-      case 'production':
-        this.setState({UserBodyComponent : (<Production />)})
-      break;
-    }
-  }
-
-  handleMenu = (e :any) => {
-    this.handleUserBody(e.key)
-  }
 
   render() {
     return (  
-        <Layout className="author theme_CSider" style={{ background: '#fff' }}>            
-            <Sider width={240} style={{height:'auto' }}>
-              <Anchor className="cb_menu" style={{ minHeight: 520}} >
-                <div style={{padding:'10px 0',textAlign: 'center' ,color:'#FFF'}}>
-                  <img className="avatar" src="http://img1.skqkw.cn:888/2014/12/06/09/m1pt2mujtwt-77324.jpg" />
-                  <p style={{fontSize: 14 ,margin:'5px 0'}}>{this.state.User.name}</p>
-                  <p><Button type="primary">关注</Button>&nbsp;&nbsp;<Button type="primary">站内信</Button> </p>
+        <Spin spinning={this.state.loading}>
+          <Row style={{margin :'20px 0'}}>
+            <Col xs={2} sm={4} md={4} style={{height:66}}>
+              <div style={{height:66 ,textAlign:'center' ,display:'flex'}}>
+                <div style={{ margin :'auto' }}>
+                  <Avatar size="large" src={this.state.User.avatar} />
+                  <br />
+                  作者：{this.state.User.name}
                 </div>
-                <Menu mode="inline" theme="dark" onClick={this.handleMenu}>
-                    <Menu.Item key="presentation">简介</Menu.Item>
-                    <Menu.Item key="production">作品</Menu.Item>
-                </Menu>
-              </Anchor>
-            </Sider>
-            
-            <Content >
-              <div className="user_body theme_DContent" style={{ padding: '10px 24px' ,minHeight: 700}}>
-                { this.state.UserBodyComponent }
               </div>
-            </Content>
-        </Layout>
+            </Col>
+            <Col xs={2} sm={4} md={4}  >
+              <div style={{height:66 ,textAlign:'center' ,display:'flex'}}>
+                <div style={{ margin :'auto' }}>
+                  <Button type="primary" >关注</Button>&nbsp;&nbsp;
+                  <Button type="primary" >站内信</Button>
+                </div>
+              </div>
+            </Col>
+          </Row>
+          <Tabs defaultActiveKey="1" >
+            <Tabs.TabPane tab="作者介绍" key="1">
+                <Presentation id={this.props.match.params.id} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab="作品" key="2">
+                <Production  id={this.props.match.params.id} />
+            </Tabs.TabPane>
+          </Tabs>
+        </Spin>
     );
   }
 }

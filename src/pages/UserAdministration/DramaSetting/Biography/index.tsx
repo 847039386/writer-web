@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card ,Button } from 'antd';
+import { Card ,Button ,Spin } from 'antd';
 import Seiri ,{ SeiriRule } from '../../../../components/Seiri'
 import { Drama } from '../../../../axios' 
 import './style.less'
@@ -20,13 +20,15 @@ class Biography extends React.Component<Props,any> {
     this.onsubmit = this.onsubmit.bind(this)
     this.state = {
         input : '',
-        md :''
+        md :'',
+        loading :false
     }
   }
 
   componentWillMount(){
-      console.log('jiutyici')
+      this.setState({loading :true})
       Drama.getDramaByID(this.props.id).then(({success ,data}) => {
+        this.setState({loading :false})
         if(success && data){  
           this.setState({input :data.character})
         }
@@ -43,9 +45,11 @@ class Biography extends React.Component<Props,any> {
   
   render() {
     return (
-        <Card title="人物小传" bodyStyle={{padding:0}} actions={[<Button onClick={this.onsubmit}>提交</Button>]}>
-            <Seiri rule={this.seiriRule} onChange={this.seiriChange} value={this.state.input} />
-        </Card>
+        <Spin spinning={this.state.loading}>
+          <Card bodyStyle={{padding:0}} actions={[<Button onClick={this.onsubmit}>提交</Button>]}>
+              <Seiri rule={this.seiriRule} onChange={this.seiriChange} value={this.state.input} />
+          </Card>
+        </Spin>
     );
   }
 }

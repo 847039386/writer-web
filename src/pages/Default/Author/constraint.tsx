@@ -2,9 +2,7 @@ import { IUser ,UserModel } from '../../../Models'
 
 interface UserState {
     User : IUser,
-    UserPageType :string,
-    UserId :string,
-    UserBodyComponent :any
+    loading:boolean
 }
 
 export { UserState ,UserModel }

@@ -1,10 +1,11 @@
-import { IUser ,UserModel } from './'
+import { IUser ,UserModel ,IBook ,ICategory ,BookModel ,CategoryModel } from './'
 
 interface IDrama {
   id     :string,     //id
-  user :IUser,     //作者
+  user_id :IUser,     //作者
   title  :string,     //标题
-  type   :string [],  //剧本类型
+  category_id : Array<ICategory>,   //剧情类型
+  book_id :IBook  ,  //剧本类型
   create_at :string,   //创建时间
   description :string,  //剧本简单描述
   abstract :string,      //剧本梗概
@@ -14,9 +15,10 @@ interface IDrama {
 
 class DramaModel {
   id     :string;
-  user :IUser;
+  user_id :IUser;
   title  :string;
-  type   :string [];
+  category_id : Array<ICategory>;
+  book_id :IBook;
   create_at :string;
   description :string;
   abstract : string;
@@ -24,13 +26,14 @@ class DramaModel {
   weight :number;
   constructor(){
     this.id = '';
+    this.category_id = [new CategoryModel()]; 
     this.title = '';
-    this.type = [];
+    this.book_id = new BookModel();
     this.create_at = "";
     this.description = "";
     this.character = "";
     this.weight = 0;
-    this.user = new UserModel();
+    this.user_id = new UserModel();
   }
 }
 

@@ -7,14 +7,16 @@ interface State {
   visible : boolean,       //model显示
   code : string,                 //左侧未处理文字
   md : string,               //右侧处理代码
-  id :string                   //key值。来判断是创建还是修改
+  id :string,                   //key值。来判断是创建还是修改
+  title :string         //标题
 }
 
 interface Props {
     visible? : boolean,
     code :string,
+    title : string,
     id? :string,
-    onSave?(id :string ,code :string) :void,
+    onSave?(id :string ,code :string ,title :string) :void,
     onCancel?(id :string ,code :string):void
 }
 
@@ -26,7 +28,8 @@ class USModal extends React.Component<Props,State> {
       visible : props.visible || false,
       code : props.code || '',
       md : '',
-      id :props.id || ''
+      id :props.id || '',
+      title : props.title || '' 
     }
     this.seiriRule = [
       {regexp : /^第\d+集$/ , value :'# ${key}' },
@@ -37,16 +40,17 @@ class USModal extends React.Component<Props,State> {
     this.USModalOk = this.USModalOk.bind(this);
     this.onUSModal = this.onUSModal.bind(this);
     this.seiriChange = this.seiriChange.bind(this)
+    this.onTitleChange = this.onTitleChange.bind(this)
   }
 
   componentWillReceiveProps(nextProps :Props){
-    let { visible ,code ,id } = nextProps;
+    let { visible ,code ,id ,title } = nextProps;
     if(visible){
       const seiriBox = new SeiriBox(code)
       const md = seiriBox.setOption({br:true}).addRule(this.seiriRule).getContent()
       visible = visible || false;
       id = id || ''
-      this.setState({ visible ,md ,id ,code })
+      this.setState({ visible ,md ,id ,code ,title })
     }else{
       this.setState({ visible :false})
     }
@@ -61,7 +65,7 @@ class USModal extends React.Component<Props,State> {
   // 点击保存时
   USModalOk = () => {
     if(this.props.onSave){
-        this.props.onSave(this.state.id,this.state.code)
+        this.props.onSave(this.state.id,this.state.code,this.state.title)
     }
   }
 
@@ -79,6 +83,10 @@ class USModal extends React.Component<Props,State> {
     })
   }
 
+  onTitleChange = (e :any) => {
+    this.setState({  title : e.target.value })
+  }
+
   render() {
     return (
         <Modal
@@ -89,7 +97,7 @@ class USModal extends React.Component<Props,State> {
             onCancel={this.USModalCancel}
             okText="保存"
         >
-            <Input placeholder={'请输入剧集标题'} />
+            <Input placeholder={'请输入剧集标题'} onChange={this.onTitleChange} value={this.state.title} />
             <br /><br />
             <Seiri rule={this.seiriRule} onChange={this.seiriChange} value={this.state.code} />
         </Modal>

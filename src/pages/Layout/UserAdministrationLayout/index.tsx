@@ -13,8 +13,11 @@ class UserAdministrationLayout extends React.Component<any,any> {
         this.toLink = this.toLink.bind(this)
     }
 
-    componentDidMount() {
-       
+    componentWillMount(){
+        const { User } = this.props
+        if(!User.token){
+            location.replace("#/");
+        }
     }
 
     toLink(e :any){
@@ -65,13 +68,5 @@ class UserAdministrationLayout extends React.Component<any,any> {
 }
 
 import { connect } from 'react-redux'
-// import { IReducer } from '../../../redux'
-// export default connect(state => ({ theme : state.ConfigReducer.theme }))(UserAdministrationLayout)
-// export default connect(state => ({ User :state.UserReducer }))(UserAdministrationLayout)
-export default connect((state :any) : any=>  {
-    if(state.UserReducer.token){
-        return { UserInfo :JSON.stringify(state.UserReducer)}
-    }else{
-        return { UserInfo :null}
-    }
-})(UserAdministrationLayout)
+export default connect((state :any) => ({ User :state.UserReducer }))(UserAdministrationLayout)
+

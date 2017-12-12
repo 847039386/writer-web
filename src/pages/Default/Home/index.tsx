@@ -1,18 +1,27 @@
 import * as React from 'react';
-import { Row, Col } from 'antd';
-import RankCard from '../../../components/RankCard'
-import ImgRankCard from '../../../components/ImgRankCard'
-import CardTopics from '../../../components/CardTopics'
+import { Row, Col ,Card } from 'antd';
 import LoginComponent from '../../../components/Login'
-import { HomeState } from './constraint'
+import ShortList from '../../../components/ShortList'
+import { Conf } from '../../../axios'
+import { IDrama ,IUser ,ITopic } from '../../../Models'
+import { Link } from 'react-router-dom'
 import './index.less'
 
-class HomePage extends React.Component<any, HomeState> {
+interface State {
+  authors :Array<IUser>,
+  dramas  :Array<IDrama>,
+  topics   :Array<ITopic>,
+  loading  :boolean 
+}
+
+class HomePage extends React.Component<any, State> {
   constructor(props :any) {
     super(props);
     this.state = { 
-      User : {},
-      loading : false,
+      authors : [],
+      dramas : [],
+      topics : [],
+      loading :true
     }
     //设置LoginComponent的参数
     LoginComponent.defaultProps = {
@@ -20,27 +29,47 @@ class HomePage extends React.Component<any, HomeState> {
     }
   }
 
-  componentWillReceiveProps(nextProps :any) {
-    console.log(nextProps ,'home')
+  componentWillMount(){
+    Conf.home().then(({success ,data}) => {
+      this.setState({loading :false})
+      if(success && data){
+        this.setState({ 
+          dramas : data.dramas,
+          authors : data.authors,
+          topics  : data.topics,
+        })
+      }
+    })
   }
-
 
   render() {
     return (
         <div className="home">
           <Row gutter={16}>
-            <Col lg={4} sm={24} xs={24}>
+            <Col lg={6} sm={24} xs={24} md={12} xl={5} >
               <Row>
-                <Col style={{marginBottom:10}}><RankCard url='http://dramaBook?count=5' title="最佳排行榜" /></Col>
-                <Col style={{marginBottom:10}}><ImgRankCard more="/classify" url="http://screenwriters?count=5" title="最佳编剧" /></Col>
+                <Col style={{marginBottom:10}}>
+                    <Card loading={this.state.loading} title={'最佳排行榜'} bodyStyle={{ padding :'5px 10px'}} >
+                      <ShortList type={'drama'} data={this.state.dramas}  />
+                    </Card>
+                </Col>
+                <Col style={{marginBottom:10}}>
+                    <Card loading={this.state.loading} title={'最佳编剧'} bodyStyle={{ padding :'5px 10px'}} >
+                      <ShortList type={'author'} data={this.state.authors}  />
+                    </Card>
+                </Col>
               </Row>
             </Col>
-            <Col lg={16} sm={24} xs={24}>
+            <Col lg={12} sm={24} xs={24} md={12} xl={14} >
               <Row>
-                <Col style={{marginBottom:10}}><CardTopics url="http://topics?count=5" title="站内文章" /></Col>
+                <Col style={{marginBottom:10}}>
+                    <Card extra={<Link to='/topics'>更多>></Link>} loading={this.state.loading} title={'站内文章'} bodyStyle={{ padding :'5px 10px'}} >
+                      <ShortList type={'topic'} data={this.state.topics}  />
+                    </Card>
+                </Col>
               </Row>
             </Col>
-            <Col lg={4} sm={24} xs={24}>
+            <Col lg={6} sm={24} xs={24} md={12} xl={5} >
               <Row>
                 <Col style={{marginBottom:10}} className="theme_CCard"><LoginComponent /></Col>
               </Row>

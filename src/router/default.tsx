@@ -2,12 +2,11 @@ import * as React from 'react';
 import { Route ,Switch } from 'react-router-dom';
 import DefaultLayout from '../pages/Layout/DefaultLayout/index'
 import Loadable from 'react-loadable';
-import LoadingComponent from '../components/Loading'
+import { Spin } from 'antd'
 
 const MyLoadingComponent = () => {
-    return <LoadingComponent />;
+    return <Spin style={{ width :'100%' }} tip="页面加载中..." />;
 }
-
 
 const HomePage = Loadable({
     loader: () => import('../pages/Default/Home/index'),
@@ -54,7 +53,7 @@ const DefaultRoute = (rote :any) => {
                     <Route exact path={`${rote.match.url}dramas`} component={DramasPage}/>  
                     <Route exact path={`${rote.match.url}topic/:id`} component={Topic}/>   
                     <Route exact path={`${rote.match.url}topics`} component={Topics}/>                    
-                    <Route exact path={`${rote.match.url}author/:type/:id`} component={AuthorPage} />        
+                    <Route exact path={`${rote.match.url}author/:id`} component={AuthorPage} />        
                     <Route path="*" component={NotFound} />
                 </Switch>                     
             </DefaultLayout>

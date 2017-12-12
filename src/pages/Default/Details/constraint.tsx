@@ -1,11 +1,13 @@
-import { IDrama ,DramaModel ,IEpisode ,EpisodeModel } from '../../../Models'
+import { IDrama ,DramaModel ,IChapter ,ChapterModel } from '../../../Models'
 
 interface DetailsState {
   dramaBook     :IDrama,
-  Episodes       :Array<any>,
-  Episode : IEpisode,
+  Chapters       :Array<any>,
+  Chapter : IChapter,
   selectedEpisodeID :string, //当前选中的集数
-  isLogin : boolean
+  isLogin : boolean,
+  mainLoading : boolean,
+  episodeLoading :boolean
 }
 
-export { DetailsState, IDrama, DramaModel ,EpisodeModel ,IEpisode }
+export { DetailsState, IDrama, DramaModel ,ChapterModel ,IChapter }

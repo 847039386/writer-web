@@ -1,39 +1,80 @@
 import * as React from 'react';
-import { Card } from 'antd'
-import { DState } from './constraint'
+import { List ,Button ,Spin } from 'antd'
 import { Drama as DramaAjax } from '../../../../axios'
 import { Link } from 'react-router-dom'
-import './index.less'
+import { IDrama } from '../../../../Models'
 
+interface State {
+    Dramas :IDrama [],
+    loading :boolean,
+    loadingMore :boolean,
+    showLoadingMore :boolean,
+    pagination :any
+}
 
-class Production extends React.Component<any,DState> {
+interface Props {
+  id :string,
+}
 
-  constructor(props :any){
+class Production extends React.Component<Props,State> {
+
+  constructor(props :Props){
     super(props)
     this.state = {
-      Dramas : []
+      Dramas : [],
+      loading :false,
+      loadingMore : false,
+      showLoadingMore :false,
+      pagination : { current : 1 }
     }
   }
 
   componentWillMount() {
-    DramaAjax.getDramasByUserID('id').then(({success ,data}) => {
-      if(success && data){
-        this.setState({ Dramas : data })
+    this.getDramas(this.props.id,1,{loading :true},{loading :false})
+  }
+
+  onLoadMore = () =>{
+    this.getDramas(this.props.id,++this.state.pagination.current,{loadingMore :true},{loadingMore :false})
+  }
+
+  getDramas = (id :string ,page : number,state :any ,end :any) => {
+    this.setState(state)
+    DramaAjax.getDramasByUserID(id ,page).then(({success ,data ,pagination}) => {
+      this.setState(end)
+      if(success && data && pagination){
+        let max = Math.ceil(pagination.total/pagination.size)
+        this.setState({ 
+          Dramas :this.state.Dramas.concat(data),
+          showLoadingMore :pagination.current < max,
+          pagination : pagination
+        })
       }
     })
   }
 
-
   render() {
+    const { loadingMore ,showLoadingMore } = this.state
+    const loadMore = showLoadingMore ? (
+      <div style={{ textAlign: 'center', marginTop: 12, lineHeight: '32px' }}>
+        {loadingMore && <Spin tip={'数据加载中...'} />}
+        {!loadingMore && <Button onClick={this.onLoadMore}>加载更多数据...</Button>}
+      </div>
+    ) : null;
     return (  
-      <div className="production">
-        {this.state.Dramas.map((drama) => {
-          return (
-              <Card key={drama.id} className="theme_CCard production_item"><Link to={`/details/${drama.id}`}>{drama.title}</Link></Card>
-          )
-        })}
-        
-      </div>  
+      <div>
+        {
+          this.state.loading ? <Spin style={{ width :'100%' }} tip={'加载中...'} /> :
+          <List
+            loadMore={loadMore}
+            dataSource={this.state.Dramas}
+            renderItem={(drama :IDrama) => (
+            <List.Item>
+              <Link to={`/details/${drama.id}`}>{drama.title}</Link>
+          </List.Item>)}
+          />
+        }
+      </div>
+      
     );
   }
 }

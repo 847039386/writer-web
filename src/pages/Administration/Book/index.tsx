@@ -51,6 +51,7 @@ class BookPage extends React.Component<any,any> {
       this.state = { 
           data : [],
           pagination : { total : 0 ,onChange :this.onPageChange ,current :0},
+          loading :false
       };
       this.cacheData = []
     }
@@ -66,7 +67,9 @@ class BookPage extends React.Component<any,any> {
     }
 
     getBooks = (currentPage :number = 1 ,pageSize :number = 10) => {
+        this.setState({loading :true})
         Book.find(currentPage,pageSize).then(({success ,data ,pagination}) => {
+            this.setState({loading :false})
             if(success && data && pagination) {
                 let newData = data.map((item :any) => {
                     item.key = item.key || item.id;
@@ -165,7 +168,9 @@ class BookPage extends React.Component<any,any> {
     }
 
     handleSearch (value :string ) {
+      this.setState({loading :true})
       Book.search(value).then(({success ,data ,pagination}) => {
+        this.setState({loading :false})
         if(success && data && pagination) {
             let newData = data.map((item :any) => {
                 item.key = item.key || item.id;
@@ -194,7 +199,7 @@ class BookPage extends React.Component<any,any> {
                     <div className="bm-content p24_32" style={{ background:'#fff'}}>
                         <Button style={{marginBottom:8}} onClick={e => this.handleCreate(e)} type={'primary'}>创建</Button>
                         <Button style={{marginBottom:8 ,marginLeft:8}} onClick={e => this.handleRefresh(e)} type={'primary'}>刷新</Button>
-                        <Table pagination={this.state.pagination} bordered dataSource={this.state.data} columns={this.columns} />
+                        <Table loading={this.state.loading} pagination={this.state.pagination} bordered dataSource={this.state.data} columns={this.columns} />
                     </div>
             </div>
         )

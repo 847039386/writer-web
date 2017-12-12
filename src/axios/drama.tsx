@@ -51,7 +51,7 @@ const getDramaByID= (id :string) => {
 }
 
 //根据userid 获取该用户的所有剧本Drama
-const getDramasByUserID = (id :string) => {
+const getDramasByUserID = (id :string ,page :number ,count :number = 10) => {
     return new Promise<IAJAXDramas>((resolve ,reject) => {
         axios.get(host + 'drama/data/list').then((request) => {
             if(request.data.success){

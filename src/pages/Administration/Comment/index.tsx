@@ -46,7 +46,7 @@ class CommentPage extends React.Component<any,State> {
                         pagination : {
                             current : pagination.current,
                             total : pagination.total,
-                            pageSize :pagination.limit
+                            pageSize :pagination.size
                         },
                         comments : data.map((d :any) : any => {
                             d.key = d.id;
@@ -84,7 +84,8 @@ class CommentPage extends React.Component<any,State> {
             <div>
                 <UAHeader data={[{value:'主页'},{value :'评论管理'}]} title="评论管理" description="评论管理" />      
                 <div className="bm-content p24_32" style={{ background:'#fff' }}>
-                    <Table          
+                    <Table     
+                            bordered     
                             loading={this.state.tabing}              
                             columns={this.getColumns()} 
                             pagination={this.state.pagination}

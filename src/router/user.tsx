@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Route ,Switch } from 'react-router-dom';
 import UserAdministrationLayout from '../pages/Layout/UserAdministrationLayout'
 import Loadable from 'react-loadable';
-import LoadingComponent from '../components/Loading'
+import { Spin } from 'antd'
 
 const MyLoadingComponent = () => {
-    return <LoadingComponent />;
+    return <Spin style={{ width :'100%' }} tip="页面加载中..." />;
 }
 
 const UserHome = Loadable({

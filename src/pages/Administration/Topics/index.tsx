@@ -85,7 +85,8 @@ class TopicsPage extends React.Component<any,State> {
             <div>
                 <UAHeader data={[{value:'主页'},{value :'文章管理'}]} title="文章管理" description="站内文章的管理" />      
                 <div className="bm-content p24_32" style={{ background:'#fff' }}>
-                    <Table          
+                    <Table      
+                            bordered    
                             loading={this.state.tabing}              
                             columns={this.getColumns()} 
                             pagination={this.state.pagination}

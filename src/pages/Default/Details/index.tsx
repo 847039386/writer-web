@@ -1,24 +1,26 @@
 import * as React from 'react';
-import { Col, Row ,Tabs ,Icon ,Button } from 'antd';
+import { Col, Row ,Tabs ,Icon ,Button ,Spin ,Card ,message } from 'antd';
 const TabPane = Tabs.TabPane;
 import { Link } from 'react-router-dom';
 import Comment from '../../../components/Comment';
-import { DetailsState, DramaModel ,IEpisode ,EpisodeModel } from './constraint';
-import { Drama as DramaAjax , Episodes } from '../../../axios';
+import { DetailsState, DramaModel ,IChapter ,ChapterModel } from './constraint';
+import { Drama as DramaAjax , Chapter } from '../../../axios';
 import Seiri from '../../../components/Seiri'
 
 class BookDetails extends React.Component<any, DetailsState> {
-  
+  loadingDOM :React.ReactNode = <Spin style={{ width :'100%' }} tip="加载中..." />;
   constructor(props :any) {
     super(props);
     const { UserReducer } = props 
     Comment.defaultProps = { drama :props.match.params.id }
     this.state = {
       dramaBook : new DramaModel(),
-      Episode : new EpisodeModel(),
-      Episodes : [],
+      Chapter : new ChapterModel(),
+      Chapters : [],
       selectedEpisodeID : '',
-      isLogin : UserReducer.token
+      isLogin : UserReducer.token,
+      mainLoading : false,
+      episodeLoading :false
     }
   }
 
@@ -27,7 +29,9 @@ class BookDetails extends React.Component<any, DetailsState> {
   }
 
   getDrama = (drama_id :string) => {
+    this.setState({mainLoading :true})
     DramaAjax.getDramaByID(drama_id).then(({success ,data}) => {
+         this.setState({mainLoading :false})
          if(success && data){
             this.setState({dramaBook :data})
             this.getEpisodes(drama_id)
@@ -37,19 +41,23 @@ class BookDetails extends React.Component<any, DetailsState> {
 
 
   getEpisode = (id :string) => {
-    this.setState({selectedEpisodeID :id})
-    Episodes.getEpisodesByID(id).then(({success ,data}) => {
-      if(success && data ){
-        this.setState({ Episode : data })
-      }
-    })
+    if(!this.state.episodeLoading){
+      this.setState({selectedEpisodeID :id ,episodeLoading :true})
+      Chapter.findById(id).then(({success ,data}) => {
+        this.setState({episodeLoading :false})
+        if(success && data ){
+          this.setState({ Chapter : data })
+        }
+      })
+    }else{
+      message.loading('正在加载数据...')
+    }
   }
 
   getEpisodes = (drama_id : string) =>{
-    Episodes.getEpisodesByDramaID(drama_id).then(({ success ,data }) => {
+    Chapter.getDataByDramaID(drama_id).then(({ success ,data }) => {
       if(success && data){
-        this.setState({ Episodes :data })
-        console.log(data)
+        this.setState({ Chapters :data })
         if(data.length > 0){
           this.getEpisode(data[0].id);
         }
@@ -58,7 +66,7 @@ class BookDetails extends React.Component<any, DetailsState> {
   }
 
 
-  getMVBodyTabPane(description :string ,character :string ,episode :IEpisode){
+  getMVBodyTabPane(description :string ,character :string ,chapter :IChapter){
     return (
       <Tabs type="card" className="theme_CTabs">
         <TabPane tab="故事梗概" key="1">{description}</TabPane>
@@ -69,19 +77,23 @@ class BookDetails extends React.Component<any, DetailsState> {
           <Row>
             <Col span={4}>
               {
-                this.state.Episodes.map((episode :any ,idx :number) => {
-                  let selected :any = this.state.selectedEpisodeID == episode.id ? {type : "primary"} : {type :'dashed'}
+                this.state.Chapters.map((item :any ,idx :number) => {
+                  let selected :any = this.state.selectedEpisodeID == item.id ? {type : "primary"} : {type :'dashed'}
                   return (
-                    <Button onClick={() => {this.getEpisode(episode.id)}} style={{marginBottom :10 ,width :'80%' }} key={episode.id} {...selected} >{`${episode.title}`}</Button>
+                    <Button onClick={() => {this.getEpisode(item.id)}} style={{marginBottom :10 ,width :'80%' }} key={item.id} {...selected} >{`${item.title}`}</Button>
                   )
                 })
               }
             </Col>
             <Col span={20}>
-              <div style={{marginBottom:10}} key={episode.id}>
-                <p>{episode.title}</p>
-                <Seiri onlyMD value={episode.content} />
-              </div>
+              {
+                this.state.episodeLoading ?
+                this.loadingDOM :
+                <div style={{marginBottom:10}} key={chapter.id}>
+                  <h1>{chapter.title}</h1>
+                  <Seiri onlyMD value={chapter.content} />
+                </div>
+              }
             </Col>
           </Row>
         </TabPane>
@@ -89,19 +101,31 @@ class BookDetails extends React.Component<any, DetailsState> {
     )
   }
 
+  getResultDOM = () :React.ReactNode =>{
+    return (
+        <Card loading={this.state.mainLoading} bodyStyle={{minHeight :'80vh',padding:24}}>
+          <Col span={24}><h1 className="theme_DTitle title">{this.state.dramaBook.title}</h1></Col>
+          <Col className="introduce theme_DBox" span={24}>
+              <Col span={12}>作者：<Link to={`/author/presentation/${this.state.dramaBook.user_id.id}`}>{this.state.dramaBook.user_id.name}</Link></Col>
+              <Col span={12}>创建于：{this.state.dramaBook.create_at}</Col>
+              <Col span={12}>作品类型：[&nbsp;{this.state.dramaBook.category_id.map((category ,item) => {
+                return (<span key={category.id}>{category.name} &nbsp;</span>)
+              })}]</Col>
+              <Col span={12}>剧本类型：{this.state.dramaBook.book_id.name}</Col>
+              <Col span={12}>阅读量：300</Col>
+              <Col span={12}>点赞：<Icon type="like" style={{cursor:'pointer'}} />&nbsp;300</Col>
+          </Col>
+          <Col className="content" span={24}>{this.getMVBodyTabPane(this.state.dramaBook.description,this.state.dramaBook.character,this.state.Chapter)}</Col>
+        </Card>
+    )
+  }
+
+
   render() {
     return (
         <Row gutter={16}>
           <Col md={16} className="details_juben theme_Dborder">
-            <Col span={24}><h1 className="theme_DTitle title">{this.state.dramaBook.title}</h1></Col>
-            <Col className="introduce theme_DBox" span={24}>
-              <Col span={12}><p>作者：<Link to={`/author/presentation/${this.state.dramaBook.user.id}`}>{this.state.dramaBook.user.name}</Link></p></Col>
-              <Col span={12}><p>创建于：{this.state.dramaBook.create_at} </p></Col>
-              <Col span={12}>作品类型：[{this.state.dramaBook.type.join('/')}]</Col>
-              <Col span={12}>阅读量：300</Col>
-              <Col span={12}>点赞：<Icon type="like" style={{cursor:'pointer'}} />&nbsp;300</Col>
-            </Col>
-            <Col className="content" span={24}>{this.getMVBodyTabPane(this.state.dramaBook.description,this.state.dramaBook.character,this.state.Episode)}</Col>
+            {this.getResultDOM() }
           </Col>
           <Col md={8}>
             <Comment  />

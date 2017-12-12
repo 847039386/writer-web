@@ -3,6 +3,8 @@ import { List ,Pagination ,Form ,Tag ,Card } from 'antd';
 const FormItem = Form.Item;
 const { CheckableTag } = Tag;
 import { Drama as DramaAjax } from '../../../axios'
+import { IDrama } from '../../../Models'
+import { Link } from 'react-router-dom'
 import './index.css';
 
 class DramasPage extends React.Component<any, any> {
@@ -15,6 +17,7 @@ class DramasPage extends React.Component<any, any> {
     this.onPageChange = this.onPageChange.bind(this);
     this.state = {
       dramas : [],
+      dramasLoading : false,
       pagination :{ current :1 , onChange :this.onPageChange ,total : 0},
       selectedDramaType : [],
       selectedDramaBookType : [],
@@ -30,7 +33,9 @@ class DramasPage extends React.Component<any, any> {
   }
 
   getDramas = (page :number = 1 ,count :number = 10) => {
+    this.setState({dramasLoading :true})
     DramaAjax.getDramas(page,count).then(({success ,data ,pagination}) => {
+      this.setState({dramasLoading :false})
       if(success && data && pagination) {
         this.setState({ dramas:data ,pagination :{total :pagination.total ,current :pagination.current }  })
       }
@@ -40,15 +45,18 @@ class DramasPage extends React.Component<any, any> {
   getList = () => {
     return (
       <List
+        loading={this.state.dramasLoading}
         grid={{ gutter: 16, lg: 6 ,xs :1 ,md :3 }}
         footer={ <Pagination style={{textAlign:'center'}} current={this.state.pagination.current} total={this.state.pagination.total} onChange={this.onPageChange} />}
         dataSource={this.state.dramas}
-        renderItem={(drama :any) => (
+        renderItem={(drama :IDrama) => (
           <List.Item  extra={''} style={{border :0}} >
             <Card>
               <Card.Meta
-                title={drama.title}
-                description={drama.type.join('/')}
+                title={<Link to={`/details/${drama.id}`}>{drama.title}</Link>}
+                description={ drama.category_id.map((category) => {
+                  return ( <span key={category.id}>{category.name}&nbsp;</span> )
+                }) }
               />
             </Card>
           </List.Item>
