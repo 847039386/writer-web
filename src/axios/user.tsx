@@ -28,6 +28,12 @@ interface IAJAXPAC {
     msg? :string
 }
 
+interface IAJAXAEmail {
+    data? :string,
+    success :boolean,
+    msg? :string
+}
+
 //获取用户详情简介内容
 const getPresentationByUserID = (user_id :string) => {
     return new Promise<IAJAXPresentation>((resolve ,reject) => {
@@ -58,16 +64,22 @@ const getUserById = (id :string) => {
     }) 
 }
 
-const Login = (username :string ,password :string) => {
+const Login = (email :string ,password :string) => {
     return new Promise<IAJAXUser>((resolve ,reject) => {
-        axios.get(`${host}user/info`).then((request) => {
-            if(request.data.success){
-                resolve(request.data) 
-            }else{
-                resolve({success :false})
-            }             
+        axios.get(`${host}user/login`).then((request) => {
+            resolve(request.data)           
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false , msg :'出现未知错误'})
+        })
+    }) 
+}
+
+const Register = (nickname :string ,email :string ,password :string) => {
+    return new Promise<IAJAXUser>((resolve ,reject) => {
+        axios.get(`${host}user/register`).then((request) => {
+            resolve(request.data)           
+        }).catch((err) => {
+            resolve({success :false , msg :'出现未知错误'})
         })
     }) 
 }
@@ -86,9 +98,10 @@ const getWelcomeUsers = () => {
     }) 
 }
 
+
 const getEmailPAC = (token :string) => {
     return new Promise<IAJAXPAC>((resolve ,reject) => {
-        axios.get(`${host}pac/email`).then((request) => {
+        axios.get(`${host}user/pac/email`).then((request) => {
             if(request.data.success){
                 resolve(request.data) 
             }else{
@@ -100,10 +113,23 @@ const getEmailPAC = (token :string) => {
     }) 
 }
 
+
+const findRepeatEmail = (email :string) => {
+    return new Promise<IAJAXAEmail>((resolve ,reject) => {
+        axios.get(`${host}user/findRepeatEmail`).then((request) => {
+            resolve(request.data)           
+        }).catch((err) => {
+            resolve({success :false})
+        })
+    }) 
+}
+
 export default {
     getPresentationByUserID,
     getUserById,
     Login,
     getWelcomeUsers,
-    getEmailPAC
+    getEmailPAC,
+    Register,
+    findRepeatEmail
 }

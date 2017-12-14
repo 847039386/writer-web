@@ -18,7 +18,23 @@ Mock.mock(GetURL('user/welcome'), {
   'success' : true,
 });
 
-Mock.mock(GetURL('pac/email'), {
+Mock.mock(GetURL('user/pac/email'), {
   'data'    :'@word(4)',
   'success' : true,
+});
+
+Mock.mock(GetURL('user/findRepeatEmail'), {
+  'data'    : '@email',
+  'success|1' : true,
+});
+
+Mock.mock(GetURL('user/login'), {
+  'data'    :User,
+  'success|1' : true,
+  'msg' : '这是登陆失败或成功时的一条详情信息。'
+});
+Mock.mock(GetURL('user/register'), {
+  'data'    :User,
+  'success|1' : true,
+  'msg' : '这是注册失败或成功时的一条详情信息。'
 });

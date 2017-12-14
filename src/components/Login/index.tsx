@@ -1,69 +1,86 @@
 import * as React from 'react';
-import { Input ,Button ,Avatar ,Card ,Icon ,Divider } from 'antd';
-import { LoginState ,LoginProps } from './constraint';
+import { Avatar ,Icon ,Divider ,Tabs ,Button } from 'antd';
 import { Link } from 'react-router-dom';
 import './index.less';
+import LoginDOM from './components/login'
+import RegisterDOM from './components/register';
+import Result from '../../components/Result'
 
+interface operationError {
+  title :string ,
+  msg :string
+}
 
+interface State {
+  error :operationError,    //失败 
+  loading :boolean,     //登陆中显示加载模式
+  isLogin :boolean,   //是否登陆状态
+  showErrorModel : boolean   //错误框
+}
 
-class Login extends React.Component<LoginProps, LoginState> {
+interface Props {
+    success?():void
+}
+
+class LoginPage extends React.Component<any, State> {
   constructor(props :any) {
     super(props);
     const { User } = props
-
     this.state = {
-      username: '',
-      password :'',
+      error : { title :'未知' ,msg :'未知' },
       loading :false,
-      loginState :User.token ? true : false
+      isLogin :User.token ? true : false,
+      showErrorModel :false
     }
     this.onLogin = this.onLogin.bind(this)
+    this.onRegister = this.onRegister.bind(this)
   }
 
-  onLogin() {
+  onLogin(email :string ,password :string) {
     const { onLogin } = this.props
     if(onLogin){
-      onLogin(this.state.username,this.state.password)
+      this.setState({ error : Object.assign(this.state.error,{ title :'登陆' }) })
+      onLogin(email,password)
     }
+  }
+
+  onRegister = (nickname :string ,email :string ,password :string) => {
+      const { onRegister } = this.props
+      if(onRegister){
+        this.setState({ error : Object.assign(this.state.error,{ title :'注册' }) })
+        onRegister(nickname,email,password)
+      }
   }
 
   componentWillReceiveProps(nextProps: any){
     const { LoginReducer ,User } = nextProps;
-    if(LoginReducer.isFetching){
-      this.setState({loading : true})
-    }else{ 
-      this.setState({loading : false})
-      if(!User.token){
+    this.setState({loading : LoginReducer.isFetching})
+    if(!User.token){
+      if(JSON.stringify(LoginReducer.request)!=='{}'){
         if(LoginReducer.request.success){
-          this.setState({loginState :true})
-          if(this.props.success){      
-            this.props.success()
+          if(nextProps.success){
+            nextProps.success()
           }
+          this.setState({isLogin :true})
         }else {
-          if(this.props.error){
-            this.props.error()
-          }
-        }
-      }
+          this.setState({ error : Object.assign(this.state.error,{ msg : LoginReducer.request.msg}) ,showErrorModel :true })
+          LoginReducer.request = {};
+        } 
+      } 
     }
-  }
-
-  onChangeUsername = (e :any) => {
-    this.setState({username :e.target.value})
-  }
-
-  onChangePassword = (e :any) => {
-    this.setState({password :e.target.value})
   }
 
   longinComponent = () => {
     return (
         <div>
-          <ul>
-            <li><Input onChange={this.onChangeUsername} disabled={this.state.loading} placeholder="邮箱" /></li>
-            <li><Input onChange={this.onChangePassword}  disabled={this.state.loading} placeholder="密码" /></li>
-            <li><Button loading={this.state.loading} onClick={this.onLogin} style={{width:'100%'}} type="primary">登陆</Button></li>
-          </ul>
+          <Tabs className={'tabs'} animated={false}>
+            <Tabs.TabPane disabled={this.state.loading} tab="登陆" key="onLogin">
+              <LoginDOM disabled={this.state.loading} onLogin={this.onLogin} />
+            </Tabs.TabPane>
+            <Tabs.TabPane disabled={this.state.loading} tab="注册" key="onRegister">
+              <RegisterDOM disabled={this.state.loading} onRegister={this.onRegister} />
+            </Tabs.TabPane>
+          </Tabs>
           <Divider><span style={{fontSize :14}}>第三方登陆</span></Divider>
           <div style={{ textAlign :'center' ,fontSize :32 }}>
             <span className={'myicon miwchat'} ><Icon type={'qq'} style={{ background :'#538DCB' ,padding: '6px 8px'}} /></span>&nbsp;&nbsp;
@@ -73,10 +90,13 @@ class Login extends React.Component<LoginProps, LoginState> {
     )
   }
 
+
+
+
   onLineComponent = () => {
     return (
       <div className="onLine" >
-        <div className="onLine_head" ><Avatar src={"http://img.qq1234.org/uploads/allimg/140831/3_140831133724_5.png"} size="large">Avatar</Avatar></div>     
+        <div className="onLine_head" ><Avatar src={this.props.User.avatar} size="large">Avatar</Avatar></div>     
         <div className="onLine_body">
           <p>{this.props.User.name}</p>
           <p><Link to={`/ua`}>管理用户后台</Link></p>
@@ -86,31 +106,26 @@ class Login extends React.Component<LoginProps, LoginState> {
     )
   }
 
-  getClassName = () :string =>{
-    if(this.props.card){
-      return "loginCard theme_CCard"
-    }else{
-      return `loginCard theme_CCard ${this.props.className || ''}`
-    }
-  } 
 
   render() {
-    const statusComponent = this.state.loginState? this.onLineComponent() : this.longinComponent()
-    const loginComponent = <div className={ this.getClassName() }>{statusComponent}</div>
-    const resultComponent = this.props.card ? <Card className={this.props.className || 'theme_CCard'}>{loginComponent}</Card> : loginComponent
-    return (
-      <div>{resultComponent}</div>
-    );
+    const Component :React.ReactNode = this.state.isLogin? this.onLineComponent() : this.longinComponent();
+    const ErrorDOM :React.ReactNode = <Result type={'error'} title={this.state.error.title} description={this.state.error.msg} actions={<Button onClick={()=>{this.setState({showErrorModel:false})}}>返回</Button>} />
+    const ResultComponent :React.ReactNode = !this.state.showErrorModel ? Component : ErrorDOM
+    return ResultComponent;
   }
 }
 
 
 import { connect } from 'react-redux'
-import { onLogin } from '../../redux/Login'
+import { onLogin ,onRegister } from '../../redux/Login'
 import { bindActionCreators } from 'redux';
-export default connect((state :any) :any => ({
+
+export default connect((state :any ,props :Props) :any => ({
   LoginReducer :state.LoginReducer,
   User : state.UserReducer
 }),dispatch => ({
-  onLogin: bindActionCreators(onLogin, dispatch)
-}))(Login);
+  onLogin: bindActionCreators(onLogin, dispatch),
+  onRegister :bindActionCreators(onRegister, dispatch),
+}))(LoginPage);
+
+

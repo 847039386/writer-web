@@ -1,4 +1,4 @@
 import LoginReducer ,{ ILoginReducer } from './reducer'
-import { onLogin } from './dispatch'
+import { onLogin ,onRegister } from './dispatch'
 
-export { LoginReducer , ILoginReducer ,onLogin }
+export { LoginReducer , ILoginReducer ,onLogin ,onRegister }

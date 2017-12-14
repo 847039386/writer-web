@@ -14,7 +14,7 @@ interface State {
   loading  :boolean 
 }
 
-class HomePage extends React.Component<any, State> {
+class HomePage extends React.PureComponent<any, State> {
   constructor(props :any) {
     super(props);
     this.state = { 
@@ -22,10 +22,6 @@ class HomePage extends React.Component<any, State> {
       dramas : [],
       topics : [],
       loading :true
-    }
-    //设置LoginComponent的参数
-    LoginComponent.defaultProps = {
-      card :true,
     }
   }
 
@@ -71,7 +67,11 @@ class HomePage extends React.Component<any, State> {
             </Col>
             <Col lg={6} sm={24} xs={24} md={12} xl={5} >
               <Row>
-                <Col style={{marginBottom:10}} className="theme_CCard"><LoginComponent /></Col>
+                <Col style={{marginBottom:10}} className="theme_CCard">
+                  <Card>
+                    <LoginComponent />
+                  </Card>
+                </Col>
               </Row>
             </Col>
           </Row>

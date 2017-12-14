@@ -28,14 +28,9 @@ class Comment extends React.Component<CommentProps, CommentState> {
       user_avatar : User.avatar || ''
     }
     LoginComponent.defaultProps = {
-      success : this.loginSuccess.bind(this)
+      success : this.toggleLoginModel.bind(this)
     }
   }
-
-  loginSuccess(){
-    this.toggleLoginModel();
-  }
-
 
   componentWillMount() {
     this.getComments(this.props.drama);
