@@ -99,7 +99,7 @@ class LoginPage extends React.Component<any, State> {
         <div className="onLine_head" ><Avatar src={this.props.User.avatar} size="large">Avatar</Avatar></div>     
         <div className="onLine_body">
           <p>{this.props.User.name}</p>
-          <p><Link to={`/ua`}>管理用户后台</Link></p>
+          <p><Link to={`/ua/dramas`}>管理用户后台</Link></p>
           <p><Link to={`/admin`}>管理后台</Link></p>
         </div>
       </div>

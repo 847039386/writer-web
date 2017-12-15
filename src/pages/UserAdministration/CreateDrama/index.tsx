@@ -15,6 +15,9 @@ class FormLayoutDemo extends React.Component<any,any> {
     this.onSubmit = this.onSubmit.bind(this)
   }
 
+  componentWillMount(){
+
+  }
  
   ProjectVisibilityOnChange(checked :boolean){
     this.setState({projectShow :checked})
@@ -63,7 +66,6 @@ class FormLayoutDemo extends React.Component<any,any> {
   }
 }
 
-// export default Form.create()(FormLayoutDemo)
 
 import { connect } from 'react-redux'
-export default connect()(Form.create()(FormLayoutDemo))
+export default connect((state :any) :any => ({ UserReducer :state.UserReducer }))(Form.create()(FormLayoutDemo))

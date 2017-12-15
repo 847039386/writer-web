@@ -42,5 +42,5 @@ class UserSetting extends React.Component<any,any> {
 }
 
 import { connect } from 'react-redux'
-export default connect()(UserSetting)
+export default connect((state :any) => ({ UserReducer :state.UserReducer }))(UserSetting)
 

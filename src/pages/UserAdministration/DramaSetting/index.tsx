@@ -17,12 +17,8 @@ class DramaSetting extends React.Component<any,any> {
   }
 
   componentWillMount(){
-    
+
   }
-
-  
-
-
   
   render() {
     return (
@@ -40,7 +36,5 @@ class DramaSetting extends React.Component<any,any> {
   }
 }
 
-
-// export default DramaSetting
-// import { connect } from 'react-redux'
-export default DramaSetting
+import { connect } from 'react-redux'
+export default connect((state :any) => ({ UserReducer :state.UserReducer }))(DramaSetting)
