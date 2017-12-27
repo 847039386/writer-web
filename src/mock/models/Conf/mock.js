@@ -4,7 +4,7 @@ import { GetURL } from '../../public/util'
 import { Home } from './'
 
 //模糊查询names
-Mock.mock(GetURL('cf/home'), {
+Mock.mock(GetURL('/cf/home'), {
     'data'    :Home,
     'success' :true,
 });  

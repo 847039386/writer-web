@@ -1,7 +1,7 @@
 import { IUser ,UserModel ,IBook ,ICategory ,BookModel ,CategoryModel } from './'
 
 interface IDrama {
-  id     :string,     //id
+  _id     :string,     //id
   user_id :IUser,     //作者
   title  :string,     //标题
   category_id : Array<ICategory>,   //剧情类型
@@ -14,7 +14,7 @@ interface IDrama {
 }
 
 class DramaModel {
-  id     :string;
+  _id     :string;
   user_id :IUser;
   title  :string;
   category_id : Array<ICategory>;
@@ -25,7 +25,7 @@ class DramaModel {
   character :string;
   weight :number;
   constructor(){
-    this.id = '';
+    this._id = '';
     this.category_id = [new CategoryModel()]; 
     this.title = '';
     this.book_id = new BookModel();

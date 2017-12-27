@@ -1,14 +1,14 @@
 import * as React from 'react';
 import moment from 'moment';
 import UAHeader from '../../../components/UAHeader';
-import { Table ,Popconfirm ,Button ,Row ,Col ,Alert  ,Form ,Select ,Icon ,Checkbox ,AutoComplete ,DatePicker } from 'antd';
+import { Table ,Popconfirm ,message ,Button ,Row ,Col ,Alert  ,Form ,Select ,Icon ,Checkbox ,AutoComplete ,DatePicker } from 'antd';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const CheckboxGroup = Checkbox.Group;
 const RangePicker = DatePicker.RangePicker;
 const AOption = AutoComplete.Option;
 import { Drama as DramaAjax } from '../../../axios';
-import { IDrama } from '../../../Models';
+import { IDrama } from '../../../model';
 import './styles.less';
 import { PaginationProps } from 'antd/lib/pagination/Pagination';
 import { setTableColumns ,defaultExpandColumns , ExpandColumns } from './conf'
@@ -117,7 +117,7 @@ class Dramas extends React.Component<any,State> {
                         pageSize :pagination.size
                     },
                     dramas :data.map((d :any) : any => {
-                        d.key = d.id;
+                        d.key = d._id;
                         return d;
                     })
                 })
@@ -132,12 +132,10 @@ class Dramas extends React.Component<any,State> {
                 return (
                     <div>
                         <Popconfirm title={'确定删除'} onConfirm={() => {
-                            this.state.dramas[index]['delete'] = true;
-                            const newDramas = this.state.dramas
-                            this.setState({dramas :newDramas})
+                            this.onDeleteDrama(record ,index)
                         }} okText="是" cancelText="否">
                             <Button disabled={this.state.dramas[index]['delete']} size={'small'} type={'primary'}>
-                                { this.state.dramas[index]['delete'] ? '已删除' : '删除' }
+                                { this.state.dramas[index]['delete'] ? this.state.dramas[index]['delete'] : '删除' }
                             </Button>
                         </Popconfirm>
                     </div>
@@ -146,6 +144,31 @@ class Dramas extends React.Component<any,State> {
         ]
         return setTableColumns(defaultExpandColumns,oldTab);
     }
+
+    onDeleteDrama = (record :IDrama,index :number) => {
+        this.state.dramas[index]['delete_title'] = '删除中';
+        this.setState({dramas :this.state.dramas})
+        if(record._id){
+            DramaAjax.remove(record._id,'token').then(({success ,data ,msg}) => {
+                if(success && data){
+                    this.state.dramas[index]['delete'] = '已删除';
+                    this.setState({dramas :this.state.dramas});
+                    message.success('删除成功');
+                }else{
+                    this.state.dramas[index]['delete'] = '';
+                    this.setState({dramas :this.state.dramas});
+                    message.error(`出现了错误，原因可能是${msg}`);
+                }
+            })
+        }else{
+            this.state.dramas[index]['delete_title'] = '';
+            this.setState({dramas :this.state.dramas})
+            message.error('参数不符合规则');
+        }  
+    }
+
+
+
 
     //选择剧本类型。
     onSelectNeed = (value :any) => {

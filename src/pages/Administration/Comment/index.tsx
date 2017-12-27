@@ -1,7 +1,7 @@
 import * as React from 'react';
 import UAHeader from '../../../components/UAHeader';
 import { Table ,Popconfirm ,Button } from 'antd';
-import { IComment } from '../../../Models';
+import { IComment } from '../../../model';
 import { PaginationProps } from 'antd/lib/pagination/Pagination';
 import { Comment as CommentAjax } from '../../../axios'
 
@@ -37,11 +37,10 @@ class CommentPage extends React.Component<any,State> {
     }
     getComments = (dramasID :string ,page :number = 1 ,count :number = 10) => {
         this.setState({tabing : true})
-        CommentAjax.getCommentsByDramaID(dramasID ,page).then(({ success ,data ,pagination }) => {     
+        CommentAjax.findByDramaID(dramasID ,page).then(({ success ,data ,pagination }) => {     
             if(this._isMounted){
                 this.setState({tabing : false}); 
                 if(success && data && pagination ){
-                    console.log(this._isMounted)
                     this.setState({
                         pagination : {
                             current : pagination.current,
@@ -49,7 +48,7 @@ class CommentPage extends React.Component<any,State> {
                             pageSize :pagination.size
                         },
                         comments : data.map((d :any) : any => {
-                            d.key = d.id;
+                            d.key = d._id;
                             return d;
                         })
                     })

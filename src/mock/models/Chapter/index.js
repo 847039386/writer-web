@@ -1,7 +1,7 @@
 import { episodes_md } from '../../data/md'
 
 const Chapter = {
-    "id"        : '@word(15)',
+    "_id"        : '@word(15)',
     "create_at" : '@date()',
     "drama_id"      : '@word(15)',
     "title"     : '@ctitle(8)',
@@ -10,7 +10,7 @@ const Chapter = {
 }
 
 const Chapters = {
-    'id' :'@word(15)',
+    '_id' :'@word(15)',
     "title" : '@ctitle(8)',
 }
 

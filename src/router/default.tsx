@@ -43,6 +43,11 @@ const NotFound = Loadable({
     loading: MyLoadingComponent
 });
 
+const Lauth = Loadable({
+    loader: () => import('../pages/Default/Lauth/index'),
+    loading: MyLoadingComponent
+});
+
 
 const DefaultRoute = (rote :any) => {
     return (
@@ -53,7 +58,8 @@ const DefaultRoute = (rote :any) => {
                     <Route exact path={`${rote.match.url}dramas`} component={DramasPage}/>  
                     <Route exact path={`${rote.match.url}topic/:id`} component={Topic}/>   
                     <Route exact path={`${rote.match.url}topics`} component={Topics}/>                    
-                    <Route exact path={`${rote.match.url}author/:id`} component={AuthorPage} />        
+                    <Route exact path={`${rote.match.url}author/:id`} component={AuthorPage} />
+                    <Route exact path={`${rote.match.url}lauth`} component={Lauth} />        
                     <Route path="*" component={NotFound} />
                 </Switch>                     
             </DefaultLayout>

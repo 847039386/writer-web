@@ -1,5 +1,5 @@
 const Topic = {
-    "id"          : "@word(15)",
+    "_id"          : "@word(15)",
     "title"    : '@ctitle(15,20)',
     "weight"    : 0,
     "create_at"   : "@date()",

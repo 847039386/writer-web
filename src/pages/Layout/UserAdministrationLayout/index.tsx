@@ -14,10 +14,8 @@ class UserAdministrationLayout extends React.Component<any,any> {
     }
 
     componentWillMount(){
-        const { User } = this.props
-        if(!User.token){
-            location.replace("#/");
-        }
+        const { storageLogin } = this.props;
+        storageLogin();
     }
 
     toLink(e :any){
@@ -67,6 +65,11 @@ class UserAdministrationLayout extends React.Component<any,any> {
       }
 }
 
-import { connect } from 'react-redux'
-export default connect((state :any) => ({ User :state.UserReducer }))(UserAdministrationLayout)
-
+import { connect } from 'react-redux';
+import { storageLogin } from '../../../redux/Login'
+import { bindActionCreators } from 'redux';
+export default connect((state :any ,props :any) :any => ({
+  User : state.UserReducer
+}),dispatch => ({
+  storageLogin :bindActionCreators(storageLogin, dispatch),
+}))(UserAdministrationLayout);

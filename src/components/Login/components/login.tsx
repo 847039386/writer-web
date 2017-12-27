@@ -3,7 +3,7 @@ import { Input ,Button ,Form } from 'antd';
 
 
 interface State {
-    email: string,
+    username: string,
     password :string,
     disabled :boolean
 }
@@ -17,7 +17,7 @@ class Login extends React.Component<any, State> {
   constructor(props :Props ) {
     super(props);
     this.state = {
-      email: '',
+      username: '',
       password :'',
       disabled :props.disabled || false
     }
@@ -28,7 +28,7 @@ class Login extends React.Component<any, State> {
       const { form } = this.props
       form.validateFields((err :any, values :any) => {
         if (!err) {
-          this.props.onLogin(values.email,values.password)
+          this.props.onLogin(values.username,values.password)
         }
       });
   }
@@ -38,8 +38,8 @@ class Login extends React.Component<any, State> {
         this.setState({ disabled })
   } 
 
-  onChangeEmail = (e :any) => {
-    this.setState({email :e.target.value})
+  onChangeUserName = (e :any) => {
+    this.setState({username :e.target.value})
   }
 
   onChangePassword = (e :any) => {
@@ -51,11 +51,11 @@ class Login extends React.Component<any, State> {
     return (
         <Form className={'login-form'}>
             <Form.Item>
-            {getFieldDecorator('email', {
+            {getFieldDecorator('username', {
                 validateTrigger :'onBlur',
-                rules: [{ required: true, type: 'email' , whitespace :true, message: '请输入有效的邮箱!' }],
+                rules: [{ required: true , whitespace :true, message: '用户名不允许为空' }],
             })(
-                <Input disabled={this.state.disabled} onChange={this.onChangeEmail} placeholder="邮箱" />
+                <Input disabled={this.state.disabled} onChange={this.onChangeUserName} placeholder="用户名" />
             )}
             </Form.Item>
             <Form.Item>

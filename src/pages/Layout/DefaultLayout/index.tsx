@@ -14,6 +14,11 @@ class App extends React.Component<any,any> {
     }
   }
 
+  componentWillMount(){
+    const { storageLogin } = this.props;
+    storageLogin();
+  }
+
   componentWillReceiveProps(nextProps :any){
     const { theme } = nextProps
     this.setState({ theme :theme })
@@ -34,5 +39,12 @@ class App extends React.Component<any,any> {
   }
 }
 
-import { connect } from 'react-redux'
-export default connect((state :any) => ({ theme : state.ConfigReducer.theme }))(App)
+import { connect } from 'react-redux';
+import { storageLogin } from '../../../redux/Login'
+import { bindActionCreators } from 'redux';
+export default connect((state :any ,props :any) :any => ({
+  theme : state.ConfigReducer.theme,
+  User : state.UserReducer
+}),dispatch => ({
+  storageLogin :bindActionCreators(storageLogin, dispatch),
+}))(App);

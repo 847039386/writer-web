@@ -1,4 +1,4 @@
-import { IUser ,UserModel } from '../../../Models'
+import { IUser ,UserModel } from '../../../model'
 
 interface UserState {
     User : IUser,

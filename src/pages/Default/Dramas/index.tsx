@@ -3,7 +3,7 @@ import { List ,Pagination ,Form ,Tag ,Card } from 'antd';
 const FormItem = Form.Item;
 const { CheckableTag } = Tag;
 import { Drama as DramaAjax } from '../../../axios'
-import { IDrama } from '../../../Models'
+import { IDrama } from '../../../model'
 import { Link } from 'react-router-dom'
 import './index.css';
 
@@ -53,10 +53,12 @@ class DramasPage extends React.Component<any, any> {
           <List.Item  extra={''} style={{border :0}} >
             <Card>
               <Card.Meta
-                title={<Link to={`/details/${drama.id}`}>{drama.title}</Link>}
-                description={ drama.category_id.map((category) => {
-                  return ( <span key={category.id}>{category.name}&nbsp;</span> )
-                }) }
+                title={<Link to={`/details/${drama._id}`}>{drama.title}</Link>}
+                description={ 
+                  drama.category_id.length > 0 ? drama.category_id.map((category) => {
+                    return ( <span key={category._id}>{category.name}&nbsp;</span> )
+                  }) : <span>其他&nbsp;</span>
+                }
               />
             </Card>
           </List.Item>

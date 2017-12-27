@@ -1,5 +1,5 @@
 interface ITopic {
-    id     :string,     //id
+    _id     :string,     //id
     create_at :string,  //创建时间
     title :string,
     weight :number,     //权重
@@ -7,13 +7,13 @@ interface ITopic {
   }
   
   class TopicModel {
-    id     :string;
+    _id     :string;
     create_at :string;
     title :string;
     content : string; 
     weight :number;
     constructor(){
-      this.id = '';
+      this._id = '';
       this.create_at = '';
       this.title = '';
       this.weight = 0;

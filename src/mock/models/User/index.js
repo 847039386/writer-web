@@ -2,7 +2,7 @@ import Mock from 'mockjs'
 
 // 用户
 const User = {
-  "id"           :"@word(15)",
+  "_id"           :"@word(15)",
   "name"         :"@cname",
   "follow"       :"@integer(1,10000)",
   "avatar|1"       :[
@@ -18,11 +18,4 @@ const User = {
   "token"        :"@word(15)",
 }
 
-const UserPresentation = {
-  "id"            : "@word(15)",
-  "user_id"       : '@word(15)',
-  "create_at"     : "@date()",
-  "content"  : "@ctitle(15,10000)",
-}
-
-export { User , UserPresentation }
+export { User }

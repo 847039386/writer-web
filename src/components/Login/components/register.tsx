@@ -4,17 +4,17 @@ import { User } from '../../../axios'
 
 
 interface State {
-    email: string,
+    username: string,
     password :string,
     nickname :string,
     ppassword :string,
     disabled :boolean,
-    allowEmail :boolean,
+    allowUserName :boolean,
     selectLoading :boolean
 }
 
 interface Props {
-    onRegister(nickname :string ,email :string ,password :string) :void,
+    onRegister(nickname :string ,username :string ,password :string) :void,
     disabled? :boolean
 }
 
@@ -24,12 +24,12 @@ class Login extends React.Component<any, State> {
   constructor(props :Props) {
     super(props);
     this.state = {
-      email: '',
+      username: '',
       password :'',
       nickname :'',
       ppassword:'',
       disabled :props.disabled || false,
-      allowEmail : false,
+      allowUserName : false,
       selectLoading :false
     }
     this.onRegister = this.onRegister.bind(this)
@@ -39,7 +39,7 @@ class Login extends React.Component<any, State> {
       const { form } = this.props
       form.validateFields((err :any, values :any) => {
         if (!err) {
-          this.props.onRegister()
+          this.props.onRegister(this.state.nickname,this.state.username,this.state.password)
         }
       });
   }
@@ -49,8 +49,8 @@ class Login extends React.Component<any, State> {
     this.setState({ disabled })
   }
 
-  onChangeEmail = (e :any) => {
-    this.setState({email :e.target.value})
+  onChangeUsername = (e :any) => {
+    this.setState({username :e.target.value})
   }
 
   onChangePassword = (e :any) => {
@@ -69,41 +69,35 @@ class Login extends React.Component<any, State> {
     const { getFieldDecorator } = this.props.form;
     return (
         <Form className={'login-form'}>
-            <Form.Item hasFeedback >
-                {getFieldDecorator('email', {
-                    validateTrigger :'onBlur',
-                    rules: [{ required: true, whitespace :true, validator :(rule :any, value :any, callback :any) => {            
-                        if(this.oldEmail !== value){
-                            let regexp = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-                            if(regexp.test(value)){
-                                User.findRepeatEmail(value).then(({success ,data})=>{
-                                    if(success && data){ 
-                                        this.oldEmailMsg = ''; 
-                                        callback()
-                                    }else{         
-                                        this.oldEmailMsg = '该邮箱已被注册'                
-                                        callback(this.oldEmailMsg)
-                                    }
-                                })
-                            }else{
-                                this.oldEmailMsg = '请输入有效的邮箱'
-                                callback(this.oldEmailMsg)
-                            }
-                        }else{
-                            this.oldEmailMsg ? callback(this.oldEmailMsg) : callback()
-                        }
-                        this.oldEmail = value;                                              
-                    }}],
-                })(
-                    <Input disabled={this.state.disabled} onChange={this.onChangeEmail} placeholder="邮箱" />             
-                )}
-            </Form.Item>
             <Form.Item hasFeedback>
                 {getFieldDecorator('nickname', {
                     validateTrigger :'onBlur',
                     rules: [{ required: true, min : 2 , max:10 ,whitespace :true,  message: '请输入有效的昵称!并且长度在2-10之间!' }],
                 })(
                     <Input disabled={this.state.disabled} onChange={this.onChangeNickname} placeholder="昵称" />
+                )}
+            </Form.Item>
+            <Form.Item hasFeedback >
+                {getFieldDecorator('username', {
+                    validateTrigger :'onBlur',
+                    rules: [{ required: true, whitespace :true, validator :(rule :any, value :any, callback :any) => {            
+                        if(this.oldEmail !== value){
+                            User.findRepeatUName(value).then(({success ,data})=>{
+                                if(success){ 
+                                    this.oldEmailMsg = ''; 
+                                    callback()
+                                }else{         
+                                    this.oldEmailMsg = '该用户名已被注册'                
+                                    callback(this.oldEmailMsg)
+                                }
+                            })
+                        }else{
+                            this.oldEmailMsg ? callback(this.oldEmailMsg) : callback()
+                        }
+                        this.oldEmail = value;                                              
+                    }}],
+                })(
+                    <Input disabled={this.state.disabled} onChange={this.onChangeUsername} placeholder="用户名" />             
                 )}
             </Form.Item>
             <Form.Item hasFeedback>
@@ -118,7 +112,6 @@ class Login extends React.Component<any, State> {
                 {getFieldDecorator('ppassword', {
                     validateTrigger :'onBlur',
                     rules: [{ required: true, validator :(rule :any, value :any, callback :any) => {    
-                        console.log(this.state.password,value)        
                         if(value === this.state.password){
                             callback()
                         }else{

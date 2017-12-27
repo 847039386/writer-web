@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IDrama ,IUser ,ITopic } from '../Models'
+import { IDrama ,IUser ,ITopic } from '../model'
 import Conf from '../conf'
 const host = Conf.host || 'http://test.com/'
 
@@ -21,7 +21,7 @@ interface IAJAXHome {
  */
 const home = () => {
     return new Promise<IAJAXHome>((resolve ,reject) => {
-        axios.get(host + 'cf/home').then((request) => {
+        axios.get(`${host}/cf/home`).then((request) => {
             if(request.data.success){
                 resolve(request.data) 
             }else{

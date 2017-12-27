@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { ICommentPopulate ,IComment } from '../Models';
+import { ICommentPopulate ,IComment } from '../model';
 import Conf from '../conf';
+import moment from '../common/moment-cn';
 const host = Conf.host || 'http://test.com/';
 
 // 一条comment接口
@@ -24,14 +25,12 @@ interface IAJAXComments {
 
 
 //根据usertoken 添加一条评论
-const setCommentByUserToken = (token :string) => {
+const send = (uid :string ,did :string ,content :string ,token :string) => {
     return new Promise<IAJAXComment>((resolve ,reject) => {
-        axios.get(`${host}drama/comment/save`).then((request) => {
-            if(request.data.success){
-                resolve(request.data) 
-            }else{
-                resolve({success :false})
-            }             
+        axios.post(`${host}/comment/ct`,{
+            uid ,did ,content
+        },{headers :{ authorization : token }}).then((request) => {
+            resolve(request.data)            
         }).catch((err) => {
             resolve({success :false})
         })
@@ -39,14 +38,23 @@ const setCommentByUserToken = (token :string) => {
 }
 
 //根据剧本id 获取该剧本下所有评论
-const getCommentsByDramaID = (drama_id :string ,page :number) => {
+const findByDramaID = (drama_id :string ,page :number ,size :number = 10) => {
     return new Promise<IAJAXComments>((resolve ,reject) => {
-        axios.get(`${host}drama/comment/find`).then((request) => {
+        axios.get(`${host}/comment/fd`,{
+            params : { id : drama_id ,page ,size}
+        }).then((request) => { 
             if(request.data.success){
-                resolve(request.data) 
+                let result :Array<any> = request.data.data;
+                result = result.map((item ) => {
+                    item.key = item._id;
+                    item.create_at = moment(item.create_at).endOf('minute').fromNow();
+                    return item;
+                })
+                resolve(request.data)
+
             }else{
-                resolve({success :false})
-            }             
+                resolve(request.data) 
+            }
         }).catch((err) => {
             resolve({success :false})
         })
@@ -55,7 +63,7 @@ const getCommentsByDramaID = (drama_id :string ,page :number) => {
 
 
 export default {
-    getCommentsByDramaID,
-    setCommentByUserToken
+    findByDramaID,
+    send
 }
 

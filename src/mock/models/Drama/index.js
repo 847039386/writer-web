@@ -5,7 +5,7 @@ import { Category } from '../Category'
 
 // 剧本文章详情
 const Drama = {
-    "id"       : "@word(15)",
+    "_id"       : "@word(15)",
     "user_id"  : User,
     "title"    : '@ctitle(10,15)',
     "book_id" :  Book,
@@ -17,10 +17,4 @@ const Drama = {
     "character" : biography.join('  \n'),
 }
 
-const DramaNames = {
-    "id" : "@word(15)",
-    "title" : "@ctitle(10)"
-}
-
-
-export { Drama , DramaNames }
+export { Drama }

@@ -22,10 +22,11 @@ class Home extends React.Component<any,any> {
 
     vCodeTimer = () => {
         if(this.state.timer_bug){
+                this.startTimer();
                 this.setState({timer_bug :false})
                 User.getEmailPAC('token').then(({success ,data}) => {
                     if(success && data){
-                        this.startTimer();                       
+                                               
                     }
                 })               
         }

@@ -7,6 +7,7 @@ import { Comment as CommentAjax } from '../../axios'
 import { connect } from 'react-redux'
 import { onLogin } from '../../redux/Login'
 import { bindActionCreators } from 'redux';
+import moment from '../../common/moment-cn'
 
 class Comment extends React.Component<CommentProps, CommentState> {
   loadingDOM :React.ReactNode = <Spin style={{ width :'100%' }} tip="加载中..." />;
@@ -46,7 +47,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
   //获取评论 
   getComments(dramaID :string ,page : number = 1) {
     this.setState({loading :true})
-    CommentAjax.getCommentsByDramaID(dramaID,page).then(({success ,data ,pagination}) => {
+    CommentAjax.findByDramaID(dramaID,page).then(({success ,data ,pagination}) => {
       this.setState({loading :false})
       if(success && data && pagination){
         let max = Math.ceil(pagination.total/pagination.size)
@@ -71,16 +72,16 @@ class Comment extends React.Component<CommentProps, CommentState> {
   //用户发送评论到服务器
   setComment = (e :any) => {
     message.config({ top :50 })
-    if(this.state.user_comment){
+    if(this.state.user_comment && this.props.User._id && this.props.User.token){
       if(this.state.sendCommentStatus){
         this.setState({sendCommentStatus: false })
-        CommentAjax.setCommentByUserToken('token').then(({ success ,data }) => {
+        CommentAjax.send(this.props.User._id,this.props.drama,this.state.user_comment,this.props.User.token).then(({ success ,data }) => {
           this.setState({sendCommentStatus: true })
           if(success && data){
             let comment :ICommentPopulate = {
-              id :data.id,
+              _id :data._id,
               user_id : this.props.User,
-              create_at : data.create_at,
+              create_at : moment(data.create_at).endOf('minute').fromNow(),
               content : data.content
             }
             let news_comments  = this.state.comments
@@ -130,7 +131,7 @@ class Comment extends React.Component<CommentProps, CommentState> {
         </div>
         <List
           loading={this.state.loading}
-          header={<div>评论列表&nbsp;&nbsp;{ this.state.notCs ? '' : <a onClick={this.onPageChange}>下一页</a> }</div>}
+          header={<div>评论列表&nbsp;&nbsp;{ this.state.notCs || this.state.comments.length <= 0 ? '' : <a onClick={this.onPageChange}>下一页</a> }</div>}
           dataSource={this.state.comments}
           renderItem={(item : ICommentPopulate) => (
             <List.Item>

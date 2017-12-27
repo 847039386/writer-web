@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { User as UserAjax } from '../../../../axios';
 import { DState } from './constraint'
 import './index.css'
 
@@ -13,12 +12,8 @@ class Presentation extends React.Component<any,DState> {
   }
 
   componentWillMount() {
-    console.log(this.props.id ,'id')
-    UserAjax.getPresentationByUserID(this.props.id).then(({ success ,data }) => {
-      if(success && data){
-        this.setState({content :data.content})
-      }
-    })
+    // console.log(this.props.id ,'id')
+    
   }
 
   render() {

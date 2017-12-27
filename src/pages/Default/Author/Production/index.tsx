@@ -2,7 +2,7 @@ import * as React from 'react';
 import { List ,Button ,Spin } from 'antd'
 import { Drama as DramaAjax } from '../../../../axios'
 import { Link } from 'react-router-dom'
-import { IDrama } from '../../../../Models'
+import { IDrama } from '../../../../model'
 
 interface State {
     Dramas :IDrama [],
@@ -69,7 +69,7 @@ class Production extends React.Component<Props,State> {
             dataSource={this.state.Dramas}
             renderItem={(drama :IDrama) => (
             <List.Item>
-              <Link to={`/details/${drama.id}`}>{drama.title}</Link>
+              <Link to={`/details/${drama._id}`}>{drama.title}</Link>
           </List.Item>)}
           />
         }

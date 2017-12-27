@@ -3,7 +3,7 @@ import { Input ,Row ,Col } from 'antd';
 const { TextArea } = Input;
 import Bundle from '../../bundle';
 import './index.less'
-import SeiriBox,{ Rule as SeiriRule } from '../../comment/seiri'
+import SeiriBox,{ Rule as SeiriRule } from '../../common/seiri'
 const ReactMarkdown = (props: any) => (
   <Bundle load={() => import('react-markdown')}>
       {(UpdateDrama: any) => <UpdateDrama {...props} />}

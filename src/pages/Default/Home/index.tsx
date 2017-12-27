@@ -3,7 +3,7 @@ import { Row, Col ,Card } from 'antd';
 import LoginComponent from '../../../components/Login'
 import ShortList from '../../../components/ShortList'
 import { Conf } from '../../../axios'
-import { IDrama ,IUser ,ITopic } from '../../../Models'
+import { IDrama ,IUser ,ITopic } from '../../../model'
 import { Link } from 'react-router-dom'
 import './index.less'
 

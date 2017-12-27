@@ -1,4 +1,4 @@
-import { IDrama ,DramaModel ,IChapter ,ChapterModel } from '../../../Models'
+import { IDrama ,DramaModel ,IChapter ,ChapterModel } from '../../../model'
 
 interface DetailsState {
   dramaBook     :IDrama,

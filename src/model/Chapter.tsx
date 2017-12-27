@@ -1,5 +1,5 @@
 interface IChapter {
-  id     :string,     //id
+  _id     :string,     //id
   create_at :string,  //创建时间
   drama_id : string,       //剧本ID
   title :string,
@@ -7,13 +7,13 @@ interface IChapter {
 }
 
 class ChapterModel {
-  id     :string;     
+  _id     :string;     
   create_at :string;  
   drama_id : string;      
   title :string;
   content : string;   
   constructor(){
-    this.id = '';
+    this._id = '';
     this.create_at = '';
     this.drama_id = '';
     this.title = '';

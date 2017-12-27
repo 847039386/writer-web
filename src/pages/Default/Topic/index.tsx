@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Col, Row  } from 'antd';
-import { Topic } from '../../../axios'
-import { ITopic ,TopicModel } from '../../../Models'
+import { Topic } from '../../../axios';
+import { ITopic ,TopicModel } from '../../../model';
+import Seiri from '../../../components/Seiri'
 
 interface State {
     topic :ITopic
@@ -17,7 +18,7 @@ class BookDetails extends React.Component<any, State> {
   }
 
   componentWillMount() {
-    Topic.getTopicById(this.props.match.params.id).then(({success ,data}) => {
+    Topic.findById(this.props.match.params.id).then(({success ,data}) => {
         if(data && success){
             this.setState({ topic :data })
         }
@@ -31,11 +32,10 @@ class BookDetails extends React.Component<any, State> {
           <Col md={24} className="details_juben theme_Dborder">
             <Col span={24}><h1 className="theme_DTitle title">{this.state.topic.title}</h1></Col>
             <Col className="introduce theme_DBox" span={24}>
-              <Col span={24}><p>作者：admin</p></Col>
               <Col span={24}><p>创建于：{this.state.topic.create_at}</p></Col>
             </Col>
             <Col className="content" span={24}>
-            {this.state.topic.content} 
+              <Seiri onlyMD value={this.state.topic.content} />
             </Col>
           </Col>
         </Row>

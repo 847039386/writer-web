@@ -1,15 +1,15 @@
 interface IBook {
-    id     :string,     //id
+    _id     :string,     //id
     create_at :string,  //创建时间
     name :string,
   }
   
   class BookModel {
-    id     :string;     
+    _id     :string;     
     create_at :string;  
     name : string;      
     constructor(){
-      this.id = '';
+      this._id = '';
       this.create_at = '';
       this.name = '';
     } 

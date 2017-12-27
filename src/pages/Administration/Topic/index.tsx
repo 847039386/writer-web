@@ -1,7 +1,8 @@
 import * as React from 'react';
 import UAHeader from '../../../components/UAHeader';
 import Markdown from '../../../components/Markdown';
-import { Input } from 'antd';
+import { Topic } from '../../../axios'
+import { Input ,message } from 'antd';
 
 interface State {
     title :string;
@@ -21,7 +22,16 @@ class Home extends React.Component<any,State> {
     }
 
     onSubmit = (code :string) => {
-        console.log(code,this.state.title)
+        if(this.state.title && code){
+            Topic.create(this.state.title,code,'token').then(({ success ,data ,msg }) => {
+                if(success && data){
+                    message.success(`文章添加成功`)
+                    location.replace("#/admin/topics");
+                }else{
+                    message.error(`文章添加失败，原因可能是：${msg}`)
+                }
+            })
+        }
     }
 
     render (){

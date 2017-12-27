@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Card ,Icon ,Spin ,List ,Button } from 'antd';
+import { Card ,Icon ,Spin ,List ,Button ,Popconfirm ,message} from 'antd';
 import UAHeader from '../../../components/UAHeader';
 import { Drama as DramaAjax } from '../../../axios'
-import { IDrama } from '../../../Models'
+import { IDrama } from '../../../model'
 import './style.less'
 
 interface State {
@@ -29,11 +29,10 @@ class UserHome extends React.Component<any,State> {
   componentWillMount(){
     const { UserReducer } = this.props;
     if(UserReducer.token){
-      this.getDramas(this.props.id,1,{loading :true},{loading :false})
+      this.getDramas(UserReducer._id,1,{loading :true},{loading :false})
     }else{
       location.replace("#/");
     }
-    
   }
 
   getDramas = (id :string ,page :number = 1, state :any , end :any) =>{
@@ -55,6 +54,18 @@ class UserHome extends React.Component<any,State> {
     location.replace("#/ua/cdrama");
   }
 
+  deleteDrama = (id :string ,idx :number) => {
+    DramaAjax.remove(id , 'token').then(({success ,data ,msg}) => {
+      if(success && data){
+        this.state.dramas.splice(idx,1)
+        this.setState({ dramas :this.state.dramas});
+        message.success('删除成功')
+      }else{
+        message.success(`删除失败，原因可能是：${msg}`)
+      }
+    })
+  }
+
   render() {
     const { loadingMore ,showLoadingMore } = this.state
     const loadMore = showLoadingMore ? (
@@ -72,11 +83,17 @@ class UserHome extends React.Component<any,State> {
                       loadMore={loadMore}
                       grid={{ gutter: 16, column: 3 }}
                       dataSource={this.state.dramas}
-                      renderItem={(drama :any) => (
+                      renderItem={(drama :IDrama ,idx :number) => (
                         <List.Item>
                           <Card 
                             className={'ua-dramas-item'}
-                            actions={[<Icon onClick={()=>{location.replace(`#/ua/drama/setting/${drama.id}`)}} type="edit" />, <Icon type="delete" />]}
+                            actions={[<Icon onClick={()=>{location.replace(`#/ua/drama/setting/${drama._id}`)}} type="edit" />,
+                            <Popconfirm title={'确定删除'} onConfirm={() => {
+                                this.deleteDrama(drama._id ,idx)
+                            }} okText="是" cancelText="否">
+                              <Icon type="delete" />
+                            </Popconfirm>
+                            ]}
                           >
                             <div className={'ua-dramas-item-body'}>
                               <div className={'ua-dramas-item-title'}>{drama.title}</div>

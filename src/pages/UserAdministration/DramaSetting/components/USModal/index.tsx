@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Modal ,Input  } from 'antd';
-import SeiriBox from '../../../../../comment/seiri'
+import SeiriBox from '../../../../../common/seiri'
 import Seiri ,{ SeiriRule } from '../../../../../components/Seiri'
 
 interface State {

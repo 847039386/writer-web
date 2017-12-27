@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Col, Row ,Tabs ,Icon ,Button ,Spin ,Card ,message } from 'antd';
+import { Col, Row ,Tabs ,Icon ,Button ,Spin ,Card ,message ,Tag } from 'antd';
 const TabPane = Tabs.TabPane;
 import { Link } from 'react-router-dom';
 import Comment from '../../../components/Comment';
@@ -55,11 +55,11 @@ class BookDetails extends React.Component<any, DetailsState> {
   }
 
   getEpisodes = (drama_id : string) =>{
-    Chapter.getDataByDramaID(drama_id).then(({ success ,data }) => {
+    Chapter.findByDramaID(drama_id).then(({ success ,data }) => {
       if(success && data){
         this.setState({ Chapters :data })
         if(data.length > 0){
-          this.getEpisode(data[0].id);
+          this.getEpisode(data[0]._id);
         }
       }
     })
@@ -77,10 +77,10 @@ class BookDetails extends React.Component<any, DetailsState> {
           <Row>
             <Col span={4}>
               {
-                this.state.Chapters.map((item :any ,idx :number) => {
-                  let selected :any = this.state.selectedEpisodeID == item.id ? {type : "primary"} : {type :'dashed'}
+                this.state.Chapters.map((chapter :IChapter ,idx :number) => {
+                  let selected :any = this.state.selectedEpisodeID == chapter._id ? {type : "primary"} : {type :'dashed'}
                   return (
-                    <Button onClick={() => {this.getEpisode(item.id)}} style={{marginBottom :10 ,width :'80%' }} key={item.id} {...selected} >{`${item.title}`}</Button>
+                    <Button disabled={this.state.episodeLoading} onClick={() => {this.getEpisode(chapter._id)}} style={{marginBottom :10 ,width :'80%' }} key={chapter._id} {...selected} >{`${chapter.title}`}</Button>
                   )
                 })
               }
@@ -89,7 +89,7 @@ class BookDetails extends React.Component<any, DetailsState> {
               {
                 this.state.episodeLoading ?
                 this.loadingDOM :
-                <div style={{marginBottom:10}} key={chapter.id}>
+                <div style={{marginBottom:10}} key={chapter._id}>
                   <h1>{chapter.title}</h1>
                   <Seiri onlyMD value={chapter.content} />
                 </div>
@@ -106,16 +106,16 @@ class BookDetails extends React.Component<any, DetailsState> {
         <Card loading={this.state.mainLoading} bodyStyle={{minHeight :'80vh',padding:24}}>
           <Col span={24}><h1 className="theme_DTitle title">{this.state.dramaBook.title}</h1></Col>
           <Col className="introduce theme_DBox" span={24}>
-              <Col span={12}>作者：<Link to={`/author/presentation/${this.state.dramaBook.user_id.id}`}>{this.state.dramaBook.user_id.name}</Link></Col>
+              <Col span={12}>作者：<Link to={`/author/${this.state.dramaBook.user_id._id}`}>{this.state.dramaBook.user_id.name}</Link></Col>
               <Col span={12}>创建于：{this.state.dramaBook.create_at}</Col>
-              <Col span={12}>作品类型：[&nbsp;{this.state.dramaBook.category_id.map((category ,item) => {
-                return (<span key={category.id}>{category.name} &nbsp;</span>)
-              })}]</Col>
-              <Col span={12}>剧本类型：{this.state.dramaBook.book_id.name}</Col>
+              <Col span={12}>剧情类型：&nbsp;{this.state.dramaBook.category_id.map((category ,item) => {
+                return (<Tag color="purple" key={category._id}>{category.name}</Tag>)
+              })}</Col>
+              <Col span={12}>剧本类型：<Tag color="#f50">{this.state.dramaBook.book_id.name}</Tag></Col>
               <Col span={12}>阅读量：300</Col>
               <Col span={12}>点赞：<Icon type="like" style={{cursor:'pointer'}} />&nbsp;300</Col>
           </Col>
-          <Col className="content" span={24}>{this.getMVBodyTabPane(this.state.dramaBook.description,this.state.dramaBook.character,this.state.Chapter)}</Col>
+          <Col className="content" span={24}>{this.getMVBodyTabPane(this.state.dramaBook.abstract || this.state.dramaBook.description,this.state.dramaBook.character,this.state.Chapter)}</Col>
         </Card>
     )
   }

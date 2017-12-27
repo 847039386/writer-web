@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import './index.less';
 import LoginDOM from './components/login'
 import RegisterDOM from './components/register';
-import Result from '../../components/Result'
+import Result from '../../components/Result';
+import Config from '../../conf'
 
 interface operationError {
   title :string ,
@@ -23,6 +24,8 @@ interface Props {
 }
 
 class LoginPage extends React.Component<any, State> {
+  status :string;
+  isLogout :boolean;
   constructor(props :any) {
     super(props);
     const { User } = props
@@ -33,44 +36,61 @@ class LoginPage extends React.Component<any, State> {
       showErrorModel :false
     }
     this.onLogin = this.onLogin.bind(this)
+    this.onLogout = this.onLogout.bind(this)
     this.onRegister = this.onRegister.bind(this)
   }
 
-  onLogin(email :string ,password :string) {
+  onLogin(username :string ,password :string) {
+    this.status = 'host';
     const { onLogin } = this.props
     if(onLogin){
       this.setState({ error : Object.assign(this.state.error,{ title :'登陆' }) })
-      onLogin(email,password)
+      onLogin(username,password)
     }
   }
 
-  onRegister = (nickname :string ,email :string ,password :string) => {
+  onRegister = (nickname :string ,username :string ,password :string) => {
+      this.status = 'host'
       const { onRegister } = this.props
       if(onRegister){
         this.setState({ error : Object.assign(this.state.error,{ title :'注册' }) })
-        onRegister(nickname,email,password)
+        onRegister(nickname,username,password)
       }
   }
 
+  componentWillMount(){
+    const { storageLogin } = this.props;
+    storageLogin();
+  }
+
+
+
   componentWillReceiveProps(nextProps: any){
     const { LoginReducer ,User } = nextProps;
-    this.setState({loading : LoginReducer.isFetching})
+    if(this.status == 'host'){
+      this.setState({loading : LoginReducer.isFetching})
+    }
     if(!User.token){
       if(JSON.stringify(LoginReducer.request)!=='{}'){
         if(LoginReducer.request.success){
           if(nextProps.success){
             nextProps.success()
           }
-          this.setState({isLogin :true})
+          if(!this.isLogout){
+            this.setState({isLogin :true})
+          }
         }else {
           this.setState({ error : Object.assign(this.state.error,{ msg : LoginReducer.request.msg}) ,showErrorModel :true })
           LoginReducer.request = {};
         } 
       } 
+    }else{
+      this.setState({isLogin :true})
     }
   }
 
   longinComponent = () => {
+    const hostRedirectURL = encodeURIComponent(location.hash)
     return (
         <div>
           <Tabs className={'tabs'} animated={false}>
@@ -83,7 +103,10 @@ class LoginPage extends React.Component<any, State> {
           </Tabs>
           <Divider><span style={{fontSize :14}}>第三方登陆</span></Divider>
           <div style={{ textAlign :'center' ,fontSize :32 }}>
-            <span className={'myicon miwchat'} ><Icon type={'qq'} style={{ background :'#538DCB' ,padding: '6px 8px'}} /></span>&nbsp;&nbsp;
+            <a href={`${Config.OAuth.qq.baseSite}?response_type=${'code'}&client_id=${Config.OAuth.qq.appID}&state=${hostRedirectURL}&redirect_uri=${Config.OAuth.qq.redirectURL}`}>
+              <span className={'myicon miwchat'} ><Icon type={'qq'} style={{ background :'#538DCB' ,padding: '6px 8px'}} /></span>
+            </a>    
+            &nbsp;&nbsp;
             <span className={'myicon miqq'} ><Icon type={'wechat'} style={{ padding: '6px 8px' ,background :'#0FCF1A'}} /></span>
           </div>
         </div>
@@ -93,17 +116,25 @@ class LoginPage extends React.Component<any, State> {
 
 
 
-  onLineComponent = () => {
+  onLineComponent = () :React.ReactNode => {
     return (
       <div className="onLine" >
-        <div className="onLine_head" ><Avatar src={this.props.User.avatar} size="large">Avatar</Avatar></div>     
+        <div className="onLine_head" ><Avatar src={this.props.User.avatar || ''} size="large">Avatar</Avatar></div>     
         <div className="onLine_body">
           <p>{this.props.User.name}</p>
           <p><Link to={`/ua/dramas`}>管理用户后台</Link></p>
-          <p><Link to={`/admin`}>管理后台</Link></p>
+          <Button onClick={this.onLogout}>注销</Button>
         </div>
       </div>
     )
+  }
+
+  onLogout = () => {
+    let { dispatch } = this.props;
+    this.isLogout = true;    
+    this.setState({ isLogin :false },() => {
+      dispatch({type: "DESTROY_USER"})
+    })
   }
 
 
@@ -117,7 +148,7 @@ class LoginPage extends React.Component<any, State> {
 
 
 import { connect } from 'react-redux'
-import { onLogin ,onRegister } from '../../redux/Login'
+import { onLogin ,onRegister ,storageLogin } from '../../redux/Login'
 import { bindActionCreators } from 'redux';
 
 export default connect((state :any ,props :Props) :any => ({
@@ -126,6 +157,8 @@ export default connect((state :any ,props :Props) :any => ({
 }),dispatch => ({
   onLogin: bindActionCreators(onLogin, dispatch),
   onRegister :bindActionCreators(onRegister, dispatch),
+  storageLogin :bindActionCreators(storageLogin, dispatch),
+  dispatch :dispatch
 }))(LoginPage);
 
 

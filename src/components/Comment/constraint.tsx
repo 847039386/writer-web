@@ -1,4 +1,4 @@
-import { IComment , CommentModel ,ICommentPopulate ,IUser } from '../../Models'
+import { IComment , CommentModel ,ICommentPopulate ,IUser } from '../../model'
 
 interface Pagination {
   total : number,

@@ -11,9 +11,7 @@ class TopicsPage extends React.Component<any, any> {
       topics : [],
       topicsLoading : false, 
       pagination :{ current :1 , onChange :this.onPageChange ,total : 0}
-    };
-    console.log(this.state.pagination)
-    
+    };    
   }
 
   componentWillMount() {
@@ -26,7 +24,7 @@ class TopicsPage extends React.Component<any, any> {
 
   getTopics = (page :number = 1 ,count :number = 10) => {
     this.setState({topicsLoading :true})
-    Topic.getTopics(page,count).then(({success ,data ,pagination}) => {
+    Topic.getDatas(page,count).then(({success ,data ,pagination}) => {
       this.setState({topicsLoading :false})
       if(success && data && pagination) {
         this.setState({ topics:data ,pagination :{total :pagination.total ,current :pagination.current }  })
@@ -45,8 +43,7 @@ class TopicsPage extends React.Component<any, any> {
           <List.Item  extra={''}>
             <List.Item.Meta
               avatar={''}
-              title={<Link to={`/topic/${topic.id}`}>{topic.title}</Link>}
-              description="随机的描述"
+              title={<Link to={`/topic/${topic._id}`}>{topic.title}</Link>}
             />
             {topic.create_at}
           </List.Item>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { List ,Avatar } from 'antd';
-import { IUser , IDrama ,ITopic } from '../../Models'
+import { IUser , IDrama ,ITopic } from '../../model'
 import { Link } from 'react-router-dom';
 
 type dateType = 'author' | 'drama' | 'topic';
@@ -28,7 +28,7 @@ class ShortList extends React.PureComponent<Props, State> {
             renderItem={
               (item :IDrama) => (
                 <List.Item>
-                  <Link to={`/details/${item.id}`}>{item.title}</Link>
+                  <Link to={`/details/${item._id}`}>{item.title}</Link>
                 </List.Item>
               )
             }
@@ -44,7 +44,7 @@ class ShortList extends React.PureComponent<Props, State> {
             (item :IUser) => (                             
                 <List.Item><List.Item.Meta
                   avatar={<Avatar src={item.avatar} />}
-                  title={<Link to={`/author/${item.id}`}>{item.name}</Link>}
+                  title={<Link to={`/author/${item._id}`}>{item.name}</Link>}
                   description={`关注：${item.follow}`}
                 /></List.Item>
               
@@ -61,7 +61,7 @@ class ShortList extends React.PureComponent<Props, State> {
           renderItem={
             (item :ITopic) => (     
                 <List.Item>
-                  <Link to={`/topic/${item.id}`}>{item.title}</Link>
+                  <Link to={`/topic/${item._id}`}>{item.title}</Link>
                 </List.Item>
             )
           }

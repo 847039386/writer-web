@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ICategory } from '../Models'
+import { ICategory } from '../model'
 import Conf from '../conf'
 const host = Conf.host || 'http://test.com/'
 
@@ -26,56 +26,84 @@ interface IAJAXCategoryCURD {
 /**
  * 获取剧本。
  */
-const find = (page :number = 0,count :number = 10) => {
+const find = (page :number = 0,size :number = 10) => {
     return new Promise<IAJAXCategorys>((resolve ,reject) => {
-        axios.get(host + 'drama/category/find').then((request) => {
+        axios.get(host + '/category/fd',{ 
+            params: { page , size }
+         }).then((request) => {
             if(request.data.success){
-                resolve(request.data) 
+                let result :Array<any> = request.data.data;
+                result = result.map((item ) => {
+                    item.key = item._id;
+                    return item;
+                })
+                resolve(request.data)
+
             }else{
-                resolve({success :false})
-            }             
+                resolve(request.data) 
+            }          
         }).catch((err) => {
             resolve({success :false})
         })
     }) 
 }
 
-const save = (name :string) => {
+const save = (name :string ,token :string) => {
     return new Promise<IAJAXCategoryCURD>((resolve ,reject) => {
-        axios.get(host + 'drama/category/save').then((request) => {
-            if(request.data.success){
-                resolve(request.data) 
-            }else{
-                resolve({success :false})
-            }             
+        axios.post(host + '/category/ct',{ 
+            name
+         },{headers :{ authorization : token }}).then((request) => {
+            resolve(request.data)             
         }).catch((err) => {
             resolve({success :false})
         })
     }) 
 }
 
-const update = (id :string) => {
+const update = (id :string ,name :string ,rname :string ,token :string) => {
     return new Promise<IAJAXCategoryCURD>((resolve ,reject) => {
-        axios.get(host + 'drama/category/update/id').then((request) => {
-            if(request.data.success){
-                resolve(request.data) 
-            }else{
+        if(name == rname){
+            resolve({success :false ,msg :'修改重复'})
+        }else{
+            axios.post(host + '/category/ut',{ 
+                id , name  
+            },{headers :{ authorization : token }}).then((request) => {
+                resolve(request.data)            
+            }).catch((err) => {
                 resolve({success :false})
-            }             
+            })
+        }
+    }) 
+}
+
+const remove = (id :string ,token :string) => {
+    return new Promise<IAJAXCategoryCURD>((resolve ,reject) => {
+        axios.post(host + '/category/rm',{ 
+            id 
+        },{headers :{ authorization : token }}).then((request) => {
+            resolve(request.data)            
         }).catch((err) => {
             resolve({success :false})
         })
     }) 
 }
 
-const search = (name :string ,page :number = 1) => {
+const search = (name :string ,page :number = 1 ,size :number = 10) => {
     return new Promise<IAJAXCategorys>((resolve ,reject) => {
-        axios.get(host + 'drama/category/search').then((request) => {
+        axios.get(host + '/category/search',{
+            params: { name ,page ,size }
+        }).then((request) => {
             if(request.data.success){
-                resolve(request.data) 
+                let result :Array<any> = request.data.data;
+                result = result.map((item ) => {
+                    item.key = item._id;
+                    return item;
+                })
+                resolve(request.data)
+
             }else{
-                resolve({success :false})
-            }             
+                resolve(request.data) 
+            }            
         }).catch((err) => {
             resolve({success :false})
         })
@@ -87,6 +115,7 @@ const search = (name :string ,page :number = 1) => {
 export default { 
     find,
     save,
+    remove,
     update,
     search 
 }

@@ -1,6 +1,6 @@
 // import { IDrama } from './'
 interface IUser {
-  id :string,     //id
+  _id :string,     //id
   name : string,  //姓名
   token : string,
   follow :number,   //点赞数
@@ -10,7 +10,7 @@ interface IUser {
 }
 
 class UserModel {
-  id :string;
+  _id :string;
   name : string;
   token :string;
   follow :number;

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { IChapter } from '../Models'
+import { IChapter } from '../model'
 import Conf from '../conf'
 const host = Conf.host || 'http://test.com/'
 
@@ -12,7 +12,7 @@ interface IAJAXChapter {
 
 
 interface Chapters {
-    id :string;
+    _id :string;
     title :string
 }
 
@@ -30,12 +30,10 @@ interface IAJAXChapters {
 //根据Episode_id获取剧本分集内容
 const findById = (id :string) => {
     return new Promise<IAJAXChapter>((resolve ,reject) => {
-        axios.get(`${host}drama/chapter/findbyid`).then((request) => {
-            if(request.data.success){
-                resolve(request.data) 
-            }else{
-                resolve({success :false})
-            }             
+        axios.get(`${host}/chapter/fdi`,{
+            params : { id }
+        }).then((request) => {
+            resolve(request.data)             
         }).catch((err) => {
             resolve({success :false})
         })
@@ -43,28 +41,24 @@ const findById = (id :string) => {
 }
 
 //根据剧本ID获取所有该剧本分集id
-const getDataByDramaID = (drama_id :string) => {
+const findByDramaID = (id :string) => {
     return new Promise<IAJAXChapters>((resolve ,reject) => {
-        axios.get(`${host}drama/chapter/findbydramaId`).then((request) => {
-            if(request.data.success){
-                resolve(request.data) 
-            }else{
-                resolve({success :false})
-            }             
+        axios.get(`${host}/chapter/fd`,{
+            params : { id }
+        }).then((request) => {
+            resolve(request.data)            
         }).catch((err) => {
             resolve({success :false})
         })
     })
 }
 
-const findByIdAndRemove = (id :string) => {
+const findByIdAndRemove = (id :string ,token :string) => {
     return new Promise<IAJAXChapter>((resolve ,reject) => {
-        axios.get(`${host}drama/chapter/remove`).then((request) => {
-            if(request.data.success){
-                resolve(request.data) 
-            }else{
-                resolve({success :false})
-            }             
+        axios.post(`${host}/chapter/rm`,{ 
+            id
+        },{headers :{ authorization : token }}).then((request) => {
+            resolve(request.data)            
         }).catch((err) => {
             resolve({success :false})
         })
@@ -76,39 +70,34 @@ const findByIdAndRemove = (id :string) => {
  * @param drama_id 剧本ID
  * @param content 该剧集内容
  */
-const save = (drama_id :string ,content :string) => {
+const save = (id :string ,title :string ,content :string ,token :string) => {
     return new Promise<IAJAXChapter>((resolve ,reject) => {
-        axios.get(`${host}drama/chapter/save`).then((request) => {
-            if(request.data.success){
-                resolve(request.data) 
-            }else{
-                resolve({success :false})
-            }             
+        axios.post(`${host}/chapter/ct`,{ 
+            id ,title ,content
+        },{headers :{ authorization : token }}).then((request) => {
+            resolve(request.data)             
         }).catch((err) => {
             resolve({success :false})
         })
     })
 }
 
-const findByIdAndUpdate = (id :string ,content :string) => {
+const findByIdAndUpdate = (id :string ,title :string ,content :string ,token :string) => {
     return new Promise<IAJAXChapter>((resolve ,reject) => {
-        axios.get(`${host}drama/chapter/update`).then((request) => {
-            if(request.data.success){
-                resolve(request.data) 
-            }else{
-                resolve({success :false})
-            }             
+        axios.post(`${host}/chapter/ut`,{ 
+            id ,title ,content
+        },{headers :{ authorization : token }}).then((request) => {
+            resolve(request.data)         
         }).catch((err) => {
             resolve({success :false})
         })
     })
 }
-
 
 export default { 
     findById,
     findByIdAndRemove,
     save,
-    getDataByDramaID,
-    findByIdAndUpdate
+    findByDramaID,
+    findByIdAndUpdate,
 }

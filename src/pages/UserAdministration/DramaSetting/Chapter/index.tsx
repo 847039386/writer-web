@@ -14,7 +14,7 @@ const ReactMarkdown = (props: any) => (
 );
 
 interface Chapters {
-  id :string,
+  _id :string,
   title :string
 }
 
@@ -30,11 +30,15 @@ interface State {
   chapterLoading :boolean,
 }
 
-class EpisodesPage extends React.Component<any,State> {
+interface Props {
+  id :string
+}
+
+class ChapterPage extends React.Component<Props,State> {
   current_ucode :string;
   current_utitle :string;
   isOnOpenUpdate : boolean
-  constructor(props :any){
+  constructor(props :Props){
     super(props)
     this.state = {
       chapters : [],      //所有剧集
@@ -53,8 +57,12 @@ class EpisodesPage extends React.Component<any,State> {
   }
 
   componentWillMount(){
+    this.getChapters();
+  }
+
+  getChapters = (page :number = 1 ,pageSize :number = 10) => {
     this.setState({titlesLoading :true})
-    Chapter.getDataByDramaID('id').then(({success ,data}) => {
+    Chapter.findByDramaID(this.props.id).then(({success ,data ,msg}) => {
       this.setState({titlesLoading :false})
       if(success && data){
         this.setState({chapters :data})
@@ -62,43 +70,51 @@ class EpisodesPage extends React.Component<any,State> {
     })
   }
 
+
+
   // 点击剧集标题触发
-  onTitle = (key? :any) :void => {
+  onTitle = (chapter :any) :void => {
     if(!this.state.chapterLoading){
       this.setState({chapterLoading :true})
-      Chapter.findById('id').then(({success ,data }) => {
+      Chapter.findById(chapter._id).then(({success ,data }) => {
         this.setState({chapterLoading :false})
         if(success && data){
-          this.setState({markdownCode : data.content ,selected :key})
+          this.setState({markdownCode : data.content ,selected :chapter._id})
         }
       })
     }
   }
 
   //删除数据触发，该参数为索引
-  onDelete = (key :any) : void => {
-    Chapter.findByIdAndRemove('id').then(({success ,data }) => {
+  onDelete = (info :any) : void => {
+    const { idx , chapter } = info;
+    const { _id } = chapter;
+    Chapter.findByIdAndRemove(_id,'token').then(({success ,data ,msg }) => {
       if(success){
-        const { idx } = key
         const chapters = this.state.chapters
         chapters.splice(idx ,1)
         this.setState({chapters})
+        message.success('删除成功')
+      }else{
+        message.error(`删除失败，原因可能是${msg}`)
       }
     })
   }
 
   //修改数据触发，该参数为索引ID
-  onUpdate = (key :any) => {
-    if(!this.isOnOpenUpdate && key.chapter.id){
+  onUpdate = (info :any) => {
+    const { chapter } = info;
+    const { _id } = chapter;
+    if(!this.isOnOpenUpdate && _id){
       this.isOnOpenUpdate = true
       message.loading('正在加载数据!',0)
-      Chapter.findById(key.chapter.id).then(({success ,data }) => {
+      Chapter.findById(_id).then(({success ,data }) => {
         message.destroy()
         this.isOnOpenUpdate = false;
         if(success && data){
           this.current_ucode = data.content;
           this.current_utitle = data.title
-          this.setState({USModal_code :data.content ,USModal_visible:true ,USModal_key :data.id ,USModal_title :data.title})
+          this.setState({USModal_code :data.content ,USModal_visible:true ,USModal_key :data._id ,USModal_title :data.title})
         }
       })
     }
@@ -113,16 +129,22 @@ class EpisodesPage extends React.Component<any,State> {
   onSave = (id :string ,code :string ,title :string) =>{
     this.setState({USModal_visible:false})
     if(id){
-      if(code === this.current_ucode && this.current_utitle === title){
-        console.log('这是修改'+id+'?但是值又没有变')
-      }else{
-        console.log('值改变了的修改', title)
+      if(code !== this.current_ucode || this.current_utitle !== title){
+        Chapter.findByIdAndUpdate(id,title,code,'token').then(({success ,data  ,msg}) => {
+          if(success && data){
+            message.success('修改成功')
+          }else{
+            message.error(`修改失败，原因可能是${msg}`)
+          }
+        })
       }
     }else{
-      console.log('这是创建'+id+'?')
-      Chapter.save('id',code).then(({success ,data}) => {
+      Chapter.save(this.props.id,title,code,'token').then(({success ,data  ,msg}) => {
         if(success && data){
-          this.setState({chapters :this.state.chapters.concat({ id : data.id ,title :data.title})})
+          this.setState({chapters :this.state.chapters.concat({ _id : data._id ,title :data.title})})
+          message.success('创建成功')
+        }else{
+          message.error(`创建失败，原因可能是${msg}`)
         }
       })
     }
@@ -133,9 +155,9 @@ class EpisodesPage extends React.Component<any,State> {
     this.setState({USModal_visible:false})
   }
 
-  chapterorderDatasoure  = (item : any) :any => {
+  chapterorderDatasoure  = (chapter : any) :any => {
     return (
-      <AOption key={item.id}>{item.title }</AOption>
+      <AOption key={chapter._id}>{chapter.title }</AOption>
     )
   }
 
@@ -146,8 +168,9 @@ class EpisodesPage extends React.Component<any,State> {
             <div style={{marginBottom:10 ,paddingLeft :2 ,background:'#e6f7ff' ,border:'1px solid #91d5ff' ,padding:15}}>
               选择章节：<AutoComplete dataSource={this.state.chapters.map(this.chapterorderDatasoure)} size={'small'} />
               &nbsp;&nbsp;移动到&nbsp;&nbsp;
-              <AutoComplete dataSource={[{id:'topchap',title:'--最顶部'}].concat(this.state.chapters).map(this.chapterorderDatasoure)} size={'small'} />&nbsp;&nbsp;之后
+              <AutoComplete dataSource={[{_id:'topchap',title:'--最顶部'}].concat(this.state.chapters).map(this.chapterorderDatasoure)} size={'small'} />&nbsp;&nbsp;之后
               &nbsp;&nbsp;<Button size={'small'} type={'danger'} >更改</Button>
+              &nbsp;&nbsp;<Button onClick={() => { this.getChapters() }} size={'small'} type={'danger'} >刷新</Button>
             </div>
           </Spin>
           <Row gutter={16}>
@@ -157,7 +180,7 @@ class EpisodesPage extends React.Component<any,State> {
                       {
                         this.state.chapters.map((chapter :any , idx:number) => {
                           return (
-                            <li key={chapter.id} style={{ textAlign:'center', padding:'5px 10px' ,listStyle:'none'}}>
+                            <li key={chapter._id} style={{ textAlign:'center', padding:'5px 10px' ,listStyle:'none'}}>
                               <UaEpisodes 
                                 onSelected={ this.state.selected == chapter.id ? true : false }
                                 onTitle={() => { this.onTitle(chapter) }} 
@@ -186,5 +209,5 @@ class EpisodesPage extends React.Component<any,State> {
 }
 
 
-export default EpisodesPage
+export default ChapterPage
 
