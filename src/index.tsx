@@ -9,7 +9,7 @@ import thunk from 'redux-thunk';
 
 import './public/less/index.less';      // 主样式
 import 'antd/dist/antd.css';            // antd
-import './mock';                        // 测试数据
+// import './mock';                        // 测试数据
 
 
 

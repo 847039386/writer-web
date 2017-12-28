@@ -94,10 +94,24 @@ const findByIdAndUpdate = (id :string ,title :string ,content :string ,token :st
     })
 }
 
+const updateChapterOrder = (beginId :string ,endId :string ,token :string) =>{
+    return new Promise<IAJAXChapter>((resolve ,reject) => {
+        axios.post(`${host}/chapter/utorder`,{ 
+            bid :beginId ,
+            eid :endId
+        },{headers :{ authorization : token }}).then((request) => {
+            resolve(request.data)         
+        }).catch((err) => {
+            resolve({success :false})
+        })
+    })
+}
+
 export default { 
     findById,
     findByIdAndRemove,
     save,
     findByDramaID,
     findByIdAndUpdate,
+    updateChapterOrder
 }

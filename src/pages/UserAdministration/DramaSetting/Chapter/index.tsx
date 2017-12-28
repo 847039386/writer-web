@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card ,Button ,Row ,Col ,AutoComplete ,message ,Spin  } from 'antd';
+import { Card ,Button ,Row ,Col ,AutoComplete ,message ,Spin ,Popconfirm ,Select  } from 'antd';
 import UaEpisodes from '../components/UaEpisodes'
 import './index.less'
 const AOption = AutoComplete.Option;
@@ -28,6 +28,8 @@ interface State {
   USModal_title :string,
   titlesLoading :boolean,
   chapterLoading :boolean,
+  order_beginID :string,
+  order_endID :string
 }
 
 interface Props {
@@ -37,7 +39,7 @@ interface Props {
 class ChapterPage extends React.Component<Props,State> {
   current_ucode :string;
   current_utitle :string;
-  isOnOpenUpdate : boolean
+  isOnOpenUpdate : boolean;
   constructor(props :Props){
     super(props)
     this.state = {
@@ -49,11 +51,17 @@ class ChapterPage extends React.Component<Props,State> {
       USModal_key :'',
       USModal_title :'',
       titlesLoading :false,
-      chapterLoading :false
+      chapterLoading :false,
+      order_beginID :'',
+      order_endID:''
     }
     this.onAdd = this.onAdd.bind(this)
     this.onSave = this.onSave.bind(this)
     this.onCancel = this.onCancel.bind(this)
+
+    this.onChapterBeginOrderChange = this.onChapterBeginOrderChange.bind(this);
+    this.onChapterEndOrderChange = this.onChapterEndOrderChange.bind(this);
+    this.updateChapterOrder = this.updateChapterOrder.bind(this)
   }
 
   componentWillMount(){
@@ -61,7 +69,7 @@ class ChapterPage extends React.Component<Props,State> {
   }
 
   getChapters = (page :number = 1 ,pageSize :number = 10) => {
-    this.setState({titlesLoading :true})
+    this.setState({titlesLoading :true ,order_beginID:'' ,order_endID :''})
     Chapter.findByDramaID(this.props.id).then(({success ,data ,msg}) => {
       this.setState({titlesLoading :false})
       if(success && data){
@@ -96,7 +104,7 @@ class ChapterPage extends React.Component<Props,State> {
         this.setState({chapters})
         message.success('删除成功')
       }else{
-        message.error(`删除失败，原因可能是${msg}`)
+        message.error(`删除失败，原因可能是：${msg}`)
       }
     })
   }
@@ -134,7 +142,7 @@ class ChapterPage extends React.Component<Props,State> {
           if(success && data){
             message.success('修改成功')
           }else{
-            message.error(`修改失败，原因可能是${msg}`)
+            message.error(`修改失败，原因可能是：${msg}`)
           }
         })
       }
@@ -144,7 +152,7 @@ class ChapterPage extends React.Component<Props,State> {
           this.setState({chapters :this.state.chapters.concat({ _id : data._id ,title :data.title})})
           message.success('创建成功')
         }else{
-          message.error(`创建失败，原因可能是${msg}`)
+          message.error(`创建失败，原因可能是：${msg}`)
         }
       })
     }
@@ -161,16 +169,60 @@ class ChapterPage extends React.Component<Props,State> {
     )
   }
 
+  onChapterBeginOrderChange = (value :any) => {
+    this.setState({order_beginID : value})
+  }
+  onChapterEndOrderChange = (value :any) => {
+    this.setState({order_endID :value})
+  }
+
+  updateChapterOrder = () => {
+    if(this.state.order_beginID && this.state.order_endID && this.state.order_beginID != this.state.order_endID){
+      this.setState({titlesLoading :true})
+      Chapter.updateChapterOrder(this.state.order_beginID,this.state.order_endID,'token').then(({success ,data ,msg}) => {
+        this.setState({titlesLoading :false})
+        if(success){
+          message.success(`移动成功`)
+          this.getChapters();
+        }else{
+          message.error(`移动失败，原因可能是：${msg}`)
+        }
+      })
+    }else{
+      message.error(`1. 左侧右侧均为必填项   2. 不能是相同的剧集`)
+    }
+  }
+
   render() {
     return (
       <div>
           <Spin spinning={this.state.titlesLoading}>
             <div style={{marginBottom:10 ,paddingLeft :2 ,background:'#e6f7ff' ,border:'1px solid #91d5ff' ,padding:15}}>
-              选择章节：<AutoComplete dataSource={this.state.chapters.map(this.chapterorderDatasoure)} size={'small'} />
-              &nbsp;&nbsp;移动到&nbsp;&nbsp;
-              <AutoComplete dataSource={[{_id:'topchap',title:'--最顶部'}].concat(this.state.chapters).map(this.chapterorderDatasoure)} size={'small'} />&nbsp;&nbsp;之后
-              &nbsp;&nbsp;<Button size={'small'} type={'danger'} >更改</Button>
-              &nbsp;&nbsp;<Button onClick={() => { this.getChapters() }} size={'small'} type={'danger'} >刷新</Button>
+              <span>选择章节：</span>
+              <Select notFoundContent={'暂无分集内容'} value={this.state.order_beginID} size={'small'} style={{ width: 200 , marginLeft:8}} onSelect={this.onChapterBeginOrderChange}>
+                {
+                  this.state.chapters.map((chapter) => {
+                    return (
+                      <Select.Option key={chapter._id}>{chapter.title }</Select.Option>
+                    )
+                  })
+                }
+              </Select>
+              <span style={{marginLeft:8}}>移动到</span>
+              <Select value={this.state.order_endID} size={'small'} style={{ width: 200 ,marginLeft:8 }} onSelect={this.onChapterEndOrderChange}>
+                <Select.Option key={'top'}>---最顶部---</Select.Option>
+                {
+                  this.state.chapters.map((chapter) => {
+                    return (
+                      <Select.Option key={chapter._id}>{chapter.title }</Select.Option>
+                    )
+                  })
+                }
+              </Select>
+              <Popconfirm title={'确认更改？'} okText={'是'} cancelText={'否'} onConfirm={this.updateChapterOrder}>
+                <Button style={{marginLeft:8}} size={'small'} type={'danger'} >更改</Button>
+              </Popconfirm>
+              <Button style={{marginLeft:8}} onClick={() => { this.getChapters() }} size={'small'} type={'danger'} >刷新</Button>
             </div>
           </Spin>
           <Row gutter={16}>

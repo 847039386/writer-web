@@ -26,3 +26,12 @@ Mock.mock(GetURL('/chapter/ut'), {
     'data'    :Chapter,
     'success' : true,
 });
+
+Mock.mock(GetURL('/chapter/utorder'), {
+    'data'    :{
+        "ok": 1,
+        "nModified": 1,
+        "n": 1
+    },
+    'success' : true,
+});
