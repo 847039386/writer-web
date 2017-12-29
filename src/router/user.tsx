@@ -13,11 +13,6 @@ const UserHome = Loadable({
     loading: MyLoadingComponent
 });
 
-const UserPresentation = Loadable({
-    loader: () => import('../pages/UserAdministration/Presentation/index'),
-    loading: MyLoadingComponent
-});
-
 const UserCreateDrama = Loadable({
     loader: () => import('../pages/UserAdministration/CreateDrama/index'),
     loading: MyLoadingComponent
@@ -33,8 +28,13 @@ const UserDramas = Loadable({
     loading: MyLoadingComponent
 });
 
-const UserSetting = Loadable({
-    loader: () => import('../pages/UserAdministration/Setting/index'),
+const UserSettingInfo = Loadable({
+    loader: () => import('../pages/UserAdministration/Setting/Info/index'),
+    loading: MyLoadingComponent
+});
+
+const UserPresentation = Loadable({
+    loader: () => import('../pages/UserAdministration/Setting/Presentation/index'),
     loading: MyLoadingComponent
 });
 
@@ -53,12 +53,12 @@ const UserRoute = (rote :any) => {
             <UserAdministrationLayout>
                 <Switch>              
                     <Route exact path={`${rote.match.url}`} component={UserHome}/>
-                    <Route exact path={`${rote.match.url}/presentation`} component={UserPresentation}/>
                     <Route exact path={`${rote.match.url}/cdrama`} component={UserCreateDrama}/>
                     <Route exact path={`${rote.match.url}/rs`} component={Result}/>
                     <Route exact path={`${rote.match.url}/dramas`} component={UserDramas}/>
                     <Route exact path={`${rote.match.url}/drama/setting/:id`} component={UserDramaSetting}/>
-                    <Route exact path={`${rote.match.url}/setting`} component={UserSetting}/>
+                    <Route exact path={`${rote.match.url}/setting/presentation`} component={UserPresentation}/>
+                    <Route exact path={`${rote.match.url}/setting/info`} component={UserSettingInfo}/>
                     <Route path="*" component={NotFound} />
                 </Switch>                     
             </UserAdministrationLayout>

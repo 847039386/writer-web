@@ -1,11 +1,7 @@
 import Mock from 'mockjs'
 import { GetURL } from '../../public/util'
-import { User ,UserPresentation } from '../'
+import { User } from '../'
 
-Mock.mock(GetURL('/user/info'), {
-  'data'    :User,
-  'success' : true,
-});
 
 Mock.mock(GetURL('/us/hlg'), {
   'data'    :User,
@@ -25,8 +21,13 @@ Mock.mock(GetURL('/us/fdbi'), {
   'success' : true,
 });
 
-Mock.mock(GetURL('/admin/sendpac'), {
-  'data'    :'abcd',
+Mock.mock(GetURL('/us/hrun'), {
+  'data'    :'username',
+  'success' : true,
+});
+
+Mock.mock(GetURL('/us/presentation'), {
+  'data'    :User,
   'success' : true,
 });
 

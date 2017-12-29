@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Button , Tabs ,Avatar ,Row ,Col ,Spin } from 'antd'
+import { Button , Tabs ,Avatar ,Row ,Col ,Spin } from 'antd';
+import Seiri from '../../../components/Seiri'
 import { UserState ,UserModel } from './constraint'
-import Presentation from './Presentation'
 import Production from './Production'
 import { User as UserAjax } from '../../../axios'
 import './index.less'
@@ -57,7 +57,7 @@ class AuthorPage extends React.Component<any,UserState> {
           </Row>
           <Tabs defaultActiveKey="1" >
             <Tabs.TabPane tab="作者介绍" key="1">
-                <Presentation id={this.props.match.params.id} />
+                <Seiri onlyMD value={this.state.User.presentation || '该用户并没有留下任何简介'} />
             </Tabs.TabPane>
             <Tabs.TabPane tab="作品" key="2">
                 <Production  id={this.props.match.params.id} />

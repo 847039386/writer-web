@@ -1,7 +1,7 @@
 import Mock from 'mockjs'
 
 // 用户
-const User = {
+const Admin = {
   "_id"           :"@word(15)",
   "name"         :"@cname",
   "follow"       :"@integer(1,10000)",
@@ -15,8 +15,7 @@ const User = {
 
 
   ],
-  "presentation" :"这是一条  presentation",
   "token"        :"@word(15)",
 }
 
-export { User }
+export { Admin }

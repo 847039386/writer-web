@@ -93,6 +93,29 @@ const storageLogin = () => {
     })
 }
 
+const getPresentation = (id :string) => {
+    return new Promise<IAJAXUser>((resolve ,reject) => {
+        axios.get(`${host}/us/presentation`,{ 
+            params: { id }
+         }).then((request) => {
+            resolve(request.data)           
+        }).catch((err) => {
+            resolve({success :false ,msg :err.message })
+        })
+    })
+}
+const setPresentation = (id :string ,content :string ,token :string) => {
+    return new Promise<IAJAXUser>((resolve ,reject) => {
+        axios.post(`${host}/us/presentation`,{ 
+            id ,content
+        },{headers :{ authorization : token }}).then((request) => {
+            resolve(request.data)           
+        }).catch((err) => {
+            resolve({success :false ,msg :err.message })
+        })
+    }) 
+}
+
 
 export default {
     getUserById,
@@ -100,5 +123,7 @@ export default {
     HOSTRegister,
     findRepeatUName,
     qqLogin,
-    storageLogin
+    storageLogin,
+    setPresentation,
+    getPresentation
 }

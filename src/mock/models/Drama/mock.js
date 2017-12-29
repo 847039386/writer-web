@@ -44,3 +44,9 @@ Mock.mock(GetURL('/drama/ct'), {
     'data'      : Drama,
     'success' : true,
 });
+Mock.mock(GetURL('/drama/search'), {
+    'data|10'      : [Drama],
+    'pagination' :Pagination,
+    'success' : true,
+});
+

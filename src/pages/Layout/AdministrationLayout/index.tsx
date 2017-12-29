@@ -54,6 +54,9 @@ class AdministrationLayout extends React.Component<any,any> {
             case 'book':
                 location.replace("#/admin/book");
             break;
+            default :
+                location.replace("#/");
+            break;
         }
     }
 
@@ -69,18 +72,22 @@ class AdministrationLayout extends React.Component<any,any> {
                     </Link>
                 </div>
                   <Menu theme="dark" defaultOpenKeys={["sub1"]} mode="inline" onClick={this.toLink} >
-                      <Menu.Item key="index"><Icon type="home" /><span>主页</span></Menu.Item>
-                      <SubMenu key="sub1" title={<span><Icon type="book" /><span>剧本管理</span></span>}>
-                          <Menu.Item key="dramas">剧本管理</Menu.Item>
-                          <Menu.Item key="comment">评论管理</Menu.Item> 
-                          <Menu.Item key="category">剧情类型</Menu.Item>
-                          <Menu.Item key="book">剧本类型</Menu.Item>                       
-                      </SubMenu>
-                      <SubMenu key="sub2" title={<span><Icon type="credit-card" /><span>站内文章</span></span>}>
-                          <Menu.Item key="topic">添加文章</Menu.Item>
-                          <Menu.Item key="topics">文章管理</Menu.Item>                       
-                      </SubMenu>
-                      <Menu.Item key="setting"><Icon type="setting" /><span>个人设置</span></Menu.Item>
+                    <Menu.Item key="host">
+                        <Icon type="home" />
+                        <span>网站主页</span>
+                    </Menu.Item>
+                    <Menu.Item key="index"><Icon type="home" /><span>主页</span></Menu.Item>
+                    <SubMenu key="sub1" title={<span><Icon type="book" /><span>剧本管理</span></span>}>
+                        <Menu.Item key="dramas">剧本管理</Menu.Item>
+                        <Menu.Item key="comment">评论管理</Menu.Item> 
+                        <Menu.Item key="category">剧情类型</Menu.Item>
+                        <Menu.Item key="book">剧本类型</Menu.Item>                       
+                    </SubMenu>
+                    <SubMenu key="sub2" title={<span><Icon type="credit-card" /><span>站内文章</span></span>}>
+                        <Menu.Item key="topic">添加文章</Menu.Item>
+                        <Menu.Item key="topics">文章管理</Menu.Item>                       
+                    </SubMenu>
+                    <Menu.Item key="setting"><Icon type="setting" /><span>个人设置</span></Menu.Item>
                   </Menu>
               </Sider>
               <Body {...newProps}>               

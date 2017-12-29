@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Input, Button ,Card ,message } from 'antd';
+import { Input, Button ,Card ,message ,Spin} from 'antd';
 import { Drama } from '../../../../axios' 
 const { TextArea } = Input;
 
@@ -61,9 +61,11 @@ class AbstractPage extends React.Component<Props,State> {
   render() {
     return (
       <div>
-        <Card loading={this.state.loading} bodyStyle={{padding:0}} actions={[<Button onClick={this.onSubmit}>提交</Button>]}>
+        <Spin spinning={this.state.loading}>
+          <Card loading={this.state.loading} bodyStyle={{padding:0}} actions={[<Button onClick={this.onSubmit}>提交</Button>]}>
             <TextArea value={this.state.abstractInput} onChange={this.onAbstractInputChange} placeholder="请输入" style={{height :'50vh' ,resize: 'none' ,border:0}} />
-        </Card>
+          </Card>
+        </Spin>
       </div>
     );
   }

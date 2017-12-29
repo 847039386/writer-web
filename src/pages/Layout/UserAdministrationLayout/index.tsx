@@ -29,14 +29,17 @@ class UserAdministrationLayout extends React.Component<any,any> {
             case 'cdrama':
                 location.replace("#/ua/cdrama");
             break;
-            case 'setting':
-                location.replace("#/ua/setting");
+            case 'setting_info':
+                location.replace("#/ua/setting/info");
+            break;
+            case 'setting_presentation':
+                location.replace("#/ua/setting/presentation");
+            break;
+            default:
+                location.replace("#/");
             break;
         }
     }
-
-
-  
 
     render() {
         return (
@@ -49,14 +52,18 @@ class UserAdministrationLayout extends React.Component<any,any> {
                     </Link>
                   </div>
                   <Menu theme="dark" defaultOpenKeys={["sub1"]} mode="inline" onClick={this.toLink} >
-                      <SubMenu key="sub1" title={<span><Icon type="book" /><span>剧本管理</span></span>}>
-                          <Menu.Item key="dramas">剧本管理</Menu.Item>
-                          <Menu.Item key="cdrama">新建剧本</Menu.Item>                      
-                      </SubMenu>
-                      <Menu.Item key="setting">
-                          <Icon type="pie-chart" />
-                          <span>个人设置</span>
-                      </Menu.Item>
+                    <Menu.Item key="host">
+                        <Icon type="home" />
+                        <span>网站主页</span>
+                    </Menu.Item>
+                    <SubMenu key="sub1" title={<span><Icon type="book" /><span>剧本管理</span></span>}>
+                        <Menu.Item key="dramas">剧本管理</Menu.Item>
+                        <Menu.Item key="cdrama">新建剧本</Menu.Item>                      
+                    </SubMenu>
+                    <SubMenu key="sub2" title={<span><Icon type="pie-chart" /><span>个人设置</span></span>}>
+                        <Menu.Item key="setting_info">用户信息</Menu.Item>
+                        <Menu.Item key="setting_presentation">用户简介</Menu.Item>                      
+                    </SubMenu>
                   </Menu>
               </Sider>
               <Body>{this.props.children}</Body>

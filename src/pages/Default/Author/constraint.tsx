@@ -5,4 +5,4 @@ interface UserState {
     loading:boolean
 }
 
-export { UserState ,UserModel }
+export { UserState ,UserModel ,IUser }

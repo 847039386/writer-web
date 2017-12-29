@@ -2,7 +2,8 @@ import { Book } from './Book';
 import { Category } from './Category';
 import { Topic } from './Topic';
 import { Chapter , Chapters } from './Chapter'
-import { User ,UserPresentation } from './User'
+import { User } from './User'
+import { Admin } from './Admin'
 import { Comment } from './Comment'
 import { Drama ,DramaNames } from './Drama'
 
@@ -16,7 +17,8 @@ export {
     Chapter ,Chapters ,
     Comment,
     User ,UserPresentation,
-    Drama ,DramaNames
+    Drama ,DramaNames,
+    Admin
 }
 
 

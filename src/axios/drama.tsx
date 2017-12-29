@@ -4,9 +4,12 @@ import moment from '../common/moment-cn'
 import Conf from '../conf'
 const host = Conf.host || 'http://test.com/'
 
-interface DTitles {
-    id :string,
-    title :string,
+interface SearchOptions {
+    books? :Array<string>,
+    categorys? :Array<string>,
+    search? :string,
+    timeBegin? :number,
+    timeEnd? :number
 }
 
 //一条剧本数据
@@ -28,16 +31,9 @@ interface IAJAXDramas {
     msg? : string,
 }
 
-// 模糊查询剧本数据
-interface IAJAXDramasTitles {
-    data? :DTitles [],
-    success : boolean,
-    msg? : string,
-}
-
 
 //获取剧本的内容详情页
-const getDramaByID= (id :string) => {
+const getDramaByID = (id :string) => {
     return new Promise<IAJAXDrama>((resolve ,reject) => {
         axios.get(host + '/drama/details',{
             params :{ id }
@@ -50,8 +46,7 @@ const getDramaByID= (id :string) => {
                 resolve(request.data) 
            }         
         }).catch((err) => {
-            console.log(err)
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -64,7 +59,7 @@ const getDramasByUserID = (id :string ,page :number ,size :number = 10) => {
         }).then((request) => {
             resolve(request.data)            
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -89,17 +84,7 @@ const getDramas = (page :number = 0,size :number = 10) => {
                 resolve(request.data) 
             }            
         }).catch((err) => {
-            resolve({success :false})
-        })
-    }) 
-}
-
-const getDimTitles = (title :string) => {
-    return new Promise<IAJAXDramasTitles>((resolve ,reject) => {
-        axios.get(host + '/drama/data/dim').then((request) => {
-            resolve(request.data)             
-        }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -181,12 +166,47 @@ const setCharacter = (id :string ,content :string ,token :string) => {
 }
 
 
+const search = (options :SearchOptions ,page :number = 1 ,size :number = 10) => {
+    let searchOptions :SearchOptions = { } 
+    if(options.books && options.books.length > 0){
+        searchOptions = Object.assign(searchOptions,{ books :options.books })
+    }
+    if(options.categorys && options.categorys.length > 0){
+        searchOptions = Object.assign(searchOptions,{ categorys :options.categorys })
+    }
+    if(options.search){
+        searchOptions = Object.assign(searchOptions,{ search :options.search });
+    }
+    if(options.timeBegin && options.timeEnd){
+        searchOptions = Object.assign(searchOptions,{ timeBegin :options.timeBegin ,timeEnd :options.timeEnd  });
+    }
+    searchOptions = Object.assign(searchOptions,{ page ,size })
+    return new Promise<IAJAXDramas>((resolve ,reject) => {
+        axios.post(`${host}/drama/search`,searchOptions).then((request) => {
+            if(request.data.success){
+                let result :Array<any> = request.data.data;
+                result = result.map((item ) => {
+                    item.key = item._id;
+                    item.create_at = moment(item.create_at).format('YYYY MMMM Do, h:mm:ss a')
+                    return item;
+                })
+                resolve(request.data)
+            }else{
+                resolve(request.data) 
+            } 
+        }).catch((err) => {
+            resolve({success :false ,msg :err.message })
+        })
+    }) 
+}
+
+
 
 export default { 
+    search,
     getDramasByUserID, 
     getDramaByID,
     getDramas,
-    getDimTitles,
     create,
     remove,
     getAbstract,
