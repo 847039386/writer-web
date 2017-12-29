@@ -31,7 +31,7 @@ interface State {
     createAt :Array<string>                 //创建时间查询
 }
 
-class Dramas extends React.Component<any,State> {
+class DramasPage extends React.Component<any,State> {
     columns : Array<any>;
     defaultExpandColumns :Array<string>
     constructor(props :any){
@@ -288,4 +288,6 @@ class Dramas extends React.Component<any,State> {
 
 }
 
-export default Dramas
+import { connect } from 'react-redux'
+import Auth from '../../../components/Auth'
+export default connect(state => state)(Auth('admin',DramasPage))

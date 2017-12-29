@@ -13,3 +13,8 @@ Mock.mock(GetURL('/comment/ct'), {
   'data'    :CommentData,
   'success' : true,
 });
+
+Mock.mock(GetURL('/comment/rm'), {
+  'data'    :CommentData,
+  'success' : true,
+});

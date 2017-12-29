@@ -10,12 +10,6 @@ interface IAJAXUser {
     msg? : string,
 }
 
-interface IAJAXPAC {
-    data? :string,
-    success :boolean,
-    msg? :string
-}
-
 interface IAJAXAEmail {
     data? :string,
     success :boolean,
@@ -30,7 +24,7 @@ const getUserById = (id :string) => {
         }).then((request) => {
             resolve(request.data)           
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -38,12 +32,10 @@ const getUserById = (id :string) => {
 // 本站登陆
 const HOSTLogin = (uname :string ,pass :string) => {
     return new Promise<IAJAXUser>((resolve ,reject) => {
-        axios.get(`${host}/us/hlg`,{ 
-            params: { uname ,pass }
-         }).then((request) => {
+        axios.post(`${host}/us/hlg`,{ uname ,pass }).then((request) => {
             resolve(request.data)           
         }).catch((err) => {
-            resolve({success :false , msg :'出现未知错误'})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -51,36 +43,17 @@ const HOSTLogin = (uname :string ,pass :string) => {
 // 本站注册
 const HOSTRegister = (nickname :string ,username :string ,password :string) => {
     return new Promise<IAJAXUser>((resolve ,reject) => {
-        axios.get(`${host}/us/hct`,{ 
-            params: { 
-                name :nickname ,
-                uname :username,
-                pass :password
-            }
-         }).then((request) => {
+        axios.post(`${host}/us/hct`,{ 
+            name :nickname ,
+            uname :username,
+            pass :password
+        }).then((request) => {
             resolve(request.data)           
         }).catch((err) => {
-            resolve({success :false , msg :'出现未知错误'})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
-
-
-
-const getEmailPAC = (token :string) => {
-    return new Promise<IAJAXPAC>((resolve ,reject) => {
-        axios.get(`${host}/admin/sendpac`).then((request) => {
-            if(request.data.success){
-                resolve(request.data) 
-            }else{
-                resolve({success :false})
-            }             
-        }).catch((err) => {
-            resolve({success :false})
-        })
-    }) 
-}
-
 
 const findRepeatUName = (uname :string) => {
     return new Promise<IAJAXAEmail>((resolve ,reject) => {
@@ -89,7 +62,7 @@ const findRepeatUName = (uname :string) => {
          }).then((request) => {
             resolve(request.data)           
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -102,7 +75,7 @@ const qqLogin = (code :string) => {
          }).then((request) => {
             resolve(request.data)           
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     })
 }
@@ -124,7 +97,6 @@ const storageLogin = () => {
 export default {
     getUserById,
     HOSTLogin,
-    getEmailPAC,
     HOSTRegister,
     findRepeatUName,
     qqLogin,

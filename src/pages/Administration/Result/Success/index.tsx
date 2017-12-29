@@ -3,7 +3,7 @@ import UAHeader from '../../../../components/UAHeader'
 import Result from '../../../../components/Result'
 import { Card } from 'antd';
 
-class Success extends React.Component<any,any> {
+class SuccessPage extends React.Component<any,any> {
 
     render (){
         return (
@@ -23,4 +23,5 @@ class Success extends React.Component<any,any> {
 
 }
 
-export default Success
+
+export default SuccessPage

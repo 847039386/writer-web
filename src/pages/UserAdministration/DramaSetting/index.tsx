@@ -7,7 +7,7 @@ import Chapter from './Chapter'
 import Character from './Character'
 import './index.less'
 
-class DramaSetting extends React.Component<any,any> {
+class DramaSettingPage extends React.Component<any,any> {
 
   constructor(props :any){
     super(props)
@@ -37,4 +37,6 @@ class DramaSetting extends React.Component<any,any> {
 }
 
 import { connect } from 'react-redux'
-export default connect((state :any) => ({ UserReducer :state.UserReducer }))(DramaSetting)
+import Auth from '../../../components/Auth'
+export default connect((state :any) :any => ({ UserReducer :state.UserReducer }))(Auth('user',DramaSettingPage))
+

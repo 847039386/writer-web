@@ -115,7 +115,7 @@ const create = (user_id :string ,title :string ,book_id :string ,category_id :Ar
         },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data)           
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -127,7 +127,7 @@ const remove = (id :string ,token :string) => {
         },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data)           
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -139,7 +139,7 @@ const getAbstract = (id :string ) => {
         }).then((request) => {
             resolve(request.data)           
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -151,7 +151,7 @@ const getCharacter = (id :string ) => {
         }).then((request) => {
             resolve(request.data)           
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -163,7 +163,7 @@ const setAbstract = (id :string ,content :string ,token :string) => {
         },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data)           
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -175,7 +175,7 @@ const setCharacter = (id :string ,content :string ,token :string) => {
         },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data)           
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }

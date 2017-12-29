@@ -36,7 +36,7 @@ const findById = (id :string) => {
                 resolve(request.data) 
            }             
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -62,7 +62,7 @@ const getDatas = (page :number = 0 ,size :number = 10) => {
                 resolve(request.data) 
             }    
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -74,7 +74,7 @@ const create = (title :string ,content :string ,token :string) => {
         },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data) 
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -86,7 +86,7 @@ const remove = (id :string ,token :string) => {
         },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data)             
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }

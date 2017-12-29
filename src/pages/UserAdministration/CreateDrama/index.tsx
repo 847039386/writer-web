@@ -13,7 +13,7 @@ interface State {
   error :boolean,
 }
 
-class FormLayoutDemo extends React.Component<any,State> {
+class UserCreateDramaPage extends React.Component<any,State> {
   constructor(props :any) {
     super(props);
     this.state = {
@@ -137,4 +137,5 @@ class FormLayoutDemo extends React.Component<any,State> {
 
 
 import { connect } from 'react-redux'
-export default connect((state :any) :any => ({ UserReducer :state.UserReducer }))(Form.create()(FormLayoutDemo))
+import Auth from '../../../components/Auth'
+export default connect((state :any) :any => ({ UserReducer :state.UserReducer }))(Auth('user',Form.create()(UserCreateDramaPage)))

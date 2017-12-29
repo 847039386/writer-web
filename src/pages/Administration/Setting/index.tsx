@@ -1,9 +1,9 @@
 import * as React from 'react';
 import UAHeader from '../../../components/UAHeader';
-import { User } from '../../../axios'
+import { Admin } from '../../../axios'
 import { Form ,Input ,Button } from 'antd';
 const FormItem = Form.Item;
-class Home extends React.Component<any,any> {
+class SettingPage extends React.Component<any,any> {
     count_down :number;
     constructor(props :any){
         super(props);
@@ -24,7 +24,7 @@ class Home extends React.Component<any,any> {
         if(this.state.timer_bug){
                 this.startTimer();
                 this.setState({timer_bug :false})
-                User.getEmailPAC('token').then(({success ,data}) => {
+                Admin.getEmailPAC('email').then(({success ,data}) => {
                     if(success && data){
                                                
                     }
@@ -101,4 +101,6 @@ class Home extends React.Component<any,any> {
 
 }
 
-export default Form.create()(Home)
+import { connect } from 'react-redux'
+import Auth from '../../../components/Auth'
+export default connect(state => state)(Auth('admin',SettingPage))

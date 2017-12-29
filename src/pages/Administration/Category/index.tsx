@@ -213,5 +213,6 @@ class CategoryPage extends React.Component<any,State> {
     }
   }
 
-
-export default CategoryPage
+import { connect } from 'react-redux'
+import Auth from '../../../components/Auth'
+export default connect(state => state)(Auth('admin',CategoryPage))

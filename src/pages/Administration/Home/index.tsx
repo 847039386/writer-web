@@ -1,17 +1,12 @@
 import * as React from 'react';
 import UAHeader from '../../../components/UAHeader'
+
 import {  } from 'antd';
-// const QueueAnim =  require('rc-queue-anim').default;
-{/* <QueueAnim delay={300} className="queue-simple">
-    <div key="a">依次进场</div>
-    <div key="b">依次进场</div>
-    <div key="c">依次进场</div>
-    <div key="d">依次进场</div>
-</QueueAnim> */}
 class Home extends React.Component<any,any> {
 
 
     componentDidMount(){
+        console.log('我是home',this.props)
         console.log()
     }
 
@@ -28,4 +23,7 @@ class Home extends React.Component<any,any> {
 
 }
 
-export default Home
+
+import { connect } from 'react-redux'
+import Auth from '../../../components/Auth'
+export default connect(state => state)(Auth('admin',Home))

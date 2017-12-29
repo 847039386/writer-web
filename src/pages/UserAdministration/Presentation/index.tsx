@@ -1,7 +1,7 @@
 import * as React from 'react';
 // import { Layout } from 'antd';
 
-class UserAdministrationLayout extends React.Component<any,any> {
+class UserPresentationPage extends React.Component<any,any> {
 
   constructor(props :any){
     super(props)
@@ -23,4 +23,5 @@ class UserAdministrationLayout extends React.Component<any,any> {
 }
 
 import { connect } from 'react-redux'
-export default connect(state => state)(UserAdministrationLayout)
+import Auth from '../../../components/Auth'
+export default connect((state :any) :any => ({ UserReducer :state.UserReducer }))(Auth('user',UserPresentationPage))

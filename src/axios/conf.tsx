@@ -28,7 +28,7 @@ const home = () => {
                 resolve({success :false})
             }             
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }

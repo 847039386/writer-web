@@ -12,7 +12,8 @@ class LAuth extends React.PureComponent<any, any> {
     this.state = {
       redirectM : 3,
       title :'',
-      status : ''
+      status : '',
+      loading :true
     }
   }
   componentWillMount(){
@@ -32,12 +33,11 @@ class LAuth extends React.PureComponent<any, any> {
 
   componentWillReceiveProps(nextProps: any){
     const { User } = nextProps;
-    console.log( this.props ,'是我啊 咋没走' ,User)
     if(User.token){
-      this.setState({title :'第三方登陆成功' ,status :'success' })
+      this.setState({title :'第三方登陆成功' ,status :'success' ,loading :false })
       location.replace('#'+this.redirectURI)
     }else{
-      this.setState({title :'第三方登陆失败' ,status :'error'})
+      this.setState({title :'第三方登陆失败' ,status :'error' ,loading :false })
       this.errorRedirect()
     }
   }
@@ -56,16 +56,19 @@ class LAuth extends React.PureComponent<any, any> {
   }
 
   render() {
-    console.log(this.redirectURI)
     return (
         <div className="bm_lauth">
-            <Result type={this.state.status} title={this.state.title} description={
-              this.state.status === 'error' ? `第三方登陆出现错误 ${this.state.redirectM} 秒后将跳转至登陆前页面！` : ''
-            } actions={
-              this.state.status === 'error' ? 
-                <div><Button type={'primary'} ><Link to={this.redirectURI} >返回</Link></Button>&nbsp;&nbsp;<Button><Link to={'/'} >返回首页</Link></Button></div>
-               : ''
-            } />
+            {
+              this.state.loading ?
+              <div>正在登陆请稍等...</div> :
+              <Result type={this.state.status} title={this.state.title} description={
+                this.state.status === 'error' ? `第三方登陆出现错误 ${this.state.redirectM} 秒后将跳转至登陆前页面！` : ''
+              } actions={
+                this.state.status === 'error' ? 
+                  <div><Button type={'primary'} ><Link to={this.redirectURI} >返回</Link></Button>&nbsp;&nbsp;<Button><Link to={'/'} >返回首页</Link></Button></div>
+                 : ''
+              } />
+            }
         </div>
     );
   }

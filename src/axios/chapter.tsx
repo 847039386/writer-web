@@ -35,7 +35,7 @@ const findById = (id :string) => {
         }).then((request) => {
             resolve(request.data)             
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     })
 }
@@ -48,7 +48,7 @@ const findByDramaID = (id :string) => {
         }).then((request) => {
             resolve(request.data)            
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     })
 }
@@ -60,7 +60,7 @@ const findByIdAndRemove = (id :string ,token :string) => {
         },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data)            
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     })
 }
@@ -77,7 +77,7 @@ const save = (id :string ,title :string ,content :string ,token :string) => {
         },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data)             
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     })
 }
@@ -89,7 +89,7 @@ const findByIdAndUpdate = (id :string ,title :string ,content :string ,token :st
         },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data)         
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     })
 }
@@ -102,7 +102,7 @@ const updateChapterOrder = (beginId :string ,endId :string ,token :string) =>{
         },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data)         
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     })
 }

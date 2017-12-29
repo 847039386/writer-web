@@ -3,7 +3,7 @@ import { Form, Input, Button  } from 'antd';
 import UAHeader from '../../../components/UAHeader'
 const FormItem = Form.Item;
 
-class UserSetting extends React.Component<any,any> {
+class UserSettingPage extends React.Component<any,any> {
 
   constructor(props :any){
     super(props)
@@ -42,5 +42,6 @@ class UserSetting extends React.Component<any,any> {
 }
 
 import { connect } from 'react-redux'
-export default connect((state :any) => ({ UserReducer :state.UserReducer }))(UserSetting)
+import Auth from '../../../components/Auth'
+export default connect((state :any) :any => ({ UserReducer :state.UserReducer }))(Auth('user',UserSettingPage))
 

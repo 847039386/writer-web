@@ -9,12 +9,23 @@ import './styles.less';
 class AdministrationLayout extends React.Component<any,any> {
 
     constructor(props:any){
-        super(props)
-        this.toLink = this.toLink.bind(this)
+        super(props);
+        this.toLink = this.toLink.bind(this);
+        this.state = {
+            AdminReducer : {}
+        }
     }
 
     componentDidMount() {
-       
+        const { adminStorageLogin } = this.props;
+        adminStorageLogin();
+    }
+
+    componentWillReceiveProps(nextProps :any){
+        const { AdminReducer } = nextProps;
+        if(AdminReducer){
+            this.setState({ AdminReducer })
+        }
     }
 
     toLink(e :any){
@@ -47,6 +58,7 @@ class AdministrationLayout extends React.Component<any,any> {
     }
 
     render() {
+        let newProps = { ...this.state , ...{ dispatch :this.props.dispatch } }
         return (
           <Layout style={{ minHeight: '100vh' }}>
               <Sider className={"ua_menu"} width={256}>
@@ -71,7 +83,7 @@ class AdministrationLayout extends React.Component<any,any> {
                       <Menu.Item key="setting"><Icon type="setting" /><span>个人设置</span></Menu.Item>
                   </Menu>
               </Sider>
-              <Body>               
+              <Body {...newProps}>               
                 {this.props.children}
               </Body>
           </Layout>
@@ -87,4 +99,13 @@ class AdministrationLayout extends React.Component<any,any> {
 //         return { UserInfo :null}
 //     }
 // })(AdministrationLayout)
-export default AdministrationLayout
+
+import { connect } from 'react-redux';
+import { adminStorageLogin } from '../../../redux/Login'
+import { bindActionCreators } from 'redux';
+export default connect((state :any ,props :any) :any => ({
+    AdminReducer : state.AdminReducer
+}),dispatch => ({
+    adminStorageLogin :bindActionCreators(adminStorageLogin, dispatch),
+    dispatch : dispatch
+}))(AdministrationLayout);

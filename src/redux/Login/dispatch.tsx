@@ -1,4 +1,4 @@
-import { User as UserAjax } from '../../axios';
+import { User as UserAjax ,Admin } from '../../axios';
 
 const requestData = () => ({
     type: 'REQUEST_DATA',
@@ -9,6 +9,29 @@ const receiveData = (request :any) => ({
        request,       
     }
 });
+
+
+const adminLogin = ( email :string ,pac :string) => (dispatch :any) => {
+    return Admin.login(email ,pac).then(request => {
+        if(request.success){
+            dispatch({
+                type :'SET_ADMIN' 
+                ,payload : request
+            })    //将用户信息记录到User上
+        }
+    });
+}
+
+const adminStorageLogin = () => (dispatch :any)  => {
+    return Admin.storageLogin().then(request => {
+        if(request.success){
+            dispatch({
+                type :'SET_ADMIN' 
+                ,payload : request
+            })
+        }
+    })
+}
 
 
 // 登陆
@@ -43,7 +66,6 @@ const onRegister = (nickname :string ,email :string ,password :string) => (dispa
 
 const qqLogin = (code :string) => (dispatch :any) => {
     return UserAjax.qqLogin(code).then(request => {
-        console.log(request)
         if(request.success){
             dispatch({
                 type :'SET_USER' 
@@ -72,6 +94,6 @@ const storageLogin = () => (dispatch :any)  => {
 
 
 
-export { onLogin ,onRegister ,qqLogin ,storageLogin } 
+export { onLogin ,onRegister ,qqLogin ,storageLogin ,adminLogin ,adminStorageLogin } 
 
 

@@ -6,6 +6,7 @@ import Topic from './topic';
 import Category from './category';
 import Book from './book';
 import Conf from './conf';
+import Admin from './admin'
 
 export {
     Drama,
@@ -15,7 +16,8 @@ export {
     Topic,
     Category,
     Book,
-    Conf
+    Conf,
+    Admin
 }
 
 

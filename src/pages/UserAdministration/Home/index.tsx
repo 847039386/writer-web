@@ -3,7 +3,7 @@ import { Button } from 'antd';
 import UAHeader from '../../../components/UAHeader'
 
 
-class UserHome extends React.Component<any,any> {
+class UserHomePage extends React.Component<any,any> {
 
   constructor(props :any){
     super(props)
@@ -32,5 +32,6 @@ class UserHome extends React.Component<any,any> {
 }
 
 import { connect } from 'react-redux'
-export default connect()(UserHome)
+import Auth from '../../../components/Auth'
+export default connect(state => state)(Auth('user',UserHomePage))
 

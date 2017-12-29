@@ -43,7 +43,7 @@ const find = (page :number = 0,size :number = 10) => {
                 resolve(request.data) 
             } 
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -55,7 +55,7 @@ const save = (name :string ,token :string) => {
          },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data)             
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -70,7 +70,7 @@ const update = (id :string ,name :string ,rname :string ,token :string) => {
             },{headers :{ authorization : token }}).then((request) => {
                 resolve(request.data)            
             }).catch((err) => {
-                resolve({success :false})
+                resolve({success :false ,msg :err.message })
             })
         }
     }) 
@@ -83,7 +83,7 @@ const remove = (id :string ,token :string) => {
          },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data)            
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }
@@ -105,7 +105,7 @@ const search = (name :string ,page :number = 1 ,size :number = 10) => {
                 resolve(request.data) 
             }            
         }).catch((err) => {
-            resolve({success :false})
+            resolve({success :false ,msg :err.message })
         })
     }) 
 }

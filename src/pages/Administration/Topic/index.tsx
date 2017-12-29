@@ -8,7 +8,7 @@ interface State {
     title :string;
 }
 
-class Home extends React.Component<any,State> {
+class CreateTopicPage extends React.Component<any,State> {
 
     constructor(props :any){
         super(props)
@@ -48,4 +48,8 @@ class Home extends React.Component<any,State> {
 
 }
 
-export default Home
+
+import { connect } from 'react-redux'
+import Auth from '../../../components/Auth'
+export default connect(state => state)(Auth('admin',CreateTopicPage))
+

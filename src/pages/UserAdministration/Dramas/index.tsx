@@ -13,7 +13,7 @@ interface State {
   pagination :any
 }
 
-class UserHome extends React.Component<any,State> {
+class UserDramasPage extends React.Component<any,State> {
 
   constructor(props :any){
     super(props)
@@ -111,5 +111,6 @@ class UserHome extends React.Component<any,State> {
 }
 
 import { connect } from 'react-redux'
-export default connect((state :any) => ({ UserReducer :state.UserReducer }))(UserHome)
+import Auth from '../../../components/Auth'
+export default connect((state :any) :any => ({ UserReducer :state.UserReducer }))(Auth('user',UserDramasPage))
 

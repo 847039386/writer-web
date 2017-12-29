@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 
 
 
-class UserHome extends React.Component<any,any> {
+class UserResultPage extends React.Component<any,any> {
 
   constructor(props :any){
     super(props)
@@ -56,6 +56,5 @@ class UserHome extends React.Component<any,any> {
   }
 }
 
-import { connect } from 'react-redux'
-export default connect()(UserHome)
+export default UserResultPage
 
