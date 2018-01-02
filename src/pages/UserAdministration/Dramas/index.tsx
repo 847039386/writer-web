@@ -55,7 +55,7 @@ class UserDramasPage extends React.Component<any,State> {
   }
 
   deleteDrama = (id :string ,idx :number) => {
-    DramaAjax.remove(id , 'token').then(({success ,data ,msg}) => {
+    DramaAjax.remove(id , this.props.UserReducer.token ,this.props.UserReducer._id).then(({success ,data ,msg}) => {
       if(success && data){
         this.state.dramas.splice(idx,1)
         this.setState({ dramas :this.state.dramas});

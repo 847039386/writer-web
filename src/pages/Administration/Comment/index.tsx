@@ -60,7 +60,7 @@ class CommentPage extends React.Component<any,State> {
     }
 
     removeCommentByID = (record :ICommentPopulate ,index :number) => {
-        CommentAjax.findRemoveByID(record._id,'token').then(({ success ,data ,msg }) => {
+        CommentAjax.findRemoveByID(record._id,this.props.AdminReducer.token,'admin').then(({ success ,data ,msg }) => {
             if(success){
                 message.success(`删除成功`)
                 this.state.comments[index]['delete'] = true;

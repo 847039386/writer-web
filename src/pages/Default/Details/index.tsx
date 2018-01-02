@@ -106,11 +106,18 @@ class BookDetails extends React.Component<any, DetailsState> {
         <Card loading={this.state.mainLoading} bodyStyle={{minHeight :'80vh',padding:24}}>
           <Col span={24}><h1 className="theme_DTitle title">{this.state.dramaBook.title}</h1></Col>
           <Col className="introduce theme_DBox" span={24}>
-              <Col span={12}>作者：<Link to={`/author/${this.state.dramaBook.user_id._id}`}>{this.state.dramaBook.user_id.name}</Link></Col>
+              {
+                this.state.dramaBook.user_id ?
+                <Col span={12}>作者：<Link to={`/author/${this.state.dramaBook.user_id._id}`}>{this.state.dramaBook.user_id.name}</Link></Col>
+                : ''
+              }
               <Col span={12}>创建于：{this.state.dramaBook.create_at}</Col>
-              <Col span={12}>剧情类型：&nbsp;{this.state.dramaBook.category_id.map((category ,item) => {
-                return (<Tag color="purple" key={category._id}>{category.name}</Tag>)
-              })}</Col>
+              <Col span={12}>剧情类型：&nbsp;{
+                this.state.dramaBook.category_id.length > 0 ?
+                this.state.dramaBook.category_id.map((category ,item) => {
+                  return (<Tag color="purple" key={category._id}>{category.name}</Tag>)
+                }) : <Tag color="purple" key={'defa'}>{'其他'}</Tag>
+              }</Col>
               <Col span={12}>剧本类型：<Tag color="#f50">{this.state.dramaBook.book_id.name}</Tag></Col>
               <Col span={12}>阅读量：300</Col>
               <Col span={12}>点赞：<Icon type="like" style={{cursor:'pointer'}} />&nbsp;300</Col>

@@ -14,7 +14,7 @@ class LoginComponent extends React.Component<any,any> {
             pacLoading :false,
             email :'',
             vcode :'验证码',
-            timer_bug :false
+            timer_bug :false,
         }
         this.getPac = this.getPac.bind(this);
         this.onEmailChange = this.onEmailChange.bind(this);
@@ -24,7 +24,6 @@ class LoginComponent extends React.Component<any,any> {
         const { form , dispatch } = this.props
         form.validateFields((err :any, values :any) => {
             if (!err) {
-              adminLogin(values.email,values.password)
               Admin.login(values.email,values.password).then(({ success , data ,msg }) => {
                 if(success){
                     dispatch({type:'SET_ADMIN' ,payload : { success , data }})

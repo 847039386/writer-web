@@ -29,7 +29,7 @@ const send = (uid :string ,did :string ,content :string ,token :string) => {
     return new Promise<IAJAXComment>((resolve ,reject) => {
         axios.post(`${host}/comment/ct`,{
             uid ,did ,content
-        },{headers :{ authorization : token }}).then((request) => {
+        },{headers :{ authorization : token ,aud :uid }}).then((request) => {
             resolve(request.data)            
         }).catch((err) => {
             resolve({success :false ,msg :err.message })
@@ -61,11 +61,11 @@ const findByDramaID = (drama_id :string ,page :number ,size :number = 10) => {
     }) 
 }
 
-const findRemoveByID = (id :string ,token :string) => {
+const findRemoveByID = (id :string ,token :string ,user_id :string) => {
     return new Promise<IAJAXComment>((resolve ,reject) => {
         axios.post(`${host}/comment/rm`,{
             id 
-        },{headers :{ authorization : token }}).then((request) => {
+        },{headers :{ authorization : token ,aud :user_id }}).then((request) => {
             resolve(request.data)            
         }).catch((err) => {
             resolve({success :false ,msg :err.message })

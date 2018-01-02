@@ -62,7 +62,7 @@ class TopicsPage extends React.Component<any,State> {
         this.state.topics[index]['delete_title'] = '删除中';
         this.setState({topics :this.state.topics})
         if(record._id){
-            TopicAjax.remove(record._id,'token').then(({success ,data ,msg}) => {
+            TopicAjax.remove(record._id,this.props.AdminReducer.token).then(({success ,data ,msg}) => {
                 if(success && data){
                     this.state.topics[index]['delete'] = '已删除';
                     this.setState({topics :this.state.topics});

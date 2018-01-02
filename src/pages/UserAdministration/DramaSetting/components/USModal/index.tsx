@@ -65,7 +65,7 @@ class USModal extends React.Component<Props,State> {
   // 点击保存时
   USModalOk = () => {
     if(this.props.onSave){
-        this.props.onSave(this.state.id,this.state.code,this.state.title)
+        this.props.onSave(this.state.id,this.state.md,this.state.title)
     }
   }
 

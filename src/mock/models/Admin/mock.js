@@ -7,3 +7,7 @@ Mock.mock(GetURL('/adm/sendpac'), {
   'success' : true,
 });
 
+Mock.mock(GetURL('/adm/lg'), {
+  'data'    :Admin,
+  'success' : true,
+});

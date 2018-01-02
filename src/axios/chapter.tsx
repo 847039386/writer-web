@@ -53,11 +53,11 @@ const findByDramaID = (id :string) => {
     })
 }
 
-const findByIdAndRemove = (id :string ,token :string) => {
+const findByIdAndRemove = (id :string ,token :string ,user_id :string) => {
     return new Promise<IAJAXChapter>((resolve ,reject) => {
         axios.post(`${host}/chapter/rm`,{ 
             id
-        },{headers :{ authorization : token }}).then((request) => {
+        },{headers :{ authorization : token ,aud :user_id }}).then((request) => {
             resolve(request.data)            
         }).catch((err) => {
             resolve({success :false ,msg :err.message })
@@ -70,11 +70,11 @@ const findByIdAndRemove = (id :string ,token :string) => {
  * @param drama_id 剧本ID
  * @param content 该剧集内容
  */
-const save = (id :string ,title :string ,content :string ,token :string) => {
+const save = (id :string ,title :string ,content :string ,token :string ,user_id :string) => {
     return new Promise<IAJAXChapter>((resolve ,reject) => {
         axios.post(`${host}/chapter/ct`,{ 
             id ,title ,content
-        },{headers :{ authorization : token }}).then((request) => {
+        },{headers :{ authorization : token ,aud :user_id }}).then((request) => {
             resolve(request.data)             
         }).catch((err) => {
             resolve({success :false ,msg :err.message })
@@ -82,11 +82,11 @@ const save = (id :string ,title :string ,content :string ,token :string) => {
     })
 }
 
-const findByIdAndUpdate = (id :string ,title :string ,content :string ,token :string) => {
+const findByIdAndUpdate = (id :string ,title :string ,content :string ,token :string ,user_id :string) => {
     return new Promise<IAJAXChapter>((resolve ,reject) => {
         axios.post(`${host}/chapter/ut`,{ 
             id ,title ,content
-        },{headers :{ authorization : token }}).then((request) => {
+        },{headers :{ authorization : token ,aud :user_id  }}).then((request) => {
             resolve(request.data)         
         }).catch((err) => {
             resolve({success :false ,msg :err.message })
@@ -94,12 +94,12 @@ const findByIdAndUpdate = (id :string ,title :string ,content :string ,token :st
     })
 }
 
-const updateChapterOrder = (beginId :string ,endId :string ,token :string) =>{
+const updateChapterOrder = (beginId :string ,endId :string ,token :string ,user_id :string) =>{
     return new Promise<IAJAXChapter>((resolve ,reject) => {
         axios.post(`${host}/chapter/utorder`,{ 
             bid :beginId ,
             eid :endId
-        },{headers :{ authorization : token }}).then((request) => {
+        },{headers :{ authorization : token ,aud :user_id }}).then((request) => {
             resolve(request.data)         
         }).catch((err) => {
             resolve({success :false ,msg :err.message })

@@ -189,7 +189,7 @@ class DramasPage extends React.Component<any,State> {
         this.state.dramas[index]['delete_title'] = '删除中';
         this.setState({dramas :this.state.dramas})
         if(record._id){
-            DramaAjax.remove(record._id,'token').then(({success ,data ,msg}) => {
+            DramaAjax.remove(record._id,this.props.AdminReducer.token,'admin').then(({success ,data ,msg}) => {
                 if(success && data){
                     this.state.dramas[index]['delete'] = '已删除';
                     this.setState({dramas :this.state.dramas});

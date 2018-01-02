@@ -5,7 +5,9 @@ import { Drama } from '../../../../axios'
 import './style.less'
 
 interface Props {
-  id :string
+  id :string,
+  uid :string,
+  token :string
 }
 
 interface State {
@@ -46,7 +48,7 @@ class CharacterPage extends React.Component<Props,State> {
   onsubmit(e :any){
     if(this.state.md && this.state.md !== this.oldCharacterInput){
       this.setState({loading :true})
-      Drama.setCharacter(this.props.id,this.state.md,'token').then(({success ,data ,msg}) => {
+      Drama.setCharacter(this.props.id,this.state.md,this.props.token,this.props.uid).then(({success ,data ,msg}) => {
         if(success && data){  
           this.oldCharacterInput = data.character;  
           this.setState({loading :false})

@@ -112,7 +112,7 @@ class BookPage extends React.Component<any,State> {
     save =(record :any) => {
       this.setState({opLoading :true})
       if(this.status === 'create'){     
-        Book.save(this.state.label,'token').then(({ success ,data ,msg }) => {
+        Book.save(this.state.label,this.props.AdminReducer.token).then(({ success ,data ,msg }) => {
           this.setState({opLoading :false})
           if(success && data){
             let newData :any = data
@@ -126,7 +126,7 @@ class BookPage extends React.Component<any,State> {
         })
       }else{
         if(this.upID && this.upName){
-          Book.update(this.upID,this.state.label,this.upName,'token').then(({success , data ,msg}) => {
+          Book.update(this.upID,this.state.label,this.upName,this.props.AdminReducer.token).then(({success , data ,msg}) => {
             this.setState({opLoading :false})
             if(success && data){
               this.state.data[this.upIndex].name = data.name
@@ -144,7 +144,7 @@ class BookPage extends React.Component<any,State> {
 
     remove = (record :any ,index :number) => {
       this.setState({loading :true})
-      Book.remove(record._id,'token').then(({success ,data ,msg}) => {
+      Book.remove(record._id,this.props.AdminReducer.token).then(({success ,data ,msg}) => {
         this.setState({loading :false})
         if(success && data){
           this.state.data.splice(index,1)

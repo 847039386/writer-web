@@ -33,7 +33,9 @@ interface State {
 }
 
 interface Props {
-  id :string
+  id :string,
+  uid :string,
+  token :string
 }
 
 class ChapterPage extends React.Component<Props,State> {
@@ -97,7 +99,7 @@ class ChapterPage extends React.Component<Props,State> {
   onDelete = (info :any) : void => {
     const { idx , chapter } = info;
     const { _id } = chapter;
-    Chapter.findByIdAndRemove(_id,'token').then(({success ,data ,msg }) => {
+    Chapter.findByIdAndRemove(_id,this.props.token,this.props.uid).then(({success ,data ,msg }) => {
       if(success){
         const chapters = this.state.chapters
         chapters.splice(idx ,1)
@@ -138,7 +140,7 @@ class ChapterPage extends React.Component<Props,State> {
     this.setState({USModal_visible:false})
     if(id){
       if(code !== this.current_ucode || this.current_utitle !== title){
-        Chapter.findByIdAndUpdate(id,title,code,'token').then(({success ,data  ,msg}) => {
+        Chapter.findByIdAndUpdate(id,title,code,this.props.token,this.props.uid).then(({success ,data  ,msg}) => {
           if(success && data){
             message.success('修改成功')
           }else{
@@ -147,7 +149,7 @@ class ChapterPage extends React.Component<Props,State> {
         })
       }
     }else{
-      Chapter.save(this.props.id,title,code,'token').then(({success ,data  ,msg}) => {
+      Chapter.save(this.props.id,title,code,this.props.token,this.props.uid).then(({success ,data  ,msg}) => {
         if(success && data){
           this.setState({chapters :this.state.chapters.concat({ _id : data._id ,title :data.title})})
           message.success('创建成功')
@@ -179,7 +181,7 @@ class ChapterPage extends React.Component<Props,State> {
   updateChapterOrder = () => {
     if(this.state.order_beginID && this.state.order_endID && this.state.order_beginID != this.state.order_endID){
       this.setState({titlesLoading :true})
-      Chapter.updateChapterOrder(this.state.order_beginID,this.state.order_endID,'token').then(({success ,data ,msg}) => {
+      Chapter.updateChapterOrder(this.state.order_beginID,this.state.order_endID,this.props.token,this.props.uid).then(({success ,data ,msg}) => {
         this.setState({titlesLoading :false})
         if(success){
           message.success(`移动成功`)

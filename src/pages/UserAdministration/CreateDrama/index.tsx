@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Form, Input, Button ,Switch ,Select ,message } from 'antd';
+import { Form, Input, Button  ,Select ,message } from 'antd';
 import UAHeader from '../../../components/UAHeader';
 import { Category ,Book ,Drama } from '../../../axios'
 const { TextArea } = Input;
@@ -52,7 +52,7 @@ class UserCreateDramaPage extends React.Component<any,State> {
     this.props.form.validateFields((err :any, values :any) => {
       if (!err) {
         if(this.props.UserReducer._id && this.props.UserReducer.token){
-          Drama.create(this.props.UserReducer._id,values.dramaName,values.book,values.categorys,values.description || '','token')
+          Drama.create(this.props.UserReducer._id,values.dramaName,values.book,values.categorys,values.description || '',this.props.UserReducer.token)
           .then(({success ,data ,msg}) => {
               if(success && data ){
                 this.props.history.push({
@@ -70,6 +70,13 @@ class UserCreateDramaPage extends React.Component<any,State> {
     });
     
   }
+
+// 以下功能暂且保留 等待上线
+// <FormItem label="访问" labelCol={{span :4}} wrapperCol={{span:14}} extra="私有模式仅允许持有密钥者才可访问." >
+//   <Switch onChange={this.ProjectVisibilityOnChange} checkedChildren="私有" unCheckedChildren="公有"  />
+//   <div style={{ display:`${this.state.projectShow ? 'block' : 'none'}` }}><Input name="props" style={{margin:'5px 0'}} placeholder="请输入密钥"  /></div>
+// </FormItem>
+
 
   getFormDom = () :React.ReactNode => {
       const { getFieldDecorator } = this.props.form;
@@ -97,10 +104,6 @@ class UserCreateDramaPage extends React.Component<any,State> {
                     }
                   </Select>
                 )}
-              </FormItem>
-              <FormItem label="访问" labelCol={{span :4}} wrapperCol={{span:14}} extra="私有模式仅允许持有密钥者才可访问." >
-                <Switch onChange={this.ProjectVisibilityOnChange} checkedChildren="私有" unCheckedChildren="公有"  />
-                <div style={{ display:`${this.state.projectShow ? 'block' : 'none'}` }}><Input name="props" style={{margin:'5px 0'}} placeholder="请输入密钥"  /></div>
               </FormItem>
               <FormItem label="剧情类型" labelCol={{span :4}} wrapperCol={{ span: 14 }}>
                 {getFieldDecorator('categorys', {

@@ -23,7 +23,7 @@ class CreateTopicPage extends React.Component<any,State> {
 
     onSubmit = (code :string) => {
         if(this.state.title && code){
-            Topic.create(this.state.title,code,'token').then(({ success ,data ,msg }) => {
+            Topic.create(this.state.title,code,this.props.AdminReducer.token).then(({ success ,data ,msg }) => {
                 if(success && data){
                     message.success(`文章添加成功`)
                     location.replace("#/admin/topics");

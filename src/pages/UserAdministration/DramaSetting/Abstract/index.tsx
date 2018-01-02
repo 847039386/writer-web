@@ -4,7 +4,9 @@ import { Drama } from '../../../../axios'
 const { TextArea } = Input;
 
 interface Props {
-  id :string
+  id :string,
+  uid :string,
+  token :string
 }
 
 interface State {
@@ -33,13 +35,10 @@ class AbstractPage extends React.Component<Props,State> {
     })
   }
   
-  onSave(e :any){
-    console.log('保存')
-  }
   onSubmit = () => {
     if(this.oldAbstractInput !== this.state.abstractInput){
       this.setState({loading :true})
-      Drama.setAbstract(this.props.id,this.state.abstractInput,'token').then(({success ,data ,msg}) => {
+      Drama.setAbstract(this.props.id,this.state.abstractInput,this.props.token ,this.props.uid).then(({success ,data ,msg}) => {
         this.setState({loading :false})
         if(success && data){  
           this.oldAbstractInput = data.abstract;  

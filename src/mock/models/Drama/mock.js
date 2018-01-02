@@ -1,7 +1,7 @@
 import Mock from 'mockjs'
 import { Pagination } from '../../public/models/pagination'
 import { GetURL } from '../../public/util'
-import { Drama , DramaNames } from '../'
+import { Drama } from '../'
 
 
 //剧本列表

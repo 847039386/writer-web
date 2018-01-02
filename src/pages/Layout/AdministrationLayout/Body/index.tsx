@@ -41,7 +41,7 @@ class AdminBody extends React.Component<any,any> {
                 <Header style={this.headerStyles}>
                     <div className={'adm_header'}>
                         <Avatar style={{marginRight:10}} size="small" className={'avatar'} >管理员:</Avatar>
-                        <span style={{marginRight:10}}>管理员</span>
+                        <span style={{marginRight:10}}>{this.state.AdminReducer.name}</span>
                         <Button style={{marginRight:10}} size="small" type={'danger'} onClick={this.onLogout} >注销</Button>
                     </div>  
                 </Header>

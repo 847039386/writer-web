@@ -16,7 +16,8 @@ module.exports = {
     output: {
         filename: "[name].bundle-[hash:8].js",
         chunkFilename: 'js/[name].chunk-[hash:8].js',
-        path: __dirname + "/build"
+        path: path.resolve(__dirname, 'build','app'),
+        publicPath :'/app/'
     },
 
     // Enable sourcemaps for debugging webpack's output.
@@ -58,7 +59,7 @@ module.exports = {
             },
             {
                 test:  /\.(eot|svg|ttf|woff|woff2)\w*/,
-                loader: "file-loader?name=fonts/[name]-[hash:3].[ext]"
+                loader: "file-loader?name=public/[name]-[hash:3].[ext]"
             },
             { test: /\.less$/ ,loader: "style-loader!css-loader!less-loader" },
             { 
@@ -79,7 +80,7 @@ module.exports = {
     plugins: [
      new HtmlWebpackPlugin({template:'./public/index.html',filename:'index.ejs'}),
      new LodashModuleReplacementPlugin,
-     new ExtractTextPlugin({filename:'/css/css.[hash:3].css'}),
+     new ExtractTextPlugin({filename:'css/css.[hash:3].css'}),
      new BundleAnalyzerPlugin({
         analyzerMode: 'server',
         analyzerHost: '127.0.0.1',

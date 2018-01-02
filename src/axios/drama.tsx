@@ -97,7 +97,7 @@ const create = (user_id :string ,title :string ,book_id :string ,category_id :Ar
             book_id ,
             category_id,
             description : description || ''
-        },{headers :{ authorization : token }}).then((request) => {
+        },{headers :{ authorization : token ,aud :user_id  }}).then((request) => {
             resolve(request.data)           
         }).catch((err) => {
             resolve({success :false ,msg :err.message })
@@ -105,11 +105,11 @@ const create = (user_id :string ,title :string ,book_id :string ,category_id :Ar
     }) 
 }
 
-const remove = (id :string ,token :string) => {
+const remove = (id :string ,token :string ,user_id:string) => {
     return new Promise<IAJAXDrama>((resolve ,reject) => {
         axios.post(`${host}/drama/rm` ,{ 
             id ,
-        },{headers :{ authorization : token }}).then((request) => {
+        },{headers :{ authorization : token ,aud :user_id  }}).then((request) => {
             resolve(request.data)           
         }).catch((err) => {
             resolve({success :false ,msg :err.message })
@@ -141,11 +141,11 @@ const getCharacter = (id :string ) => {
     }) 
 }
 
-const setAbstract = (id :string ,content :string ,token :string) => {
+const setAbstract = (id :string ,content :string ,token :string ,user_id :string) => {
     return new Promise<IAJAXDrama>((resolve ,reject) => {
         axios.post(`${host}/drama/abstract`,{ 
             id ,content
-        },{headers :{ authorization : token }}).then((request) => {
+        },{headers :{ authorization : token ,aud :user_id }}).then((request) => {
             resolve(request.data)           
         }).catch((err) => {
             resolve({success :false ,msg :err.message })
@@ -153,11 +153,11 @@ const setAbstract = (id :string ,content :string ,token :string) => {
     }) 
 }
 
-const setCharacter = (id :string ,content :string ,token :string) => {
+const setCharacter = (id :string ,content :string ,token :string ,user_id :string) => {
     return new Promise<IAJAXDrama>((resolve ,reject) => {
         axios.post(`${host}/drama/character`,{ 
             id ,content
-        },{headers :{ authorization : token }}).then((request) => {
+        },{headers :{ authorization : token ,aud :user_id  }}).then((request) => {
             resolve(request.data)           
         }).catch((err) => {
             resolve({success :false ,msg :err.message })

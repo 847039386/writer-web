@@ -37,7 +37,7 @@ class UserSettingPresentationPage extends React.Component<any,any> {
     if(this.oldPresentation !== this.state.presentationInput){
       this.setState({loading :true})
       const { UserReducer } = this.props;
-      User.setPresentation(UserReducer._id,this.state.presentationInput,'token').then(({ success ,data ,msg }) => {
+      User.setPresentation(UserReducer._id,this.state.presentationInput,this.props.UserReducer.token).then(({ success ,data ,msg }) => {
         this.setState({loading :false})
         if(success && data){
           this.setState({presentationInput : data.presentation || ''})
