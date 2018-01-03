@@ -38,11 +38,6 @@ const Topic = Loadable({
     loading: MyLoadingComponent
 });
 
-const Setting = Loadable({
-    loader: () => import('../pages/Administration/Setting/index'),
-    loading: MyLoadingComponent
-});
-
 const Success = Loadable({
     loader: () => import('../pages/Administration/Result/Success/index'),
     loading: MyLoadingComponent
@@ -67,7 +62,6 @@ const AdminRoute = (rote :any) => {
                     <Route exact path={`${rote.match.url}/topics`} component={Topics}/>
                     <Route exact path={`${rote.match.url}/topic`} component={Topic}/>
                     <Route exact path={`${rote.match.url}/comment`} component={CommentPage}/>
-                    <Route exact path={`${rote.match.url}/setting`} component={Setting}/>
                     <Route exact path={`${rote.match.url}/category`} component={Category}/>
                     <Route exact path={`${rote.match.url}/book`} component={Book}/>
                     <Route exact path={`${rote.match.url}/success/:type`} component={Success}/>

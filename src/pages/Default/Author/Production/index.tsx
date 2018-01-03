@@ -3,6 +3,7 @@ import { List ,Button ,Spin } from 'antd'
 import { Drama as DramaAjax } from '../../../../axios'
 import { Link } from 'react-router-dom'
 import { IDrama } from '../../../../model'
+import moment from '../../../../common/moment-cn'
 
 interface State {
     Dramas :IDrama [],
@@ -68,9 +69,14 @@ class Production extends React.Component<Props,State> {
             loadMore={loadMore}
             dataSource={this.state.Dramas}
             renderItem={(drama :IDrama) => (
-            <List.Item>
-              <Link to={`/details/${drama._id}`}>{drama.title}</Link>
-          </List.Item>)}
+              <List.Item  extra={''}>
+                <List.Item.Meta
+                  avatar={''}
+                  title={<Link to={`/details/${drama._id}`}>{drama.title}</Link>}
+                />
+                {moment(drama.create_at).format('YYYY MMMM Do, h:mm:ss a')}
+              </List.Item>
+            )}
           />
         }
       </div>

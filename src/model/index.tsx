@@ -5,6 +5,7 @@ import { IUser ,UserModel } from './User';
 import { ITopic ,TopicModel } from './Topic'
 import { ICategory ,CategoryModel } from './Category'
 import { IBook ,BookModel } from './Book'
+import { IRelation ,IRelationToFans ,IRelationToStars } from './Relation'
 
 export {
     IChapter, ChapterModel,
@@ -14,4 +15,5 @@ export {
     ITopic , TopicModel,
     ICategory ,CategoryModel,
     IBook ,BookModel,
+    IRelation , IRelationToFans ,IRelationToStars
  }

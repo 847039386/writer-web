@@ -6,6 +6,7 @@ import { User } from './User'
 import { Admin } from './Admin'
 import { Comment } from './Comment'
 import { Drama ,DramaNames } from './Drama'
+import { RelationFans ,RelationStars } from './Relation'
 
 import { Pagination  } from '../public/models/pagination'
 
@@ -18,7 +19,8 @@ export {
     Comment,
     User ,UserPresentation,
     Drama ,DramaNames,
-    Admin
+    Admin,
+    RelationFans ,RelationStars
 }
 
 
