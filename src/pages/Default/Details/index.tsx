@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Col, Row ,Tabs ,Icon ,Button ,Spin ,Card ,message ,Tag } from 'antd';
+import { Col, Row ,Tabs ,Button ,Spin ,Card ,message ,Tag } from 'antd';
 const TabPane = Tabs.TabPane;
 import { Link } from 'react-router-dom';
 import Comment from '../../../components/Comment';
@@ -67,6 +67,7 @@ class BookDetails extends React.Component<any, DetailsState> {
 
 
   getMVBodyTabPane(description :string ,character :string ,chapter :IChapter){
+    const { Chapters ,selectedEpisodeID ,episodeLoading } = this.state;
     return (
       <Tabs type="card" className="theme_CTabs">
         <TabPane tab="故事梗概" key="1">{description}</TabPane>
@@ -77,17 +78,17 @@ class BookDetails extends React.Component<any, DetailsState> {
           <Row>
             <Col span={4}>
               {
-                this.state.Chapters.map((chapter :IChapter ,idx :number) => {
-                  let selected :any = this.state.selectedEpisodeID == chapter._id ? {type : "primary"} : {type :'dashed'}
+                Chapters.map((chapter :IChapter ,idx :number) => {
+                  let selected :any = selectedEpisodeID == chapter._id ? {type : "primary"} : {type :'dashed'}
                   return (
-                    <Button disabled={this.state.episodeLoading} onClick={() => {this.getEpisode(chapter._id)}} style={{marginBottom :10 ,width :'80%' }} key={chapter._id} {...selected} >{`${chapter.title}`}</Button>
+                    <Button disabled={episodeLoading} onClick={() => {this.getEpisode(chapter._id)}} style={{marginBottom :10 ,width :'80%' }} key={chapter._id} {...selected} >{`${chapter.title}`}</Button>
                   )
                 })
               }
             </Col>
             <Col span={20}>
               {
-                this.state.episodeLoading ?
+                episodeLoading ?
                 this.loadingDOM :
                 <div style={{marginBottom:10}} key={chapter._id}>
                   <h1>{chapter.title}</h1>
@@ -102,27 +103,27 @@ class BookDetails extends React.Component<any, DetailsState> {
   }
 
   getResultDOM = () :React.ReactNode =>{
+    const { dramaBook ,mainLoading ,Chapter } = this.state; 
     return (
-        <Card loading={this.state.mainLoading} bodyStyle={{minHeight :'80vh',padding:24}}>
-          <Col span={24}><h1 className="theme_DTitle title">{this.state.dramaBook.title}</h1></Col>
+        <Card loading={mainLoading} bodyStyle={{minHeight :'80vh',padding:24}}>
+          <Col span={24}><h1 className="theme_DTitle title">{dramaBook.title}</h1></Col>
           <Col className="introduce theme_DBox" span={24}>
               {
-                this.state.dramaBook.user_id ?
-                <Col span={12}>作者：<Link to={`/author/${this.state.dramaBook.user_id._id}`}>{this.state.dramaBook.user_id.name}</Link></Col>
+                dramaBook.user_id ?
+                <Col span={12}>作者：<Link to={`/author/${dramaBook.user_id._id}`}>{dramaBook.user_id.name}</Link></Col>
                 : ''
               }
-              <Col span={12}>创建于：{this.state.dramaBook.create_at}</Col>
+              <Col span={12}>创建于：{dramaBook.create_at}</Col>
               <Col span={12}>剧情类型：&nbsp;{
-                this.state.dramaBook.category_id.length > 0 ?
-                this.state.dramaBook.category_id.map((category ,item) => {
+                dramaBook.category_id.length > 0 ?
+                dramaBook.category_id.map((category ,item) => {
                   return (<Tag color="purple" key={category._id}>{category.name}</Tag>)
                 }) : <Tag color="purple" key={'defa'}>{'其他'}</Tag>
               }</Col>
-              <Col span={12}>剧本类型：<Tag color="#f50">{this.state.dramaBook.book_id.name}</Tag></Col>
-              <Col span={12}>阅读量：300</Col>
-              <Col span={12}>点赞：<Icon type="like" style={{cursor:'pointer'}} />&nbsp;300</Col>
+              <Col span={12}>剧本类型：<Tag color="#f50">{dramaBook.book_id.name}</Tag></Col>
+              <Col span={12}>阅读量：{dramaBook.reading_count || 0}</Col>
           </Col>
-          <Col className="content" span={24}>{this.getMVBodyTabPane(this.state.dramaBook.abstract || this.state.dramaBook.description,this.state.dramaBook.character,this.state.Chapter)}</Col>
+          <Col className="content" span={24}>{this.getMVBodyTabPane(dramaBook.abstract || dramaBook.description,dramaBook.character,Chapter)}</Col>
         </Card>
     )
   }
@@ -143,7 +144,4 @@ class BookDetails extends React.Component<any, DetailsState> {
 }
 
 import { connect } from 'react-redux'
-const mapStateToPorps = (state :any) => {
-    return { ...state };
-};
-export default connect(mapStateToPorps)(BookDetails);
+export default connect(state => state)(BookDetails);

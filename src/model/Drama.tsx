@@ -11,6 +11,9 @@ interface IDrama {
   abstract :string,      //剧本梗概
   character :string,     //人物小传
   weight? :number    //权重，越高越前面
+  reading_count : number,     // 总阅读量
+  reading_week_count : number,  // 周阅读量
+  reading_month_count :number   // 月阅读量
 }
 
 class DramaModel {
@@ -24,6 +27,9 @@ class DramaModel {
   abstract : string;
   character :string;
   weight :number;
+  reading_count : number;
+  reading_week_count : number;
+  reading_month_count :number;
   constructor(){
     this._id = '';
     this.category_id = [new CategoryModel()]; 
@@ -33,6 +39,9 @@ class DramaModel {
     this.description = "";
     this.character = "";
     this.weight = 0;
+    this.reading_count = 0;
+    this.reading_week_count = 0;
+    this.reading_week_count = 0;
     this.user_id = new UserModel();
   }
 }

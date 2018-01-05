@@ -14,6 +14,9 @@ const Drama = {
     "create_at": "@date()",
     "description" : "@cparagraph",
     "abstract" : "@cparagraph",
+    "reading_count" :'@integer(300, 500)',
+    "reading_week_count" :'@integer(60, 100)',
+    "reading_month_count" :'@integer(101, 200)',
     "character" : biography.join('  \n'),
 }
 
