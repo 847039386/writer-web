@@ -7,7 +7,9 @@ interface DetailsState {
   selectedEpisodeID :string, //当前选中的集数
   isLogin : boolean,
   mainLoading : boolean,
-  episodeLoading :boolean
+  episodeLoading :boolean,
+  isLike :boolean,
+  likeLoading :boolean
 }
 
 export { DetailsState, IDrama, DramaModel ,ChapterModel ,IChapter }

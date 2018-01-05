@@ -8,7 +8,7 @@ Mock.mock(GetURL('/chapter/fdi'), {
 });
 
 Mock.mock(GetURL('/chapter/fd'), {
-    'data|2-5'    :[Chapters],
+    'data|30-50'    :[Chapters],
     'success' : true,
 });
 

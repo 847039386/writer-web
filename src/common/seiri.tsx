@@ -29,7 +29,7 @@ interface ProcessingResult {
  * @param br   是否原数据每行还原。（就是换行不？） 
  *              如不设置则每行不换行 则按rule里的value设置，注意换行在markdown语法是两个空格+\n
  */
-type RuleType = 'episodes' | 'biography'; 
+type RuleType = 'chapter' | 'character' | ''; 
 interface Option {
     trim? :boolean          
     br? : boolean,
@@ -219,7 +219,7 @@ class SeiriBox {
     ruleRuleTYPE = () => {
         let rules :Array<Rule> = [ ]
         switch (this.options.type){
-            case 'episodes' :
+            case 'chapter' :
                 rules = [
                     {regexp : /^第\d+集$/ , value :'# ${key}' },
                     {regexp : /^\d+[-]\d+[,.:].{0,10}$/ , value :'  \n---  \n## ${key}'},
@@ -227,7 +227,7 @@ class SeiriBox {
                   ]
                 this.addRule(rules)
             break;
-            case 'biography' :
+            case 'character' :
                 rules = [
                     { regexp:/^(.{1,5})([\(\[【（].{0,10}[\)）】\]])?[.:：]$/ ,value:'# ${key}' ,key: { name:'renwu' ,exec :1 ,result :'`${key}`' } }
                 ]
@@ -298,7 +298,7 @@ class SeiriBox {
      */
     getContent = () :string => {
         let content = this.getLines();
-        let newContent = this.options.br ? content.join("  \n") : content.join()
+        let newContent = this.options.br ? content.join("  \n\n") : content.join()
         if(this.keys.length > 0 ){
             return this.ruleInKey().end(newContent);
         }else{

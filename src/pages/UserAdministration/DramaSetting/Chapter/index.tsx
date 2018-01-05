@@ -1,35 +1,33 @@
 import * as React from 'react';
-import { Card ,Button ,Row ,Col ,AutoComplete ,message ,Spin ,Popconfirm ,Select  } from 'antd';
-import UaEpisodes from '../components/UaEpisodes'
+import { Card ,Button ,AutoComplete ,message ,Spin  ,Select ,Popconfirm ,Divider ,Input ,Badge } from 'antd';
+import { Chapter } from '../../../../axios'
 import './index.less'
 const AOption = AutoComplete.Option;
-import { Chapter } from '../../../../axios'
-import Bundle from '../../../../bundle'
-import USModal from '../components/USModal'
+import Seiri from '../../../../components/Seiri'
 
-const ReactMarkdown = (props: any) => (
-  <Bundle load={() => import('react-markdown')}>
-      {(UpdateDrama: any) => <UpdateDrama {...props} />}
-  </Bundle>
-);
+
 
 interface Chapters {
   _id :string,
-  title :string
+  title :string,
+  isNEW? :boolean
 }
 
 interface State {
   chapters : Array<Chapters>,      
-  markdownCode : string,
+  markdownCode : string,    // 用户修改时候的剧集内容
+  new_markdownCode :string,   //用户新增时候的剧集内容
   selected :string,
-  USModal_visible :boolean,
-  USModal_code :string,
-  USModal_key :string,
-  USModal_title :string,
   titlesLoading :boolean,
   chapterLoading :boolean,
   order_beginID :string,
-  order_endID :string
+  order_endID :string,
+
+  current_chapterID : string,   // 当前操作剧集的id
+  current_chapterIDX : number,  //当前操作剧集的索引
+  current_chapterTitle :string, // 当前操作剧集的标题
+  chapter_Operation :string   // 剧集操作类型
+  new_chapterTitle :string  // 新创建的剧集title
 }
 
 interface Props {
@@ -39,31 +37,35 @@ interface Props {
 }
 
 class ChapterPage extends React.Component<Props,State> {
-  current_ucode :string;
-  current_utitle :string;
+  current_chapter_old_title :string;
+  current_chapter_old_content :string;
   isOnOpenUpdate : boolean;
   constructor(props :Props){
     super(props)
     this.state = {
       chapters : [],      //所有剧集
       markdownCode : '',
+      new_markdownCode :'',
       selected :'',
-      USModal_visible :false,
-      USModal_code :'',
-      USModal_key :'',
-      USModal_title :'',
       titlesLoading :false,
       chapterLoading :false,
       order_beginID :'',
-      order_endID:''
+      order_endID:'',
+      current_chapterID :'',
+      current_chapterIDX : 0,
+      current_chapterTitle :'',
+      chapter_Operation :'',
+      new_chapterTitle :''
     }
-    this.onAdd = this.onAdd.bind(this)
-    this.onSave = this.onSave.bind(this)
-    this.onCancel = this.onCancel.bind(this)
 
     this.onChapterBeginOrderChange = this.onChapterBeginOrderChange.bind(this);
     this.onChapterEndOrderChange = this.onChapterEndOrderChange.bind(this);
-    this.updateChapterOrder = this.updateChapterOrder.bind(this)
+    this.updateChapterOrder = this.updateChapterOrder.bind(this);
+    this.onUpdateSeiriChange = this.onUpdateSeiriChange.bind(this);
+    this.onCurrentChapterTitleChange = this.onCurrentChapterTitleChange.bind(this);
+    this.updateChapter = this.updateChapter.bind(this);
+    this.onNewChapterTitleChange = this.onNewChapterTitleChange.bind(this);
+    this.addChapter = this.addChapter.bind(this)
   }
 
   componentWillMount(){
@@ -83,86 +85,27 @@ class ChapterPage extends React.Component<Props,State> {
 
 
   // 点击剧集标题触发
-  onTitle = (chapter :any) :void => {
+  searchChapterStatus = (id :string ,idx:number) :void => {
+    this.setState({ current_chapterID :id ,current_chapterIDX :idx})
     if(!this.state.chapterLoading){
       this.setState({chapterLoading :true})
-      Chapter.findById(chapter._id).then(({success ,data }) => {
+      Chapter.findById(id).then(({success ,data }) => {
         this.setState({chapterLoading :false})
         if(success && data){
-          this.setState({markdownCode : data.content ,selected :chapter._id})
+          this.current_chapter_old_title = data.title;
+          this.current_chapter_old_content = data.content;
+          this.setState({markdownCode : data.content ,selected :id , current_chapterTitle :data.title })
         }
       })
     }
   }
 
-  //删除数据触发，该参数为索引
-  onDelete = (info :any) : void => {
-    const { idx , chapter } = info;
-    const { _id } = chapter;
-    Chapter.findByIdAndRemove(_id,this.props.token,this.props.uid).then(({success ,data ,msg }) => {
-      if(success){
-        const chapters = this.state.chapters
-        chapters.splice(idx ,1)
-        this.setState({chapters})
-        message.success('删除成功')
-      }else{
-        message.error(`删除失败，原因可能是：${msg}`)
-      }
-    })
+  updateChapterStatus = () => {
+    this.setState({ chapter_Operation :'update'})
   }
 
-  //修改数据触发，该参数为索引ID
-  onUpdate = (info :any) => {
-    const { chapter } = info;
-    const { _id } = chapter;
-    if(!this.isOnOpenUpdate && _id){
-      this.isOnOpenUpdate = true
-      message.loading('正在加载数据!',0)
-      Chapter.findById(_id).then(({success ,data }) => {
-        message.destroy()
-        this.isOnOpenUpdate = false;
-        if(success && data){
-          this.current_ucode = data.content;
-          this.current_utitle = data.title
-          this.setState({USModal_code :data.content ,USModal_visible:true ,USModal_key :data._id ,USModal_title :data.title})
-        }
-      })
-    }
-  }
-
-  //添加剧集触发
-  onAdd = (event :any) => {
-    this.setState({USModal_visible:true ,USModal_code:'',USModal_key:''})
-  }
-
-  //保存数据的时候触发
-  onSave = (id :string ,code :string ,title :string) =>{
-    this.setState({USModal_visible:false})
-    if(id){
-      if(code !== this.current_ucode || this.current_utitle !== title){
-        Chapter.findByIdAndUpdate(id,title,code,this.props.token,this.props.uid).then(({success ,data  ,msg}) => {
-          if(success && data){
-            message.success('修改成功')
-          }else{
-            message.error(`修改失败，原因可能是：${msg}`)
-          }
-        })
-      }
-    }else{
-      Chapter.save(this.props.id,title,code,this.props.token,this.props.uid).then(({success ,data  ,msg}) => {
-        if(success && data){
-          this.setState({chapters :this.state.chapters.concat({ _id : data._id ,title :data.title})})
-          message.success('创建成功')
-        }else{
-          message.error(`创建失败，原因可能是：${msg}`)
-        }
-      })
-    }
-  }
-
-  //取消保存数据时触发
-  onCancel = (id :string ,code :string) => {
-    this.setState({USModal_visible:false})
+  addChapterStatus = () => {
+    this.setState({ chapter_Operation :'add' ,current_chapterID :'ADDJEY'}) //这里先模拟个ID
   }
 
   chapterorderDatasoure  = (chapter : any) :any => {
@@ -171,11 +114,83 @@ class ChapterPage extends React.Component<Props,State> {
     )
   }
 
+  onCurrentChapterTitleChange = (e :any) => {
+    this.setState({ current_chapterTitle : e.target.value})
+  }
+
+  onNewChapterTitleChange = (e :any) => {
+    this.setState({ new_chapterTitle : e.target.value})
+  }
+
   onChapterBeginOrderChange = (value :any) => {
     this.setState({order_beginID : value})
   }
   onChapterEndOrderChange = (value :any) => {
     this.setState({order_endID :value})
+  }
+
+  onUpdateSeiriChange = (code :string ,md :string) => {
+    this.setState({ markdownCode :md });
+  }
+
+  onAddSeiriChange = (code :string ,md :string) => {
+    this.setState({ new_markdownCode :md });
+  }
+
+  updateChapter = () => {
+      const { markdownCode ,current_chapterTitle ,current_chapterID } = this.state;
+      const { uid ,token } = this.props;
+      if(this.current_chapter_old_content != markdownCode || this.current_chapter_old_title != current_chapterTitle ){
+          this.setState({ chapterLoading :true })
+          Chapter.findByIdAndUpdate(current_chapterID,current_chapterTitle,markdownCode,token,uid).then(({success ,data ,msg}) => {
+              this.setState({ chapterLoading :false })
+              if(success && data){
+                this.current_chapter_old_title = data.title;
+                this.current_chapter_old_content = data.content;
+                this.setState({ chapter_Operation :'' })
+                message.success('修改成功');
+              }else{
+                message.error(`修改失败，原因可能是：${msg}`);
+              }
+          })
+      }else{
+        message.error('不允许提交重复值');
+      }
+  }
+
+  addChapter = () => {
+    const { new_chapterTitle ,new_markdownCode ,chapters } = this.state;
+    const { id ,token ,uid } = this.props
+    if(new_chapterTitle && new_markdownCode){
+      this.setState({ chapterLoading :true })
+      Chapter.save(id,new_chapterTitle,new_markdownCode,token,uid).then(({success ,data ,msg}) => {
+        this.setState({ chapterLoading :false })
+        if(success && data){
+          this.setState({ chapter_Operation :'' ,new_chapterTitle :'' ,new_markdownCode :'' ,current_chapterID :'' ,chapters: chapters.concat({_id : data._id ,title :data.title ,isNEW :true})})
+          message.success('创建成功');
+        }else{
+          message.error(`创建失败，原因可能是：${msg}`);
+        }
+      })
+    }else{
+      message.error('标题与内容不能为空');
+    }
+  }
+
+  removeChapter = () : void => {
+    const { chapters ,current_chapterID ,current_chapterIDX } = this.state;
+    const { token ,uid } = this.props;
+    this.setState({ chapterLoading :true })
+    Chapter.findByIdAndRemove(current_chapterID,token,uid).then(({success ,data ,msg }) => {
+      this.setState({ chapterLoading :false })
+      if(success){
+        chapters.splice(current_chapterIDX ,1)
+        this.setState({ chapters ,current_chapterID :'' ,current_chapterIDX :0})
+        message.success('删除成功')
+      }else{
+        message.error(`删除失败，原因可能是：${msg}`)
+      }
+    })
   }
 
   updateChapterOrder = () => {
@@ -194,6 +209,114 @@ class ChapterPage extends React.Component<Props,State> {
       message.error(`1. 左侧右侧均为必填项   2. 不能是相同的剧集`)
     }
   }
+
+  rollback = () => {
+    this.setState({ current_chapterID : '' , chapter_Operation :'' , current_chapterIDX :0})
+  }
+
+  getChapterOperationDOM = () :React.ReactNode => {
+    const { chapterLoading } = this.state;
+    return (
+      <div>
+        {
+          chapterLoading ? <div style={{textAlign:'center'}}><Spin tip={'加载中...'} /></div> :
+          <div>
+            <div>
+              { this.getChapterOperationTypeDOM() }
+            </div>
+          </div>
+        }
+      </div>
+    )
+  }
+
+  
+  getChapterOperationTypeDOM = ():React.ReactNode => {
+    const { chapter_Operation ,markdownCode ,current_chapterTitle ,new_markdownCode ,new_chapterTitle } = this.state
+    if(chapter_Operation === 'update'){
+      return (
+        <div>
+          <Input  addonBefore="标题：" value={current_chapterTitle} onChange={this.onCurrentChapterTitleChange} />
+          <Divider dashed />
+          <Seiri ruleType={'chapter'} onChange={this.onUpdateSeiriChange} value={markdownCode} />
+        </div>
+      )
+    }else if(chapter_Operation === 'add'){
+      return (
+        <div>
+          <Input  addonBefore="标题：" value={new_chapterTitle} onChange={this.onNewChapterTitleChange} />
+          <Divider dashed />
+          <Seiri ruleType={'chapter'} onChange={this.onAddSeiriChange} value={new_markdownCode} />
+        </div>
+      )
+    } else {
+      return <Seiri onlyMD value={markdownCode} />
+    }
+  }
+
+  getDramaOperationDOM = () :React.ReactNode =>{
+    const { chapters } = this.state;
+    return (
+      <div>
+              <p>点击下列标签进行操作</p>
+              <Button type={'primary'} icon={'plus'} style={{ margin:10 }} onClick={() => { this.addChapterStatus() }} >添加</Button>
+              {chapters.map((chapter,idx) => {
+                return (
+                  <Popconfirm okText={'查看'} cancelText={'取消'} title={'对剧集进行操作'} key={chapter._id} onConfirm={() => { this.searchChapterStatus(chapter._id,idx) }}>
+                    {
+                      chapter.isNEW ?
+                      <Button style={{ margin:10 }}><Badge status="success" text={chapter.title}></Badge> </Button>:
+                      <Button style={{ margin:10 }}>{chapter.title}</Button>
+                    }
+                    
+                  </Popconfirm>
+                )
+              })}
+      </div>
+    )
+  }
+
+  getChapterOperationTypeButtonDOM = () =>{
+    const { chapter_Operation } = this.state;
+    if(chapter_Operation === 'update'){
+      return (
+        <span>
+          <Button icon={'edit'} style={{margin:'0px 10px 10px'}} onClick={this.updateChapter}>提交修改</Button>
+        </span>
+      )
+    }else if(chapter_Operation === 'add'){
+      return (
+        <span>
+          <Button icon={'save'} style={{margin:'0px 10px 10px'}} onClick={this.addChapter}>保存</Button>
+        </span>
+      )
+    }else{
+      return (
+        <span>
+          <Button icon={'edit'} style={{margin:'0px 10px 10px'}} onClick={() => { this.updateChapterStatus() }}>修改</Button>
+          <Popconfirm title="是否删除？" okText="是" cancelText="否" onConfirm={() => { this.removeChapter() }} >
+            <Button icon={'delete'} >删除</Button>
+          </Popconfirm>
+        </span>
+      )
+    }
+  }
+
+  getResultOperationDOM = () :React.ReactNode => {
+      const { current_chapterID ,titlesLoading ,chapterLoading } = this.state;
+      return (
+        <Card loading={titlesLoading} title={
+          current_chapterID && !chapterLoading ?
+            <div style={{ height :32}}>
+              <Button icon={'rollback'} onClick={() =>{ this.rollback() }}>返回</Button>
+               { this.getChapterOperationTypeButtonDOM() }      
+            </div> : '展示框'
+        }>
+            { current_chapterID ? this.getChapterOperationDOM() : this.getDramaOperationDOM() }
+        </Card>
+      )
+  }
+
 
   render() {
     return (
@@ -227,36 +350,7 @@ class ChapterPage extends React.Component<Props,State> {
               <Button style={{marginLeft:8}} onClick={() => { this.getChapters() }} size={'small'} type={'danger'} >刷新</Button>
             </div>
           </Spin>
-          <Row gutter={16}>
-             <Col span={6}>
-                <Card loading={this.state.titlesLoading} title="剧集" bodyStyle={{overflow:'hidden' ,height:550 ,padding:0}} extra={<Button onClick={this.onAdd} size={"small"}  icon={'plus'} type="danger">添加剧集</Button> }>
-                    <ul style={{overflowY:'scroll' ,height:550 ,padding:24 }}>
-                      {
-                        this.state.chapters.map((chapter :any , idx:number) => {
-                          return (
-                            <li key={chapter._id} style={{ textAlign:'center', padding:'5px 10px' ,listStyle:'none'}}>
-                              <UaEpisodes 
-                                onSelected={ this.state.selected == chapter.id ? true : false }
-                                onTitle={() => { this.onTitle(chapter) }} 
-                                onDelete={()=> this.onDelete({idx, chapter}) }
-                                onUpdate={() => this.onUpdate({idx ,chapter})}
-                                title={`${chapter.title}`} />
-                            </li>
-                          )
-                        })
-                      }                     
-                    </ul>     
-                </Card>
-             </Col>
-             <Col span={18}>
-                <Card loading={this.state.chapterLoading} title="展示框" bodyStyle={{overflowY:'scroll' ,height:550}}>
-                  <div className={"bm-markdown"} >
-                    <ReactMarkdown source={this.state.markdownCode} />
-                  </div>
-                </Card>
-             </Col>
-          </Row>
-          <USModal title={this.state.USModal_title} id={this.state.USModal_key} code={this.state.USModal_code} visible={this.state.USModal_visible} onCancel={this.onCancel} onSave={this.onSave} />
+          {this.getResultOperationDOM()}
       </div>
     );
   }

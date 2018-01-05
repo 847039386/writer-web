@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Card ,Button ,Spin ,message } from 'antd';
-import Seiri ,{ SeiriRule } from '../../../../components/Seiri'
+import Seiri from '../../../../components/Seiri'
 import { Drama } from '../../../../axios' 
 import './style.less'
 
@@ -18,13 +18,9 @@ interface State {
 
 
 class CharacterPage extends React.Component<Props,State> {
-  seiriRule : Array<SeiriRule>;
   oldCharacterInput :string;
   constructor(props :any){
     super(props)
-    this.seiriRule = [
-        { regexp:/^(.{1,5})([\(\[【（].{0,10}[\)）】\]])?[.:：]$/ ,value:'# ${key}' ,key: { name:'renwu' ,exec :1 ,result :'`${key}`' } }
-    ]
     this.seiriChange = this.seiriChange.bind(this);
     this.onsubmit = this.onsubmit.bind(this)
     this.state = {
@@ -71,7 +67,7 @@ class CharacterPage extends React.Component<Props,State> {
     return (
         <Spin spinning={this.state.loading}>
           <Card loading={this.state.loading} bodyStyle={{padding:0}} actions={[<Button onClick={this.onsubmit}>提交</Button>]}>
-              <Seiri rule={this.seiriRule} onChange={this.seiriChange} value={this.state.characterinput} />
+              <Seiri ruleType={'character'} onChange={this.seiriChange} value={this.state.characterinput} />
           </Card>
         </Spin>
     );

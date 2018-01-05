@@ -13,7 +13,8 @@ interface IDrama {
   weight? :number    //权重，越高越前面
   reading_count : number,     // 总阅读量
   reading_week_count : number,  // 周阅读量
-  reading_month_count :number   // 月阅读量
+  reading_month_count :number,   // 月阅读量
+  like_count :number,
 }
 
 class DramaModel {
@@ -30,6 +31,7 @@ class DramaModel {
   reading_count : number;
   reading_week_count : number;
   reading_month_count :number;
+  like_count :number;
   constructor(){
     this._id = '';
     this.category_id = [new CategoryModel()]; 
@@ -42,6 +44,7 @@ class DramaModel {
     this.reading_count = 0;
     this.reading_week_count = 0;
     this.reading_week_count = 0;
+    this.like_count = 0;
     this.user_id = new UserModel();
   }
 }

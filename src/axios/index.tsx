@@ -6,8 +6,9 @@ import Topic from './topic';
 import Category from './category';
 import Book from './book';
 import Conf from './conf';
-import Admin from './admin'
-import Relation from './relation'
+import Admin from './admin';
+import Relation from './relation';
+import DramaLike from './drama_like';
 
 export {
     Drama,
@@ -19,7 +20,8 @@ export {
     Book,
     Conf,
     Admin,
-    Relation
+    Relation,
+    DramaLike
 }
 
 
