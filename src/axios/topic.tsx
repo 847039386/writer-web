@@ -25,7 +25,7 @@ interface IAJAXTopics {
 
 const findById = (id :string) => {
     return new Promise<IAJAXTopic>((resolve ,reject) => {
-        axios.get(host + '/topic/fdi',{
+        axios.get(host + '/v1/topic/fdi',{
             params : { id }
         }).then((request) => {
             if(request.data.success){
@@ -46,7 +46,7 @@ const findById = (id :string) => {
  */
 const getDatas = (page :number = 0 ,size :number = 10) => {
     return new Promise<IAJAXTopics>((resolve ,reject) => {
-        axios.get(host + '/topic/fd',{
+        axios.get(host + '/v1/topic/fd',{
             params : { page ,size }
         }).then((request) => {
             if(request.data.success){
@@ -69,7 +69,7 @@ const getDatas = (page :number = 0 ,size :number = 10) => {
 
 const create = (title :string ,content :string ,token :string) => {
     return new Promise<IAJAXTopic>((resolve ,reject) => {
-        axios.post(host + '/topic/ct',{
+        axios.post(host + '/v1/topic/ct',{
             title , content
         },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data) 
@@ -81,7 +81,7 @@ const create = (title :string ,content :string ,token :string) => {
 
 const remove = (id :string ,token :string) => {
     return new Promise<IAJAXTopic>((resolve ,reject) => {
-        axios.post(host + '/topic/rm',{
+        axios.post(host + '/v1/topic/rm',{
             id
         },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data)             

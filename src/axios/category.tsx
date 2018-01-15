@@ -28,7 +28,7 @@ interface IAJAXCategoryCURD {
  */
 const find = (page :number = 0,size :number = 10) => {
     return new Promise<IAJAXCategorys>((resolve ,reject) => {
-        axios.get(host + '/category/fd',{ 
+        axios.get(host + '/v1/category/fd',{ 
             params: { page , size }
          }).then((request) => {
             if(request.data.success){
@@ -50,7 +50,7 @@ const find = (page :number = 0,size :number = 10) => {
 
 const save = (name :string ,token :string) => {
     return new Promise<IAJAXCategoryCURD>((resolve ,reject) => {
-        axios.post(host + '/category/ct',{ 
+        axios.post(host + '/v1/category/ct',{ 
             name
          },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data)             
@@ -65,7 +65,7 @@ const update = (id :string ,name :string ,rname :string ,token :string) => {
         if(name == rname){
             resolve({success :false ,msg :'修改重复'})
         }else{
-            axios.post(host + '/category/ut',{ 
+            axios.post(host + '/v1/category/ut',{ 
                 id , name  
             },{headers :{ authorization : token }}).then((request) => {
                 resolve(request.data)            
@@ -78,7 +78,7 @@ const update = (id :string ,name :string ,rname :string ,token :string) => {
 
 const remove = (id :string ,token :string) => {
     return new Promise<IAJAXCategoryCURD>((resolve ,reject) => {
-        axios.post(host + '/category/rm',{ 
+        axios.post(host + '/v1/category/rm',{ 
             id 
         },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data)            
@@ -90,7 +90,7 @@ const remove = (id :string ,token :string) => {
 
 const search = (name :string ,page :number = 1 ,size :number = 10) => {
     return new Promise<IAJAXCategorys>((resolve ,reject) => {
-        axios.get(host + '/category/search',{
+        axios.get(host + '/v1/category/search',{
             params: { name ,page ,size }
         }).then((request) => {
             if(request.data.success){

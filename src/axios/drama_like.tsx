@@ -18,7 +18,7 @@ interface IAJAXLike {
 
 const addLike = (drama_id :string ,user_id :string ,token :string) => {
     return new Promise<IAJAXADDLike>((resolve ,reject) => {
-        axios.post(host + '/dlike/ct',{
+        axios.post(host + '/v1/dlike/ct',{
             did :drama_id,
             uid :user_id
         },{headers :{ authorization : token ,aud :user_id }}).then((request) => {
@@ -31,7 +31,7 @@ const addLike = (drama_id :string ,user_id :string ,token :string) => {
 
 const isLike = (drama_id :string ,user_id :string) => {
     return new Promise<IAJAXLike>((resolve ,reject) => {
-        axios.get(host + '/dlike/is',{
+        axios.get(host + '/v1/dlike/is',{
             params : { did :drama_id ,uid :user_id } 
         }).then((request) => {
             resolve(request.data);           

@@ -27,7 +27,7 @@ interface IAJAXComments {
 //根据usertoken 添加一条评论
 const send = (uid :string ,did :string ,content :string ,token :string) => {
     return new Promise<IAJAXComment>((resolve ,reject) => {
-        axios.post(`${host}/comment/ct`,{
+        axios.post(`${host}/v1/comment/ct`,{
             uid ,did ,content
         },{headers :{ authorization : token ,aud :uid }}).then((request) => {
             resolve(request.data)            
@@ -40,7 +40,7 @@ const send = (uid :string ,did :string ,content :string ,token :string) => {
 //根据剧本id 获取该剧本下所有评论
 const findByDramaID = (drama_id :string ,page :number ,size :number = 10) => {
     return new Promise<IAJAXComments>((resolve ,reject) => {
-        axios.get(`${host}/comment/fd`,{
+        axios.get(`${host}/v1/comment/fd`,{
             params : { id : drama_id ,page ,size}
         }).then((request) => { 
             if(request.data.success){
@@ -63,7 +63,7 @@ const findByDramaID = (drama_id :string ,page :number ,size :number = 10) => {
 
 const findRemoveByID = (id :string ,token :string ,user_id :string) => {
     return new Promise<IAJAXComment>((resolve ,reject) => {
-        axios.post(`${host}/comment/rm`,{
+        axios.post(`${host}/v1/comment/rm`,{
             id 
         },{headers :{ authorization : token ,aud :user_id }}).then((request) => {
             resolve(request.data)            

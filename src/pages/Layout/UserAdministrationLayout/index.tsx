@@ -61,7 +61,8 @@ class UserAdministrationLayout extends React.Component<any,any> {
                         <Menu.Item key="cdrama">新建剧本</Menu.Item>                      
                     </SubMenu>
                     <SubMenu key="sub2" title={<span><Icon type="pie-chart" /><span>个人设置</span></span>}>
-                        <Menu.Item key="setting_presentation">用户简介</Menu.Item>                      
+                        <Menu.Item key="setting_presentation">用户简介</Menu.Item>   
+                        <Menu.Item key="setting_info">安全设置</Menu.Item>                   
                     </SubMenu>
                   </Menu>
               </Sider>

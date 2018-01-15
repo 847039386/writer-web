@@ -12,7 +12,7 @@ interface IAJAXPAC {
 
 const getEmailPAC = (email :string) => {
     return new Promise<IAJAXPAC>((resolve ,reject) => {
-        axios.post(`${host}/adm/sendpac`,{
+        axios.post(`${host}/v1/adm/sendpac`,{
             email
         }).then((request) => {
             resolve(request.data)          
@@ -24,7 +24,7 @@ const getEmailPAC = (email :string) => {
 
 const login = (email :string , pac:string ) => {
     return new Promise<IAJAXPAC>((resolve ,reject) => {
-        axios.post(`${host}/adm/lg`,{
+        axios.post(`${host}/v1/adm/lg`,{
             email ,pac
         }).then((request) => {
             resolve(request.data)              

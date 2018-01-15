@@ -1,5 +1,5 @@
 export default {
-    host : 'http://localhost:5555/v1',
+    host : 'http://localhost:5555',
     OAuth : {
         qq : {
             baseSite :'https://graph.qq.com/oauth2.0/authorize',

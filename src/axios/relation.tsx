@@ -32,7 +32,7 @@ interface IAJAXFollow {
 
 const follow = (from_user_id :string ,to_user_id :string ,token :string) => {
     return new Promise<IAJAXFollow>((resolve ,reject) => {
-        axios.post(host + '/relation/follow',{
+        axios.post(host + '/v1/relation/follow',{
             fid :from_user_id,
             tid :to_user_id
         },{headers :{ authorization : token ,aud :from_user_id }}).then((request) => {
@@ -45,7 +45,7 @@ const follow = (from_user_id :string ,to_user_id :string ,token :string) => {
 
 const isfollow = (from_user_id :string ,to_user_id :string) => {
     return new Promise<IAJAXFollow>((resolve ,reject) => {
-        axios.get(host + '/relation/isfollow',{
+        axios.get(host + '/v1/relation/isfollow',{
             params : { fid :from_user_id ,tid :to_user_id } 
         }).then((request) => {
             resolve(request.data);           
@@ -57,7 +57,7 @@ const isfollow = (from_user_id :string ,to_user_id :string) => {
 
 const fans = (to_user_id :string ,page :number = 1,size :number = 10) => {
     return new Promise<IAJAXRelationToFans>((resolve ,reject) => {
-        axios.get(host + '/relation/fans',{
+        axios.get(host + '/v1/relation/fans',{
             params : { id :to_user_id ,page ,size } 
         }).then((request) => {
             resolve(request.data);           
@@ -69,7 +69,7 @@ const fans = (to_user_id :string ,page :number = 1,size :number = 10) => {
 
 const stars = (from_user_id :string ,page :number = 1,size :number = 10) => {
     return new Promise<IAJAXRelationToStars>((resolve ,reject) => {
-        axios.get(host + '/relation/stars',{
+        axios.get(host + '/v1/relation/stars',{
             params : { id :from_user_id ,page ,size } 
         }).then((request) => {
             resolve(request.data);           

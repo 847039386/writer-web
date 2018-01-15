@@ -22,7 +22,7 @@ Mock.mock(GetURL('/us/fdbi'), {
 });
 
 Mock.mock(GetURL('/us/hrun'), {
-  'data'    :'username',
+  'data'    :false,
   'success' : true,
 });
 
@@ -30,4 +30,48 @@ Mock.mock(GetURL('/us/presentation'), {
   'data'    :User,
   'success' : true,
 });
+
+Mock.mock(GetURL('/us/bs'), {
+  'data'    :[
+    { _id :'@word(15)' ,identifier :'@word(15)' ,identity_type :'qq' },
+    { _id :'@word(15)' ,identifier :'@word(15)' ,identity_type :'email' }
+  ],
+  'success' : true,
+});
+
+Mock.mock(GetURL('/us/utan'), {
+  'data'    :User,
+  'success' : true,
+});
+
+Mock.mock(GetURL('/us/sendpac'), {
+  'data'    :'ABCDEF',
+  'success' : true,
+});
+
+Mock.mock(GetURL('/us/bndemail'), {
+  'data'    :{
+    identifier :'ABC',
+    identity_type :'email'
+  },
+  'success' : true,
+});
+
+Mock.mock(GetURL('/us/bndunop'), {
+  'data'    :'username',
+  'success' : true,
+});
+
+Mock.mock(GetURL('/us/utpwbmail'), {
+  'data'    :'username',
+  'msg' :'is success',
+  'success' : true,
+});
+
+Mock.mock(GetURL('/us/bndqq'), {
+  'data'    :true,
+  'success' : true,
+});
+
+
 

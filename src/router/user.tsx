@@ -28,12 +28,11 @@ const UserDramas = Loadable({
     loading: MyLoadingComponent
 });
 
-// 以下功能保留等待开发
-// const UserSettingInfo = Loadable({
-//     loader: () => import('../pages/UserAdministration/Setting/Info/index'),
-//     loading: MyLoadingComponent
-// });
-// <Route exact path={`${rote.match.url}/setting/info`} component={UserSettingInfo}/>
+const UserSettingInfo = Loadable({
+    loader: () => import('../pages/UserAdministration/Setting/Info/index'),
+    loading: MyLoadingComponent
+});
+
 
 
 const UserPresentation = Loadable({
@@ -60,7 +59,8 @@ const UserRoute = (rote :any) => {
                     <Route exact path={`${rote.match.url}/rs`} component={Result}/>
                     <Route exact path={`${rote.match.url}/dramas`} component={UserDramas}/>
                     <Route exact path={`${rote.match.url}/drama/setting/:id`} component={UserDramaSetting}/>
-                    <Route exact path={`${rote.match.url}/setting/presentation`} component={UserPresentation}/>     
+                    <Route exact path={`${rote.match.url}/setting/presentation`} component={UserPresentation}/>   
+                    <Route exact path={`${rote.match.url}/setting/info`} component={UserSettingInfo}/>  
                     <Route path="*" component={NotFound} />
                 </Switch>                     
             </UserAdministrationLayout>

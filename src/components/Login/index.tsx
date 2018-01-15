@@ -90,7 +90,12 @@ class LoginPage extends React.Component<any, State> {
   }
 
   longinComponent = () => {
-    const hostRedirectURL = encodeURIComponent(location.hash)
+    const stateOption = {
+        platform :'qq',
+        type :'login' ,
+        referer :location.hash
+    }
+    const stateOptionString = encodeURIComponent(JSON.stringify(stateOption));
     return (
         <div>
           <Tabs className={'tabs'} animated={false}>
@@ -103,7 +108,7 @@ class LoginPage extends React.Component<any, State> {
           </Tabs>
           <Divider><span style={{fontSize :14}}>第三方登陆</span></Divider>
           <div style={{ textAlign :'center' ,fontSize :32 }}>
-            <a href={`${Config.OAuth.qq.baseSite}?response_type=${'code'}&client_id=${Config.OAuth.qq.appID}&state=${hostRedirectURL}&redirect_uri=${Config.OAuth.qq.redirectURL}`}>
+            <a href={`${Config.OAuth.qq.baseSite}?response_type=${'code'}&client_id=${Config.OAuth.qq.appID}&state=${stateOptionString}&redirect_uri=${Config.OAuth.qq.redirectURL}`}>
               <span className={'myicon miwchat'} ><Icon type={'qq'} style={{ background :'#538DCB' ,padding: '6px 8px'}} /></span>
             </a>    
             &nbsp;&nbsp;

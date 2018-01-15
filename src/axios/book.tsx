@@ -28,7 +28,7 @@ interface IAJAXBookCURD {
  */
 const find = (page :number = 0,size :number = 10) => {
     return new Promise<IAJAXBooks>((resolve ,reject) => {
-        axios.get(host + '/book/fd',{ 
+        axios.get(host + '/v1/book/fd',{ 
             params: { page , size }
          }).then((request) => {
             if(request.data.success){
@@ -50,7 +50,7 @@ const find = (page :number = 0,size :number = 10) => {
 
 const save = (name :string ,token :string) => {
     return new Promise<IAJAXBookCURD>((resolve ,reject) => {
-        axios.post(host + '/book/ct',{ 
+        axios.post(host + '/v1/book/ct',{ 
             name
          },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data)             
@@ -65,7 +65,7 @@ const update = (id :string ,name :string ,rname :string ,token :string) => {
         if(name == rname){
             resolve({success :false ,msg :'修改重复'})
         }else{
-            axios.post(host + '/book/ut',{ 
+            axios.post(host + '/v1/book/ut',{ 
                 id ,name
             },{headers :{ authorization : token }}).then((request) => {
                 resolve(request.data)            
@@ -78,7 +78,7 @@ const update = (id :string ,name :string ,rname :string ,token :string) => {
 
 const remove = (id :string ,token :string) => {
     return new Promise<IAJAXBookCURD>((resolve ,reject) => {
-        axios.post(host + '/book/rm',{ 
+        axios.post(host + '/v1/book/rm',{ 
             id
          },{headers :{ authorization : token }}).then((request) => {
             resolve(request.data)            
@@ -90,7 +90,7 @@ const remove = (id :string ,token :string) => {
 
 const search = (name :string ,page :number = 1 ,size :number = 10) => {
     return new Promise<IAJAXBooks>((resolve ,reject) => {
-        axios.get(host + '/book/search',{
+        axios.get(host + '/v1/book/search',{
             params: { name ,page ,size }
         }).then((request) => {
             if(request.data.success){

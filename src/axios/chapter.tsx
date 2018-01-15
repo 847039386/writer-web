@@ -30,7 +30,7 @@ interface IAJAXChapters {
 //根据Episode_id获取剧本分集内容
 const findById = (id :string) => {
     return new Promise<IAJAXChapter>((resolve ,reject) => {
-        axios.get(`${host}/chapter/fdi`,{
+        axios.get(`${host}/v1/chapter/fdi`,{
             params : { id }
         }).then((request) => {
             resolve(request.data)             
@@ -43,7 +43,7 @@ const findById = (id :string) => {
 //根据剧本ID获取所有该剧本分集id
 const findByDramaID = (id :string) => {
     return new Promise<IAJAXChapters>((resolve ,reject) => {
-        axios.get(`${host}/chapter/fd`,{
+        axios.get(`${host}/v1/chapter/fd`,{
             params : { id }
         }).then((request) => {
             resolve(request.data)            
@@ -55,7 +55,7 @@ const findByDramaID = (id :string) => {
 
 const findByIdAndRemove = (id :string ,token :string ,user_id :string) => {
     return new Promise<IAJAXChapter>((resolve ,reject) => {
-        axios.post(`${host}/chapter/rm`,{ 
+        axios.post(`${host}/v1/chapter/rm`,{ 
             id
         },{headers :{ authorization : token ,aud :user_id }}).then((request) => {
             resolve(request.data)            
@@ -72,7 +72,7 @@ const findByIdAndRemove = (id :string ,token :string ,user_id :string) => {
  */
 const save = (id :string ,title :string ,content :string ,token :string ,user_id :string) => {
     return new Promise<IAJAXChapter>((resolve ,reject) => {
-        axios.post(`${host}/chapter/ct`,{ 
+        axios.post(`${host}/v1/chapter/ct`,{ 
             id ,title ,content
         },{headers :{ authorization : token ,aud :user_id }}).then((request) => {
             resolve(request.data)             
@@ -84,7 +84,7 @@ const save = (id :string ,title :string ,content :string ,token :string ,user_id
 
 const findByIdAndUpdate = (id :string ,title :string ,content :string ,token :string ,user_id :string) => {
     return new Promise<IAJAXChapter>((resolve ,reject) => {
-        axios.post(`${host}/chapter/ut`,{ 
+        axios.post(`${host}/v1/chapter/ut`,{ 
             id ,title ,content
         },{headers :{ authorization : token ,aud :user_id  }}).then((request) => {
             resolve(request.data)         
@@ -96,7 +96,7 @@ const findByIdAndUpdate = (id :string ,title :string ,content :string ,token :st
 
 const updateChapterOrder = (beginId :string ,endId :string ,token :string ,user_id :string) =>{
     return new Promise<IAJAXChapter>((resolve ,reject) => {
-        axios.post(`${host}/chapter/utorder`,{ 
+        axios.post(`${host}/v1/chapter/utorder`,{ 
             bid :beginId ,
             eid :endId
         },{headers :{ authorization : token ,aud :user_id }}).then((request) => {

@@ -72,7 +72,7 @@ class Login extends React.Component<any, State> {
             <Form.Item hasFeedback>
                 {getFieldDecorator('nickname', {
                     validateTrigger :'onBlur',
-                    rules: [{ required: true, min : 2 , max:10 ,whitespace :true,  message: '请输入有效的昵称!并且长度在2-10之间!' }],
+                    rules: [{ required: true, min : 1 , max:10 ,whitespace :true,  message: '请输入有效的昵称!并且长度在2-10之间!' }],
                 })(
                     <Input disabled={this.state.disabled} onChange={this.onChangeNickname} placeholder="昵称" />
                 )}
@@ -82,8 +82,8 @@ class Login extends React.Component<any, State> {
                     validateTrigger :'onBlur',
                     rules: [{ required: true, whitespace :true, validator :(rule :any, value :any, callback :any) => {            
                         if(this.oldEmail !== value){
-                            User.findRepeatUName(value).then(({success ,data})=>{
-                                if(success){ 
+                            User.findRepeatUIdentifier(value,'username').then(({success ,data})=>{
+                                if(success && !data){ 
                                     this.oldEmailMsg = ''; 
                                     callback()
                                 }else{         

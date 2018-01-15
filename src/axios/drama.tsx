@@ -35,7 +35,7 @@ interface IAJAXDramas {
 //获取剧本的内容详情页
 const getDramaByID = (id :string) => {
     return new Promise<IAJAXDrama>((resolve ,reject) => {
-        axios.get(host + '/drama/details',{
+        axios.get(host + '/v1/drama/details',{
             params :{ id }
         }).then((request) => {
            if(request.data.success){
@@ -54,7 +54,7 @@ const getDramaByID = (id :string) => {
 //根据userid 获取该用户的所有剧本Drama
 const getDramasByUserID = (id :string ,page :number ,size :number = 10) => {
     return new Promise<IAJAXDramas>((resolve ,reject) => {
-        axios.get(host + '/drama/fdbui',{
+        axios.get(host + '/v1/drama/fdbui',{
             params : {  id ,page ,size }
         }).then((request) => {
             resolve(request.data)            
@@ -69,7 +69,7 @@ const getDramasByUserID = (id :string ,page :number ,size :number = 10) => {
  */
 const getDramas = (page :number = 0,size :number = 10) => {
     return new Promise<IAJAXDramas>((resolve ,reject) => {
-        axios.get(host + '/drama/fd',{
+        axios.get(host + '/v1/drama/fd',{
             params :{  page ,size }
         }).then((request) => {
             if(request.data.success){
@@ -91,7 +91,7 @@ const getDramas = (page :number = 0,size :number = 10) => {
 
 const create = (user_id :string ,title :string ,book_id :string ,category_id :Array<string> ,description :string ,token :string) => {
     return new Promise<IAJAXDrama>((resolve ,reject) => {
-        axios.post(`${host}/drama/ct` ,{ 
+        axios.post(`${host}/v1/drama/ct` ,{ 
             user_id ,
             title ,
             book_id ,
@@ -107,7 +107,7 @@ const create = (user_id :string ,title :string ,book_id :string ,category_id :Ar
 
 const remove = (id :string ,token :string ,user_id:string) => {
     return new Promise<IAJAXDrama>((resolve ,reject) => {
-        axios.post(`${host}/drama/rm` ,{ 
+        axios.post(`${host}/v1/drama/rm` ,{ 
             id ,
         },{headers :{ authorization : token ,aud :user_id  }}).then((request) => {
             resolve(request.data)           
@@ -119,7 +119,7 @@ const remove = (id :string ,token :string ,user_id:string) => {
 
 const getAbstract = (id :string ) => {
     return new Promise<IAJAXDrama>((resolve ,reject) => {
-        axios.get(`${host}/drama/abstract`,{ 
+        axios.get(`${host}/v1/drama/abstract`,{ 
             params :{ id }
         }).then((request) => {
             resolve(request.data)           
@@ -131,7 +131,7 @@ const getAbstract = (id :string ) => {
 
 const getCharacter = (id :string ) => {
     return new Promise<IAJAXDrama>((resolve ,reject) => {
-        axios.get(`${host}/drama/character`,{ 
+        axios.get(`${host}/v1/drama/character`,{ 
             params :{ id }
         }).then((request) => {
             resolve(request.data)           
@@ -143,7 +143,7 @@ const getCharacter = (id :string ) => {
 
 const setAbstract = (id :string ,content :string ,token :string ,user_id :string) => {
     return new Promise<IAJAXDrama>((resolve ,reject) => {
-        axios.post(`${host}/drama/abstract`,{ 
+        axios.post(`${host}/v1/drama/abstract`,{ 
             id ,content
         },{headers :{ authorization : token ,aud :user_id }}).then((request) => {
             resolve(request.data)           
@@ -155,7 +155,7 @@ const setAbstract = (id :string ,content :string ,token :string ,user_id :string
 
 const setCharacter = (id :string ,content :string ,token :string ,user_id :string) => {
     return new Promise<IAJAXDrama>((resolve ,reject) => {
-        axios.post(`${host}/drama/character`,{ 
+        axios.post(`${host}/v1/drama/character`,{ 
             id ,content
         },{headers :{ authorization : token ,aud :user_id  }}).then((request) => {
             resolve(request.data)           
@@ -182,7 +182,7 @@ const search = (options :SearchOptions ,page :number = 1 ,size :number = 10) => 
     }
     searchOptions = Object.assign(searchOptions,{ page ,size })
     return new Promise<IAJAXDramas>((resolve ,reject) => {
-        axios.post(`${host}/drama/search`,searchOptions).then((request) => {
+        axios.post(`${host}/v1/drama/search`,searchOptions).then((request) => {
             if(request.data.success){
                 let result :Array<any> = request.data.data;
                 result = result.map((item ) => {

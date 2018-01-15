@@ -3,6 +3,7 @@ import './styles.less'
 import { parseQueryString } from '../../../common/util';
 import { Button } from 'antd';
 import Result from '../../../components/Result';
+import { User as UserAjax } from '../../../axios'
 import { Link } from 'react-router-dom'
 
 class LAuth extends React.PureComponent<any, any> {
@@ -17,17 +18,37 @@ class LAuth extends React.PureComponent<any, any> {
     }
   }
   componentWillMount(){
-    const { qqLogin } = this.props
+    const { qqLogin ,User } = this.props
     let query :any = parseQueryString(this.props.location.search);
-    let code = query.code;
-    let state = query.state;
-    if(state && code){
-      let url = decodeURIComponent(state).split('#')
+    // 判断是否有重定向地址的参数
+    if(query.redirectURI){
+      let url = decodeURIComponent(query.redirectURI).split('#')
       this.redirectURI = url[0] || url[1]
-      qqLogin(code)
     }else{
-      this.setState({title :'第三方登陆失败' ,status :'error'})
       this.redirectURI = '/'
+    }
+
+    // 第三方平台是QQ
+    if(query.platform && query.platform == 'qq' && query.code){
+      if(query.type == 'login'){
+        // 这里是登陆
+        qqLogin(query.code)
+      }else if(query.type == 'bind' && query.uid && User.token){
+        // 这里是绑定
+        UserAjax.bindUserQQ(query.code,query.uid,User.token).then(({success , data ,msg}) => {
+            if(success){
+              location.replace('#'+this.redirectURI)
+            }else{
+              this.setState({title :`绑定失败：${msg}` ,status :'error' ,loading :false})
+            }
+        })
+      }else{
+        this.setState({title :'第三方获取失败' ,status :'error' ,loading :false})
+        this.errorRedirect()
+      }
+    }else{
+      this.setState({title :'第三方获取失败' ,status :'error' ,loading :false})
+      this.errorRedirect()
     }
   }
 

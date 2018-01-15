@@ -21,7 +21,7 @@ interface IAJAXHome {
  */
 const home = () => {
     return new Promise<IAJAXHome>((resolve ,reject) => {
-        axios.get(`${host}/cf/home`).then((request) => {
+        axios.get(`${host}/v1/cf/home`).then((request) => {
             if(request.data.success){
                 resolve(request.data) 
             }else{
