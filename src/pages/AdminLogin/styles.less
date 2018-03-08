@@ -43,7 +43,7 @@
   font-size: @font-size-base;
   color: @text-color-secondary;
   margin-top: 12px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .footer {
@@ -86,4 +86,27 @@
           }
         }
       }
+}
+
+.tabs {
+  padding: 0 2px;
+  margin: 0 -2px;
+  .ant-tabs-bar {
+      border-bottom: 0;
+      margin-bottom: 10px;
+      text-align: center;
+  }
+  :global {
+    .ant-tabs-tab {
+      font-size: 16px;
+      line-height: 24px;
+      
+    }
+    .ant-input-affix-wrapper .ant-input:not(:first-child) {
+      padding-left: 34px;
+    }
+    .ant-form-item {
+      margin-bottom: 24px;
+    }
+  }
 }

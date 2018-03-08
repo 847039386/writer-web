@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Layout , Menu ,Icon  } from 'antd';
 const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
-const logo = require('../../../public/img/logo.svg');
+const logo = require('../../../public/img/logo.ico');
 import { Link } from 'react-router-dom'
 import Body from './Body';
 import './styles.less';
@@ -54,6 +54,9 @@ class AdministrationLayout extends React.Component<any,any> {
             case 'book':
                 location.replace("#/admin/book");
             break;
+            case 'admins':
+                location.replace("#/admin/admins");
+            break;
             default :
                 location.replace("#/");
             break;
@@ -72,9 +75,9 @@ class AdministrationLayout extends React.Component<any,any> {
                     </Link>
                 </div>
                   <Menu theme="dark" defaultOpenKeys={["sub1"]} mode="inline" onClick={this.toLink} >
-                    <Menu.Item key="host">
-                        <Icon type="home" />
-                        <span>网站主页</span>
+                    <Menu.Item key="admins">
+                        <Icon type="user" />
+                        <span>管理员管理</span>
                     </Menu.Item>
                     <Menu.Item key="index"><Icon type="home" /><span>主页</span></Menu.Item>
                     <SubMenu key="sub1" title={<span><Icon type="book" /><span>剧本管理</span></span>}>

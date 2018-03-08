@@ -4,7 +4,7 @@ const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 import Body from './Body';
 import './index.less';
-const logo = require('../../../public/img/logo.svg');
+const logo = require('../../../public/img/logo.ico');
 import { Link } from 'react-router-dom'
 class UserAdministrationLayout extends React.Component<any,any> {
 

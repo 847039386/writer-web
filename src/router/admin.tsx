@@ -53,6 +53,12 @@ const Book = Loadable({
     loading: MyLoadingComponent
 });
 
+const Admins = Loadable({
+    loader: () => import('../pages/Administration/Admins/index'),
+    loading: MyLoadingComponent
+});
+
+
 const AdminRoute = (rote :any) => {
     return (
             <AdministrationLayout>
@@ -64,6 +70,7 @@ const AdminRoute = (rote :any) => {
                     <Route exact path={`${rote.match.url}/comment`} component={CommentPage}/>
                     <Route exact path={`${rote.match.url}/category`} component={Category}/>
                     <Route exact path={`${rote.match.url}/book`} component={Book}/>
+                    <Route exact path={`${rote.match.url}/admins`} component={Admins}/>
                     <Route exact path={`${rote.match.url}/success/:type`} component={Success}/>
                     <Route path="*" component={NotFound} />
                 </Switch>                     
