@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Layout , Menu ,Icon  } from 'antd';
 const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
-const logo = require('../../../public/img/logo.ico');
 import { Link } from 'react-router-dom'
 import Body from './Body';
 import './styles.less';
@@ -70,7 +69,7 @@ class AdministrationLayout extends React.Component<any,any> {
               <Sider className={"ua_menu"} width={256}>
                 <div className={'logo_a'}>
                     <Link to="/">
-                        <img src={logo} alt="logo" />
+                        <img alt="" className={'logo'} src={'/images/favicon.ico'} />
                         <h1>编辑库</h1>
                     </Link>
                 </div>

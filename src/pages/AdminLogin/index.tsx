@@ -1,6 +1,5 @@
 import * as React from 'react';
 import DocumentTitle from 'react-document-title';
-const logo = require('../../public/img/logo.ico');
 import './styles.less';
 import { Link } from 'react-router-dom'
 import { Form ,Tabs } from 'antd';
@@ -20,7 +19,7 @@ class LoginComponent extends React.Component<any,any> {
                     <div className={'top'}>
                         <div className={'header'}>
                         <Link to="/">
-                            <img alt="" className={'logo'} src={logo} />
+                            <img alt="" className={'logo'} src={'/images/favicon.ico'} />
                             <span className={'title'}>北门中文网</span>
                         </Link>
                         </div>

@@ -71,9 +71,7 @@ class DramaFormat extends React.Component<Props,State> {
   pastingText = (e :any) =>{
       let inputValue = e.target.value
       let markdownCode : string = inputValue
-      if(this.props.rule){
-        markdownCode = this.getMarkdown(inputValue)
-      }
+      markdownCode = this.getMarkdown(inputValue)
       this.setState({
         value : inputValue,
         markdownCode : markdownCode
@@ -109,4 +107,3 @@ class DramaFormat extends React.Component<Props,State> {
 
 export default DramaFormat
 export { SeiriRule }
-

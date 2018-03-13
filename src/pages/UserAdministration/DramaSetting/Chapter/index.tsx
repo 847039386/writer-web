@@ -130,24 +130,24 @@ class ChapterPage extends React.Component<Props,State> {
   }
 
   onUpdateSeiriChange = (code :string ,md :string) => {
-    this.setState({ markdownCode :md });
+    this.setState({ markdownCode :code ,new_markdownCode :md });
   }
 
   onAddSeiriChange = (code :string ,md :string) => {
-    this.setState({ new_markdownCode :md });
+    this.setState({ markdownCode :code ,new_markdownCode :md });
   }
 
   updateChapter = () => {
-      const { markdownCode ,current_chapterTitle ,current_chapterID } = this.state;
+      const { current_chapterTitle ,current_chapterID ,new_markdownCode } = this.state;
       const { uid ,token } = this.props;
-      if(this.current_chapter_old_content != markdownCode || this.current_chapter_old_title != current_chapterTitle ){
+      if(this.current_chapter_old_content != new_markdownCode || this.current_chapter_old_title != current_chapterTitle ){
           this.setState({ chapterLoading :true })
-          Chapter.findByIdAndUpdate(current_chapterID,current_chapterTitle,markdownCode,token,uid).then(({success ,data ,msg}) => {
+          Chapter.findByIdAndUpdate(current_chapterID,current_chapterTitle,new_markdownCode,token,uid).then(({success ,data ,msg}) => {
               this.setState({ chapterLoading :false })
               if(success && data){
                 this.current_chapter_old_title = data.title;
                 this.current_chapter_old_content = data.content;
-                this.setState({ chapter_Operation :'' })
+                this.setState({ chapter_Operation :'' ,markdownCode :new_markdownCode })
                 message.success('修改成功');
               }else{
                 message.error(`修改失败，原因可能是：${msg}`);
@@ -232,7 +232,7 @@ class ChapterPage extends React.Component<Props,State> {
 
   
   getChapterOperationTypeDOM = ():React.ReactNode => {
-    const { chapter_Operation ,markdownCode ,current_chapterTitle ,new_markdownCode ,new_chapterTitle } = this.state
+    const { chapter_Operation ,markdownCode ,current_chapterTitle ,new_chapterTitle } = this.state
     if(chapter_Operation === 'update'){
       return (
         <div>
@@ -246,7 +246,7 @@ class ChapterPage extends React.Component<Props,State> {
         <div>
           <Input  addonBefore="标题：" value={new_chapterTitle} onChange={this.onNewChapterTitleChange} />
           <Divider dashed />
-          <Seiri ruleType={'chapter'} onChange={this.onAddSeiriChange} value={new_markdownCode} />
+          <Seiri ruleType={'chapter'} onChange={this.onAddSeiriChange} value={markdownCode} />
         </div>
       )
     } else {

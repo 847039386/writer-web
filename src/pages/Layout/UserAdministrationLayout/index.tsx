@@ -4,7 +4,6 @@ const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 import Body from './Body';
 import './index.less';
-const logo = require('../../../public/img/logo.ico');
 import { Link } from 'react-router-dom'
 class UserAdministrationLayout extends React.Component<any,any> {
 
@@ -50,7 +49,7 @@ class UserAdministrationLayout extends React.Component<any,any> {
               <Sider className={"ua_menu"} width={256}>
                   <div className={'logo_a'}>
                     <Link to="/">
-                        <img src={logo} alt="logo" />
+                        <img alt="" className={'logo'} src={'/images/favicon.ico'} />
                         <h1>编辑库</h1>
                     </Link>
                   </div>

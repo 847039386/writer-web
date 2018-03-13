@@ -3,7 +3,6 @@ import * as React from 'react';
 import Menu from './Menu';
 import { Layout ,Avatar ,Popover ,Button ,Divider ,Icon } from 'antd';
 import { Link } from 'react-router-dom';
-const logo = require('../../../../public/img/logo.ico');
 const { Header } = Layout;
 
 class HeaderComponent extends React.Component<any,any> {
@@ -48,7 +47,7 @@ class HeaderComponent extends React.Component<any,any> {
   render() {
     return (
       <Header>
-        <div className="logoDefault"><img src={logo} alt="logo" /></div>
+        <div className="logoDefault"><img alt="" className={'logo'} src={'/images/favicon.ico'} /></div>
         {
           this.state.User.token ? 
           <div className="UserDefault">
