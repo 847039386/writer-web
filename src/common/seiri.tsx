@@ -223,6 +223,7 @@ class SeiriBox {
                 rules = [
                     {regexp : /^第\d+集$/ , value :'# ${key}' },
                     {regexp : /^\d+[-]\d+[,.:].{0,10}$/ , value :'  \n---  \n## ${key}'},
+                    {regexp : /^.*(日|夜|傍晚|凌晨)?\s?(外|内)+$/ , value :'  \n---  \n## ${key}'},
                     {regexp : /^(场景|人物|时间)[-:,.：]/ , value :'`${key}`'   },
                   ]
                 this.addRule(rules)

@@ -35,6 +35,9 @@ class UserAdministrationLayout extends React.Component<any,any> {
             case 'setting_presentation':
                 location.replace("#/ua/setting/presentation");
             break;
+            case 'notify' :
+                location.replace("#/ua/notify");
+            break;
             default:
                 location.replace("#/");
             break;
@@ -55,6 +58,10 @@ class UserAdministrationLayout extends React.Component<any,any> {
                     <Menu.Item key="host">
                         <Icon type="home" />
                         <span>网站主页</span>
+                    </Menu.Item>
+                    <Menu.Item key="notify">
+                        <Icon type="mail" />
+                        <span>我的消息</span>
                     </Menu.Item>
                     <SubMenu key="sub1" title={<span><Icon type="book" /><span>剧本管理</span></span>}>
                         <Menu.Item key="dramas">剧本管理</Menu.Item>

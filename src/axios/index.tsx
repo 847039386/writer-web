@@ -9,6 +9,7 @@ import Conf from './conf';
 import Admin from './admin';
 import Relation from './relation';
 import DramaLike from './drama_like';
+import Notify from './notify';
 
 export {
     Drama,
@@ -21,7 +22,8 @@ export {
     Conf,
     Admin,
     Relation,
-    DramaLike
+    DramaLike,
+    Notify
 }
 
 

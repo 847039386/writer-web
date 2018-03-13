@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Input ,Button ,Form } from 'antd';
-import { User } from '../../../axios'
+import { User } from '../../../axios';
+import {FormComponentProps} from 'antd/lib/form/Form';
 
 
 interface State {
@@ -18,10 +19,10 @@ interface Props {
     disabled? :boolean
 }
 
-class Login extends React.Component<any, State> {
+class RegisterComponent extends React.Component<Props & FormComponentProps ,State> {
   oldEmail :string;
   oldEmailMsg :string;
-  constructor(props :Props) {
+  constructor(props :Props & FormComponentProps) {
     super(props);
     this.state = {
       username: '',
@@ -130,4 +131,4 @@ class Login extends React.Component<any, State> {
   }
 }
 
-export default Form.create<Props>()(Login)
+export default Form.create<Props>()(RegisterComponent)

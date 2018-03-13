@@ -79,11 +79,14 @@ class LoginPage extends React.Component<any, State> {
           if(!this.isLogout){
             this.setState({isLogin :true})
           }
+          if(this.state.isLogin){
+            this.setState({isLogin :false})
+          }
         }else {
           this.setState({ error : Object.assign(this.state.error,{ msg : LoginReducer.request.msg}) ,showErrorModel :true })
           LoginReducer.request = {};
         } 
-      } 
+      }
     }else{
       this.setState({isLogin :true})
     }

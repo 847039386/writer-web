@@ -83,14 +83,18 @@ class FansComponent extends React.Component<Props,State> {
             <ul className={'cop_fans'}>
               {
                   this.state.fans.map((user :IRelationToFans) => {
-                      return (
-                          <li key={user.from_user_id._id} >
-                              <Avatar style={{width:100,height:100}} src={user.from_user_id.avatar} /><br />
-                              <p className={'fansname'}>
-                                  <Link to={`/author/${user.from_user_id._id}`} >{user.from_user_id.name}</Link>
-                              </p>
-                          </li> 
-                      )
+                      if(user.from_user_id){
+                        return (
+                            <li key={user.from_user_id._id} >
+                                <Avatar style={{width:100,height:100}} src={user.from_user_id.avatar} /><br />
+                                <p className={'fansname'}>
+                                    <Link to={`/author/${user.from_user_id._id}`} >{user.from_user_id.name}</Link>
+                                </p>
+                            </li> 
+                        )
+                      }else{
+                          return ''
+                      }
                   })
               }
           </ul>
@@ -114,14 +118,19 @@ class FansComponent extends React.Component<Props,State> {
             <ul className={'cop_fans'}>
               {
                   this.state.stars.map((user :IRelationToStars) => {
-                      return (
-                          <li key={user.to_user_id._id} >
-                              <Avatar style={{width:100,height:100}} src={user.to_user_id.avatar} /><br />
-                              <p className={'fansname'}>
-                                  <Link to={`/author/${user.to_user_id._id}`} >{user.to_user_id.name}</Link>
-                              </p>
-                          </li> 
-                      )
+                      if(user.to_user_id){
+                        return (
+                            <li key={user.to_user_id._id} >
+                                <Avatar style={{width:100,height:100}} src={user.to_user_id.avatar} /><br />
+                                <p className={'fansname'}>
+                                    <Link to={`/author/${user.to_user_id._id}`} >{user.to_user_id.name}</Link>
+                                </p>
+                            </li> 
+                        )
+                      }else{
+                          return ''
+                      }
+                      
                   })
               }
           </ul>

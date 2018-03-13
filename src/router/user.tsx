@@ -45,6 +45,12 @@ const Result = Loadable({
     loading: MyLoadingComponent
 });
 
+
+const Notify = Loadable({
+    loader: () => import('../pages/UserAdministration/Notify/index'),
+    loading: MyLoadingComponent
+});
+
 const NotFound = Loadable({
     loader: () => import('../pages/NotFound/index'),
     loading: MyLoadingComponent
@@ -58,6 +64,7 @@ const UserRoute = (rote :any) => {
                     <Route exact path={`${rote.match.url}/cdrama`} component={UserCreateDrama}/>
                     <Route exact path={`${rote.match.url}/rs`} component={Result}/>
                     <Route exact path={`${rote.match.url}/dramas`} component={UserDramas}/>
+                    <Route exact path={`${rote.match.url}/notify`} component={Notify}/>
                     <Route exact path={`${rote.match.url}/drama/setting/:id`} component={UserDramaSetting}/>
                     <Route exact path={`${rote.match.url}/setting/presentation`} component={UserPresentation}/>   
                     <Route exact path={`${rote.match.url}/setting/info`} component={UserSettingInfo}/>  

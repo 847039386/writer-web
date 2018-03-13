@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Input ,Button ,Form } from 'antd';
+import {FormComponentProps} from 'antd/lib/form/Form';
 
 
 interface State {
@@ -13,8 +14,8 @@ interface Props {
     disabled? :boolean
 }
 
-class Login extends React.Component<any, State> {
-  constructor(props :Props ) {
+class Login extends React.Component<Props & FormComponentProps ,State> {
+  constructor(props :Props & FormComponentProps ) {
     super(props);
     this.state = {
       username: '',
@@ -74,4 +75,4 @@ class Login extends React.Component<any, State> {
   }
 }
 
-export default Form.create<Props>()(Login)
+export default  Form.create()(Login)
